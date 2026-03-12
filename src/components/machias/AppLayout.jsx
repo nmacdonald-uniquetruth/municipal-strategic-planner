@@ -51,34 +51,44 @@ export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Machias Blue = #344A60, Sand Dune = #E7D0B1, Shiretown Cream = #F3EAD6
+  // Misty Blue = #B3C6C8, Salt Marsh Grass = #F6C85F
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex h-screen" style={{ background: '#F3EAD6' }}>
       {/* Mobile overlay */}
-      {mobileOpen && <div className="fixed inset-0 bg-black/30 z-30 lg:hidden" onClick={() => setMobileOpen(false)} />}
+      {mobileOpen && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setMobileOpen(false)} />}
 
-      {/* Sidebar */}
+      {/* Sidebar — Machias Blue */}
       <aside className={`
-        fixed lg:static z-40 h-full flex flex-col bg-slate-900 text-white transition-all duration-300
+        fixed lg:static z-40 h-full flex flex-col transition-all duration-300
         ${collapsed ? 'w-16' : 'w-56'}
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        <div className={`flex items-center gap-2 p-4 border-b border-white/10 ${collapsed ? 'justify-center' : ''}`}>
+      `} style={{ background: '#344A60' }}>
+
+        {/* Brand header */}
+        <div className={`flex items-center gap-2.5 p-4 border-b ${collapsed ? 'justify-center' : ''}`} style={{ borderColor: 'rgba(179,198,200,0.2)' }}>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <h1 className="text-sm font-bold tracking-tight truncate">Town of Machias</h1>
-              <p className="text-[10px] text-slate-400 truncate">Strategic Planning Tool</p>
+              <h1 className="text-sm font-bold tracking-tight truncate" style={{ color: '#E7D0B1', fontFamily: 'Raleway, sans-serif' }}>
+                Town of Machias
+              </h1>
+              <p className="text-[10px] truncate mt-0.5" style={{ color: '#B3C6C8' }}>Strategic Planning · FY2027–31</p>
             </div>
           )}
-          <button onClick={() => { setCollapsed(!collapsed); setMobileOpen(false); }} className="p-1 rounded hover:bg-white/10">
+          <button onClick={() => { setCollapsed(!collapsed); setMobileOpen(false); }}
+            className="p-1 rounded transition-colors"
+            style={{ color: '#B3C6C8' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
             <ChevronLeft className={`h-4 w-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
-        <nav className="flex-1 p-2 overflow-y-auto space-y-3">
+        <nav className="flex-1 p-2 overflow-y-auto space-y-3 mt-1">
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
               {!collapsed && (
-                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-1">{group.label}</p>
+                <p className="text-[9px] font-bold uppercase tracking-widest px-3 mb-1" style={{ color: '#B3C6C8', opacity: 0.6 }}>{group.label}</p>
               )}
               <div className="space-y-0.5">
                 {group.items.map(({ path, label, icon: NavIcon }) => {
@@ -88,11 +98,15 @@ export default function AppLayout() {
                       key={path}
                       to={path}
                       onClick={() => setMobileOpen(false)}
-                      className={`
-                        flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all
-                        ${active ? 'bg-white/15 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}
-                        ${collapsed ? 'justify-center' : ''}
-                      `}
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${collapsed ? 'justify-center' : ''}`}
+                      style={{
+                        background: active ? 'rgba(231,208,177,0.18)' : 'transparent',
+                        color: active ? '#E7D0B1' : '#B3C6C8',
+                        borderLeft: active ? '2px solid #F6C85F' : '2px solid transparent',
+                        fontFamily: 'Open Sans, sans-serif',
+                      }}
+                      onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'rgba(179,198,200,0.1)'; e.currentTarget.style.color = '#E7D0B1'; }}}
+                      onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#B3C6C8'; }}}
                     >
                       <NavIcon className="h-4 w-4 flex-shrink-0" />
                       {!collapsed && <span className="truncate">{label}</span>}
@@ -104,17 +118,22 @@ export default function AppLayout() {
           ))}
         </nav>
 
-        <div className={`p-3 border-t border-white/10 ${collapsed ? 'hidden' : ''}`}>
-          <p className="text-[10px] text-slate-500 leading-relaxed">FY2027-FY2031 Administrative Realignment & Regional Service Center</p>
+        {/* Footer tagline */}
+        <div className={`p-3 border-t ${collapsed ? 'hidden' : ''}`} style={{ borderColor: 'rgba(179,198,200,0.2)' }}>
+          <p className="text-[9px] leading-relaxed italic" style={{ color: '#B3C6C8', opacity: 0.7 }}>
+            "Making Here Better — Together"
+          </p>
         </div>
       </aside>
 
-      {/* Main */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="lg:hidden p-3 border-b border-slate-200 bg-white sticky top-0 z-20">
-          <button onClick={() => setMobileOpen(true)} className="p-1.5 rounded-lg hover:bg-slate-100">
-            <Menu className="h-5 w-5 text-slate-600" />
+      {/* Main content — Shiretown Cream background */}
+      <main className="flex-1 overflow-y-auto" style={{ background: '#F3EAD6' }}>
+        {/* Mobile top bar */}
+        <div className="lg:hidden p-3 border-b sticky top-0 z-20 flex items-center gap-3" style={{ background: '#344A60', borderColor: 'rgba(179,198,200,0.2)' }}>
+          <button onClick={() => setMobileOpen(true)} className="p-1.5 rounded" style={{ color: '#E7D0B1' }}>
+            <Menu className="h-5 w-5" />
           </button>
+          <span className="text-sm font-bold" style={{ color: '#E7D0B1', fontFamily: 'Raleway, sans-serif' }}>Town of Machias</span>
         </div>
         <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
           <Outlet />
