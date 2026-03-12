@@ -399,8 +399,8 @@ export default function Narrative() {
                   body: `The primary fix for the structural inefficiency problem. Takes over AP, payroll, bank reconciliation, grant financial reporting, and audit prep from the FD. Restores separation of duties. Enables the FD to focus on financial strategy, budget development, and capital planning. Without this hire, neither ERP implementation nor regional services expansion is administratively feasible.`
                 },
                 {
-                  title: 'Billing Specialist (Ambulance Fund)', icon: '🚑',
-                  body: `Manages in-house EMS billing, replacing the Comstar contract. Fully funded by the Ambulance Fund — this is not a General Fund cost. The position eliminates ${fmt(d1?.value?.comstarAvoided)}/yr in Comstar fees in Year 1 while improving collection rates from ${pct(s.comstar_collection_rate)} to ${pct(s.inhouse_y1_rate)} (Y1) and ${pct(s.inhouse_steady_rate)} (Y2+). Also positioned to manage external EMS billing for neighboring towns as a revenue source.`
+                  title: 'Billing Specialist', icon: '🚑',
+                  body: `Manages in-house EMS billing, replacing the Comstar contract. Positioned in the Finance Department and reports to the Finance Director. Funded through general administration budget with cost recovery via increased Ambulance Fund transfer. The position eliminates ${fmt(d1?.value?.comstarAvoided)}/yr in Comstar fees in Year 1 while improving collection rates from ${pct(s.comstar_collection_rate)} to ${pct(s.inhouse_y1_rate)} (Y1) and ${pct(s.inhouse_steady_rate)} (Y2+). Also positioned to manage external EMS billing for neighboring towns as a revenue source.`
                 },
                 {
                   title: 'GA Coordinator', icon: '📋',
@@ -499,7 +499,7 @@ export default function Narrative() {
           </SubSection>
 
           <Callout color="emerald" label="Key Point">
-            The Billing Specialist is 100% Ambulance Fund funded. It does not appear in General Fund cost calculations. The position produces a net positive cash position for the Ambulance Fund in all 5 years while simultaneously freeing FD and TM time from billing oversight.
+            The Billing Specialist is paid from the General Fund administration budget and reports to the Finance Director. The Ambulance Fund transfer to the General Fund increases to cover the Billing Specialist cost, maintaining the Ambulance Fund as a self-sustaining operation. This structure ensures proper financial supervision while distributing the cost through the ambulance transfer mechanism.
           </Callout>
         </Section>
 
@@ -587,10 +587,10 @@ export default function Narrative() {
 
           <SubSection title="Why ERP Modernization Is a Prerequisite — Not an Add-On">
             <p>
-              The administrative restructuring and ERP implementation are <strong>interdependent</strong>. The ERP cannot be successfully implemented without adequate finance staff to manage the COA rebuild, data migration, and parallel operation period. Conversely, the Staff Accountant's effectiveness is significantly constrained by legacy software that lacks the reporting and automation tools needed to operate efficiently.
+              The administrative restructuring and ERP implementation are <strong>interdependent</strong>. While ERP implementation is technically feasible without additional staff, the timeline extends significantly without adequate finance capacity. The Staff Accountant enables faster execution of COA rebuild, data migration, and parallel operation. Conversely, the Staff Accountant's long-term effectiveness is significantly enhanced by modern ERP tools that provide reporting and automation capabilities that legacy software cannot support.
             </p>
-            <Callout color="amber" label="Critical Dependency">
-              Phase 0 of ERP implementation (COA gap analysis, requirements definition) can only begin after the Staff Accountant is hired. Attempting ERP implementation without adequate staffing is a known failure mode for small municipal technology projects.
+            <Callout color="amber" label="Implementation Timing">
+              Phase 0 of ERP implementation (COA gap analysis, requirements definition) can begin after the Staff Accountant is hired, accelerating the overall project timeline. Implementation without this staffing capacity is possible but would extend the deployment schedule by several months.
             </Callout>
           </SubSection>
 
