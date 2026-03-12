@@ -51,8 +51,13 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard label="Year 1 Net" value={`$${(y1Net / 1000).toFixed(0)}K`} icon={DollarSign} sub="Base case, all 3 positions" />
         <StatCard label="Year 5 Gross Value" value={`$${(y5Value / 1000).toFixed(0)}K`} icon={TrendingUp} sub="Structural + regional" />
-        <StatCard label="Phase 1 Positions" value="3" icon={Users} sub="SA, BS, GA Coordinator" />
-        <StatCard label="Enterprise Funds at Risk" value={ENTERPRISE_FUNDS.filter(f => f.balance < 0).length} icon={AlertTriangle} sub="Sewer & Transfer Station" />
+        <StatCard
+          label="Y1 GF Levy Impact"
+          value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `(${Math.abs(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K) surplus` : `+$${(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K`}
+          icon={ShieldCheck}
+          sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
+        />
+        <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${(data[0]?.gf?.undesignatedDraw / 1000).toFixed(0)}K`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
       </div>
 
       {/* Charts */}
