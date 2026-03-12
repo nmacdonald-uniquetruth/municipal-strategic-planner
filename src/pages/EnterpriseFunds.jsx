@@ -73,15 +73,15 @@ export default function EnterpriseFunds() {
               <span className="text-xs font-bold text-emerald-800">Option A — Recommended</span>
               <span className="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-medium">RECOMMENDED</span>
             </div>
-            <p className="text-xs text-emerald-700 mt-1">Ambulance Fund balance draw (~$90K). Directly justifiable: BS is Ambulance benefit, EMS improvement accrues to Ambulance fund. $300K+ balance remains.</p>
+            <p className="text-xs text-emerald-700 mt-1">GF undesignated fund balance draw for Y1 only. ~$90K ≈ 1.8–2% of $2.4–2.6M balance. Well within GFOA guidance. Fully repaid by Y2 operations. Ambulance Fund must maintain a 3–6 month undesignated reserve — no draw from that fund.</p>
           </div>
           <div className="rounded-lg bg-slate-50 p-3 border border-slate-200">
             <p className="text-xs font-bold text-slate-700">Option B — Partial</p>
-            <p className="text-xs text-slate-600 mt-1">Delay SA hire to Month 3, saves ~$18K. Combined with Option A reduces draw. Downside: delays regional services and COA cleanup by 2 months.</p>
+            <p className="text-xs text-slate-600 mt-1">Delay SA hire to Month 3, saves ~$18K. Reduces Y1 GF draw to ~$72K. Downside: delays regional services and COA cleanup by 2 months.</p>
           </div>
           <div className="rounded-lg bg-slate-50 p-3 border border-slate-200">
-            <p className="text-xs font-bold text-slate-700">Option C — Acceptable</p>
-            <p className="text-xs text-slate-600 mt-1">GF undesignated fund balance draw for Y1 only. ~$90K ≈ 1.8-2% of $2.4-2.6M balance. Well within GFOA guidance. Fully repaid by Y2 operations.</p>
+            <p className="text-xs font-bold text-slate-700">Option C — Parallel</p>
+            <p className="text-xs text-slate-600 mt-1">Accelerate interlocal agreement execution to begin revenue in Month 7 rather than Month 9. Adds ~$13K in Y1 regional revenue, reducing the GF draw proportionally.</p>
           </div>
         </div>
       </div>
