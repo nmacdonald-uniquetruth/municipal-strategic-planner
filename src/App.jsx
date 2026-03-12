@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import { ModelProvider } from './components/machias/ModelContext';
+import { ModelProvider } from './components/machias/ModelContext.jsx';
 
 import AppLayout from './components/machias/AppLayout';
 import Dashboard from './pages/Dashboard';
