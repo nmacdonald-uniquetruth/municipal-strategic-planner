@@ -37,7 +37,7 @@ export default function ProForma() {
 
       <ProFormaChart data={data} />
 
-      <ProFormaTable data={data} />
+      <ProFormaTable data={data} settings={settings} />
 
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-5">
         <h3 className="text-sm font-semibold text-emerald-800 mb-2">General Fund Fiscal Guardrails</h3>
