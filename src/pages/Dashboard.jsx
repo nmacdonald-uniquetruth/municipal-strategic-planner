@@ -28,9 +28,15 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Administrative Restructuring</h1>
-        <p className="text-sm text-slate-500 mt-1">Comprehensive 5-year analysis — admin realignment, ERP modernization & regional service strategy</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Administrative Restructuring</h1>
+          <p className="text-sm text-slate-500 mt-1">Comprehensive 5-year analysis — admin realignment, ERP modernization & regional service strategy</p>
+        </div>
+        <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all flex-shrink-0">
+          <BookOpen className="h-3.5 w-3.5" />
+          Full Narrative
+        </Link>
       </div>
 
       {/* Key insight banner */}
