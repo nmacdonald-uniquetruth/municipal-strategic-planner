@@ -80,15 +80,47 @@ export default function Dashboard() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label="Year 1 Net" value={`$${(y1Net / 1000).toFixed(0)}K`} icon={DollarSign} sub="Base case, all 3 positions" />
-        <StatCard label="Year 5 Gross Value" value={`$${(y5Value / 1000).toFixed(0)}K`} icon={TrendingUp} sub="Structural + regional" />
-        <StatCard
-          label="Y1 GF Levy Impact"
-          value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `(${Math.abs(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K) surplus` : `+$${(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K`}
-          icon={ShieldCheck}
-          sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
-        />
-        <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${(data[0]?.gf?.undesignatedDraw / 1000).toFixed(0)}K`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
+        <div className="relative">
+          <StatCard label="Year 1 Net" value={`$${(y1Net / 1000).toFixed(0)}K`} icon={DollarSign} sub="Base case, all 3 positions" />
+          <div className="absolute top-2 right-2">
+            <InfoTooltip title="Year 1 Net Value">
+              <p>This is the net of all projected value (structural savings, regional revenue, EMS improvement, capacity) minus the total cost of all new positions and ERP implementation in Year 1.</p>
+              <p>It includes both cash and non-cash value categories. For a cash-only view, see the "5-Yr Cash Net" figure on the banner above.</p>
+            </InfoTooltip>
+          </div>
+        </div>
+        <div className="relative">
+          <StatCard label="Year 5 Gross Value" value={`$${(y5Value / 1000).toFixed(0)}K`} icon={TrendingUp} sub="Structural + regional" />
+          <div className="absolute top-2 right-2">
+            <InfoTooltip title="Year 5 Gross Value">
+              <p>The total projected annual value of the restructuring by Year 5, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
+            </InfoTooltip>
+          </div>
+        </div>
+        <div className="relative">
+          <StatCard
+            label="Y1 GF Levy Impact"
+            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `(${Math.abs(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K) surplus` : `+$${(data[0]?.gf?.gfNetLevyImpact / 1000).toFixed(0)}K`}
+            icon={ShieldCheck}
+            sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
+          />
+          <div className="absolute top-2 right-2">
+            <InfoTooltip title="General Fund Levy Impact">
+              <p>This measures whether the restructuring requires a property tax increase. The calculation compares GF-funded position costs (Staff Accountant, GA Coordinator, ERP, airport stipend) against GF cash offsets (regional contracts, Comstar savings, stipend elimination, enterprise overhead).</p>
+              <p><strong>The Billing Specialist is excluded</strong> — that position is funded entirely by the Ambulance Fund.</p>
+              <p>A surplus means cash offsets exceed costs — no tax increase needed.</p>
+            </InfoTooltip>
+          </div>
+        </div>
+        <div className="relative">
+          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${(data[0]?.gf?.undesignatedDraw / 1000).toFixed(0)}K`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
+          <div className="absolute top-2 right-2">
+            <InfoTooltip title="Undesignated Fund Draw">
+              <p>If GF-funded costs exceed GF cash offsets in Year 1, the gap would need to be covered by a draw from the undesignated fund balance (currently ~${settings.gf_undesignated_balance?.toLocaleString()}).</p>
+              <p>The plan is designed to avoid any undesignated fund draw. If this shows "None," the restructuring is fully covered by operating cash offsets.</p>
+            </InfoTooltip>
+          </div>
+        </div>
       </div>
 
       {/* Charts */}
