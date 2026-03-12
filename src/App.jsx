@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { ModelProvider } from './components/machias/ModelContext';
 
 import AppLayout from './components/machias/AppLayout';
 import Dashboard from './pages/Dashboard';
@@ -14,41 +15,48 @@ import ERPRoadmapPage from './pages/ERPRoadmapPage';
 import EnterpriseFunds from './pages/EnterpriseFunds';
 import Scenarios from './pages/Scenarios';
 import Milestones from './pages/Milestones';
+import MathVerify from './pages/MathVerify';
+import ModelSettings from './pages/ModelSettings';
+import AIPlanner from './pages/AIPlanner';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+          <p className="text-xs text-slate-400">Loading Machias Strategic Plan...</p>
+        </div>
       </div>
     );
   }
 
   if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
-    }
+    if (authError.type === 'user_not_registered') return <UserNotRegisteredError />;
+    if (authError.type === 'auth_required') { navigateToLogin(); return null; }
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/Dashboard" replace />} />
-      <Route element={<AppLayout />}>
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/ProForma" element={<ProForma />} />
-        <Route path="/Positions" element={<Positions />} />
-        <Route path="/ERPRoadmap" element={<ERPRoadmapPage />} />
-        <Route path="/EnterpriseFunds" element={<EnterpriseFunds />} />
-        <Route path="/Scenarios" element={<Scenarios />} />
-        <Route path="/Milestones" element={<Milestones />} />
-      </Route>
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <ModelProvider>
+      <Routes>
+        <Route path="/" element={<Navigate to="/Dashboard" replace />} />
+        <Route element={<AppLayout />}>
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/ProForma" element={<ProForma />} />
+          <Route path="/Positions" element={<Positions />} />
+          <Route path="/ERPRoadmap" element={<ERPRoadmapPage />} />
+          <Route path="/EnterpriseFunds" element={<EnterpriseFunds />} />
+          <Route path="/Scenarios" element={<Scenarios />} />
+          <Route path="/Milestones" element={<Milestones />} />
+          <Route path="/MathVerify" element={<MathVerify />} />
+          <Route path="/ModelSettings" element={<ModelSettings />} />
+          <Route path="/AIPlanner" element={<AIPlanner />} />
+        </Route>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </ModelProvider>
   );
 };
 
