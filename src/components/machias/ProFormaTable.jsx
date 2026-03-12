@@ -1,7 +1,8 @@
 import React from 'react';
 
-export default function ProFormaTable({ data }) {
+export default function ProFormaTable({ data, settings }) {
   const fmt = (v) => v ? `$${v.toLocaleString()}` : '—';
+  const y5Label = settings?.y5_senior_hire === 'controller' ? 'Controller (Y5 ½yr)' : 'Staff Accountant 2 (Y5)';
 
   return (
     <div className="rounded-2xl border border-slate-200/60 bg-white overflow-hidden">
