@@ -10,26 +10,47 @@ const fmtK = (n) => `$${Math.round(Math.abs(n) / 1000)}K`;
 
 const SERVICE_TIERS = [
   {
-    tier: 'Tier 1 — Basic Bookkeeping',
-    description: 'Monthly reconciliation, journal entries, accounts payable processing, and monthly financial reports. Suitable for very small towns with simple GF-only operations.',
+    tier: 'Tier 1A — Complete Financial Administration',
+    description: 'Monthly GL posting, reconciliations, warrant preparation, budget monitoring, annual close support, audit preparation and auditor coordination. Approx. 8–12 SA hours/month per town.',
+    feeRange: '$9,000–$13,000',
     hours_per_month: '8–12 hrs',
     staff_level: 'Staff Accountant',
-    includes: ['Monthly bank reconciliation', 'Accounts payable processing', 'Monthly financial statement', 'Annual budget preparation support', 'Year-end close assistance'],
+    includes: ['Monthly GL posting', 'Bank reconciliation', 'Warrant preparation', 'Budget monitoring', 'Annual close support', 'Audit prep & auditor coordination'],
   },
   {
-    tier: 'Tier 2 — Full Financial Administration',
-    description: 'All Tier 1 services plus payroll processing, grant financial reporting, audit preparation, and quarterly board presentations.',
-    hours_per_month: '16–24 hrs',
+    tier: 'Tier 1B — Payroll Administration',
+    description: 'Bi-weekly payroll processing, tax deposits, quarterly 941 filings, W-2 preparation. Priced per pay period or flat annual rate based on employee count.',
+    feeRange: '$4,000–$5,500',
+    hours_per_month: '4–6 hrs',
+    staff_level: 'Staff Accountant',
+    includes: ['Bi-weekly payroll processing', 'Tax deposits', 'Quarterly 941 filings', 'W-2 preparation', 'State filings', 'Maine PERS data'],
+  },
+  {
+    tier: 'Tier 1C — Budget Development Support',
+    description: 'Annual budget workbook preparation, department submissions, revenue analysis, Select Board presentation materials. Finance Director attends budget committee meetings.',
+    feeRange: '$2,500–$4,500',
+    hours_per_month: '~4 hrs (annual peak)',
     staff_level: 'Staff Accountant + FD oversight',
-    includes: ['All Tier 1 services', 'Payroll processing + W-2', 'Federal/state grant financial reporting', 'Audit preparation package', 'Quarterly board report', 'Budget narrative support'],
+    includes: ['Budget workbook prep', 'Department submission templates', 'Revenue analysis', 'Select Board presentation materials', 'Budget committee attendance (FD)'],
   },
   {
-    tier: 'Tier 3 — Comprehensive Financial Services',
-    description: 'All Tier 2 services plus enterprise fund oversight, capital planning support, debt service management, and on-site attendance at board meetings.',
-    hours_per_month: '32–40 hrs',
-    staff_level: 'Staff Accountant + FD + Controller',
-    includes: ['All Tier 2 services', 'Enterprise fund accounting', 'Capital improvement plan', 'Debt service scheduling', 'On-site board meeting attendance', 'GASB compliance review', 'Insurance procurement support'],
+    tier: 'Tier 1 Complete Package (A+B+C)',
+    description: 'Bundled rate with 10% discount vs. a la carte. Minimum 12-month interlocal agreement. Includes all financial administration, payroll, and budget development.',
+    feeRange: '$16,000–$22,000',
+    hours_per_month: '16–22 hrs',
+    staff_level: 'Staff Accountant + FD oversight',
+    includes: ['All Tier 1A services', 'All Tier 1B services', 'All Tier 1C services', '10% bundle discount', '12-month minimum agreement', 'Annual CPI adjustment clause'],
+    highlight: true,
   },
+];
+
+const PROJECT_ENGAGEMENTS = [
+  { type: 'Chart of Accounts Rebuild', fee: '$4,500–$7,500', deliverable: 'COA assessment vs. Maine GASB standards; redesign with fund accounting structure; ERP/TRIO config docs; staff training. Implementation-ready COA with crosswalk from prior structure.' },
+  { type: 'Taxation Review & Assessment Analysis', fee: '$3,500–$5,500', deliverable: 'Mill rate review, property tax commitment analysis, abatement history, BETE/BETR compliance. Findings report with corrective action and estimated revenue recovery.' },
+  { type: 'Audit Preparation & Corrective Action Support', fee: '$5,000–$9,000', deliverable: 'Pre-audit reconciliation, schedule prep (fixed assets, debt service, fund balance), PBC list completion, management letter response drafting. Higher end for towns with open findings.' },
+  { type: 'ERP / Financial System Implementation Support', fee: '$6,000–$12,000', deliverable: 'Vendor evaluation, RFP development, COA configuration, data migration review, parallel testing, go-live support. Relevant for towns transitioning from Harris TRIO.' },
+  { type: 'Policy & Internal Controls Development', fee: '$2,500–$5,000', deliverable: 'Cash handling, purchasing, AP/AR, payroll policy drafts. Internal control gap assessment vs. audit standards. Board-ready resolutions.' },
+  { type: 'Grant Administration Support', fee: '$1,500–$4,000/grant', deliverable: 'Application support, drawdown management, reporting, fund accounting setup, closeout documentation. Fee scales with grant complexity.' },
 ];
 
 const TOWNS = [
@@ -301,13 +322,10 @@ export default function RegionalServices() {
       {/* Pricing Model */}
       {activeTab === 'pricing' && (
         <div className="space-y-5">
-          <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 text-sm text-amber-800">
-            <strong>Pricing Philosophy:</strong> Contracts are priced based on fully loaded staff costs plus a 25% overhead recovery factor. The goal is cost recovery + modest margin — not profit maximization. This keeps contracts attractive to small towns while ensuring Machias recoups all direct costs.
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <h3 className="font-semibold text-slate-800 text-sm mb-3">Staff Cost Basis (from Model Settings)</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {/* Cost basis */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="font-semibold text-slate-800 text-sm mb-3">Pricing Basis — Staff Cost at Model Settings</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
               {[
                 { label: 'Staff Accountant', fl: saFL, hourly: saHourly },
                 { label: 'Finance Director', fl: fdFL, hourly: fdHourly },
@@ -318,27 +336,28 @@ export default function RegionalServices() {
                   <p className="font-semibold text-slate-700">{r.label}</p>
                   <p className="text-slate-500 mt-1">Fully loaded: <span className="font-mono font-bold text-slate-800">{fmt(r.fl)}/yr</span></p>
                   <p className="text-slate-500">Effective rate: <span className="font-mono font-bold text-slate-800">${r.hourly}/hr</span></p>
-                  <p className="text-[10px] text-slate-400 mt-1">+{Math.round((overhead_multiplier-1)*100)}% overhead = ${Math.round(r.hourly * overhead_multiplier)}/hr billed</p>
+                  <p className="text-[10px] text-slate-400 mt-1">+{Math.round((overhead_multiplier-1)*100)}% overhead → ${Math.round(r.hourly * overhead_multiplier)}/hr billed</p>
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-slate-400 mt-3">* Change staff salaries in <Link to="/ModelSettings" className="underline">Model Settings</Link> to update all pricing calculations automatically.</p>
+            <p className="text-[10px] text-slate-400">Blended billing rate: SA at ~${saHourly}/hr, FD at ~${fdHourly}/hr. Managed services fees invoiced monthly; project fees at completion. All fees subject to annual CPI adjustment per interlocal agreement.</p>
+            <p className="text-[10px] text-slate-400 mt-1">* Change staff salaries in <Link to="/ModelSettings" className="underline">Model Settings</Link> to update all pricing calculations automatically.</p>
           </div>
 
-          <div className="space-y-3">
-            {SERVICE_TIERS.map((tier, i) => {
-              const annualPrice = [tier1AnnualCost, tier2AnnualCost, tier3AnnualCost][i];
-              const monthlyPrice = Math.round(annualPrice / 12);
-              return (
-                <div key={i} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-                  <div className="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
+          {/* Tier 1 Managed Services */}
+          <div>
+            <h3 className="font-semibold text-slate-800 text-sm mb-3">Tier 1 — Managed Financial Services (Annual Contracts)</h3>
+            <div className="space-y-3">
+              {SERVICE_TIERS.map((tier, i) => (
+                <div key={i} className={`rounded-xl border overflow-hidden ${tier.highlight ? 'border-emerald-300' : 'border-slate-200'} bg-white`}>
+                  <div className={`px-5 py-3 flex items-center justify-between ${tier.highlight ? 'bg-emerald-800' : 'bg-slate-900'} text-white`}>
                     <div>
                       <h3 className="font-bold text-sm">{tier.tier}</h3>
-                      <p className="text-[10px] text-slate-400">{tier.staff_level} · {tier.hours_per_month}/month</p>
+                      <p className="text-[10px] text-slate-300">{tier.staff_level} · {tier.hours_per_month}/month</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xl font-bold text-emerald-400">{fmt(annualPrice)}/yr</p>
-                      <p className="text-[10px] text-slate-400">({fmt(monthlyPrice)}/month)</p>
+                      <p className="text-xl font-bold text-emerald-300">{tier.feeRange}</p>
+                      <p className="text-[10px] text-slate-400">annual fee range</p>
                     </div>
                   </div>
                   <div className="px-5 py-4">
@@ -352,34 +371,52 @@ export default function RegionalServices() {
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="rounded-xl border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50 px-4 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider grid grid-cols-5">
-              <span>Municipality</span><span>Tier</span><span>Model Price</span><span>Actual Contract</span><span>Variance</span>
+              ))}
             </div>
-            {TOWNS.map((town, i) => {
-              const tierIdx = parseInt(town.tier.slice(-1)) - 1;
-              const modelPrice = [tier1AnnualCost, tier2AnnualCost, tier3AnnualCost][Math.min(tierIdx, 2)];
-              const actual = settings[town.contractKey];
-              const variance = actual - modelPrice;
-              return (
-                <div key={i} className="px-4 py-2 grid grid-cols-5 text-xs border-t border-slate-100">
-                  <span className="font-medium text-slate-800">{town.name}</span>
-                  <span className="text-slate-600">{town.tier}</span>
-                  <span className="font-mono text-slate-700">{fmt(modelPrice)}</span>
-                  <span className="font-mono text-slate-700">{fmt(actual)}</span>
-                  <span className={`font-mono font-semibold ${variance >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>{variance >= 0 ? '+' : ''}{fmt(variance)}</span>
-                </div>
-              );
-            })}
           </div>
 
-          <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs text-slate-600 space-y-1">
-            <p><strong>Adjusting contracts:</strong> Go to <Link to="/ModelSettings" className="underline text-slate-800">Model Settings → Regional Services</Link> to change any contract value. All projections, pro forma, and the pricing comparison above will update automatically.</p>
-            <p><strong>Pricing adjustment factors:</strong> Small towns may need subsidized rates to close — consider a first-year discount of 10–15% to secure the contract, then escalate 4%/yr. Contracts currently escalate at 4%/yr in the model.</p>
+          {/* Tier 2 Project-Based */}
+          <div>
+            <h3 className="font-semibold text-slate-800 text-sm mb-3">Tier 2 — Project-Based Engagements (Fixed Fee)</h3>
+            <div className="rounded-xl border border-slate-200 overflow-hidden">
+              <div className="bg-slate-900 text-white px-4 py-2 text-[10px] font-semibold uppercase tracking-wider grid grid-cols-3">
+                <span>Project Type</span><span>Fixed Fee Range</span><span>Deliverables</span>
+              </div>
+              {PROJECT_ENGAGEMENTS.map((p, i) => (
+                <div key={i} className="px-4 py-3 grid grid-cols-3 text-xs border-t border-slate-100">
+                  <span className="font-semibold text-slate-800">{p.type}</span>
+                  <span className="font-mono font-bold text-emerald-700">{p.fee}</span>
+                  <span className="text-slate-600">{p.deliverable}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-2">Municipality complexity drives FD vs. SA time allocation. A town with open audit findings or nonstandard COA requires proportionally more Finance Director hours. All project fees subject to interlocal agreement terms.</p>
+          </div>
+
+          {/* Contract comparison */}
+          <div>
+            <h3 className="font-semibold text-slate-800 text-sm mb-2">Current Contract Values vs. Cost Basis</h3>
+            <div className="rounded-xl border border-slate-200 overflow-hidden">
+              <div className="bg-slate-50 px-4 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider grid grid-cols-5">
+                <span>Municipality</span><span>Tier</span><span>Direct Cost/yr</span><span>Contract Value</span><span>Margin</span>
+              </div>
+              {TOWNS.slice(0,3).map((town, i) => {
+                const directCost = Math.round(saHourly * 130 + fdHourly * 24); // ~130 SA hrs + 24 FD oversight hrs
+                const actual = settings[town.contractKey];
+                const margin = actual - directCost;
+                const marginPct = Math.round((margin / directCost) * 100);
+                return (
+                  <div key={i} className="px-4 py-2 grid grid-cols-5 text-xs border-t border-slate-100">
+                    <span className="font-medium text-slate-800">{town.name}</span>
+                    <span className="text-slate-600">{town.tier}</span>
+                    <span className="font-mono text-slate-500">~{fmt(directCost)}</span>
+                    <span className="font-mono font-semibold text-slate-800">{fmt(actual)}</span>
+                    <span className={`font-mono font-semibold ${margin >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>{fmt(margin)} ({marginPct}%)</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1">Direct cost = ~130 SA hours + 24 FD oversight hours per town per year at model rates. Adjust contract values in <Link to="/ModelSettings" className="underline">Model Settings</Link>.</p>
           </div>
         </div>
       )}
@@ -388,8 +425,9 @@ export default function RegionalServices() {
       {activeTab === 'emsext' && (
         <div className="space-y-4">
           <p className="text-sm text-slate-600">
-            Once the Billing Specialist is operational and the in-house EMS billing transition is complete, Machias can offer billing services to neighboring Ambulance Services — generating new revenue from existing capacity.
+            Once the Billing Specialist is operational, Machias can offer EMS billing services to neighboring Ambulance Services. Machias ran <strong>1,648 transports</strong> in FY2024–25 with <strong>$2.44M gross charges</strong> and an <strong>87.39% overall collection rate</strong> under Comstar — in-house with a dedicated specialist is projected to reach 90%+.
           </p>
+
           <div className="rounded-xl border border-slate-200 overflow-hidden">
             <div className="bg-slate-900 text-white px-4 py-2 text-[10px] font-semibold uppercase tracking-wider grid grid-cols-4">
               <span>Fiscal Year</span><span>EMS Ext Revenue</span><span>Target Clients</span><span>Notes</span>
@@ -410,22 +448,81 @@ export default function RegionalServices() {
             ))}
           </div>
 
-          <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-4">
-            <h4 className="font-semibold text-blue-900 text-sm mb-2">EMS Billing Service Pricing</h4>
-            <p className="text-xs text-blue-800 mb-3">External EMS billing is offered at a flat fee per transport or a percentage of collections — whichever is lower. This undercuts Comstar's rate while maintaining positive margin for Machias.</p>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-5">
+            <h4 className="font-semibold text-blue-900 text-sm mb-3">EMS External Billing Pricing Models</h4>
+            <p className="text-xs text-blue-800 mb-4">Pricing undercuts Comstar's {(settings.comstar_fee_rate*100).toFixed(2)}% fee while maintaining positive margin for Machias. Flat fee is based on historical annual call volume — not a per-transport rate — to provide budget certainty for client towns.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
               {[
-                { label: 'Flat Fee Model', price: '$12–15/transport', note: 'Predictable for client, scalable for Machias' },
-                { label: 'Percentage Model', price: '3.5–4.0% of gross', note: 'Below Comstar\'s 5.22% — compelling pitch' },
-                { label: 'Hybrid Model', price: 'Lower of flat or %', note: 'Client-friendly; Machias absorbs volume risk' },
+                {
+                  label: 'Annual Flat Fee',
+                  price: 'Fixed annual amount',
+                  note: 'Based on prior-year transport volume. Client gets budget certainty regardless of call volume. Machias absorbs year-over-year variance.',
+                  recommended: false,
+                  example: 'e.g., 400 annual transports × $40/transport = $16,000/yr flat',
+                },
+                {
+                  label: 'Percentage of Collections',
+                  price: '3.5–4.0% of gross',
+                  note: `Below Comstar's ${(settings.comstar_fee_rate*100).toFixed(2)}% — compelling pitch. Machias revenue grows as client transport volume grows. Client pays more in high-volume years.`,
+                  recommended: false,
+                  example: 'e.g., $500K gross billings × 3.75% = $18,750/yr',
+                },
+                {
+                  label: 'Hybrid Model',
+                  price: '% with annual minimum',
+                  note: 'Percentage of collections with a floor. Client pays the greater of the minimum or % calculation. Machias gets baseline revenue protection; client upside is capped at minimum.',
+                  recommended: true,
+                  example: 'e.g., $12,000 minimum or 3.75% of gross, whichever is greater',
+                },
               ].map((m, i) => (
-                <div key={i} className="rounded-lg bg-white border border-blue-100 p-3 text-xs">
-                  <p className="font-semibold text-blue-900">{m.label}</p>
-                  <p className="text-lg font-bold text-blue-700 my-1">{m.price}</p>
-                  <p className="text-blue-600">{m.note}</p>
+                <div key={i} className={`rounded-lg border p-3 text-xs ${m.recommended ? 'border-blue-400 bg-blue-50' : 'bg-white border-blue-100'}`}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <p className="font-semibold text-blue-900">{m.label}</p>
+                    {m.recommended && <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded-full font-bold">RECOMMENDED</span>}
+                  </div>
+                  <p className="text-base font-bold text-blue-700 my-1">{m.price}</p>
+                  <p className="text-blue-700 mb-2">{m.note}</p>
+                  <p className="text-[10px] text-blue-500 italic">{m.example}</p>
                 </div>
               ))}
             </div>
+
+            {/* Machias actual data context */}
+            <div className="rounded-xl bg-white border border-blue-200 p-4">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Machias FY2024–25 Billing Data (Comstar)</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: 'Total Transports', value: '1,648' },
+                  { label: 'Gross Charges', value: '$2,443,735' },
+                  { label: 'Total Collected', value: '$1,095,931' },
+                  { label: 'Overall Collection Rate', value: '87.39%' },
+                ].map((s, i) => (
+                  <div key={i} className="text-center">
+                    <p className="text-lg font-bold text-slate-900">{s.value}</p>
+                    <p className="text-[10px] text-slate-500">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                {[
+                  { payer: 'Medicare', rate: '97.95%', transports: 1001 },
+                  { payer: 'Medicaid', rate: '97.40%', transports: 292 },
+                  { payer: 'Blue Cross', rate: '91.95%', transports: 48 },
+                  { payer: 'Self-Pay (Uninsured)', rate: '3.26%', transports: 35 },
+                ].map((p, i) => (
+                  <div key={i} className="rounded bg-slate-50 px-2 py-1.5 text-[10px]">
+                    <p className="font-semibold text-slate-700">{p.payer}</p>
+                    <p className="text-emerald-700 font-bold">{p.rate}</p>
+                    <p className="text-slate-400">{p.transports} transports</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-slate-400 mt-2">Note: 19.6% of denials were controllable by Comstar (duplicate claims, incorrect codes, missing info). In-house billing with FD oversight can directly reduce this. 35 uninsured self-pay patients represent the primary write-off risk — payment plan program can recover a portion.</p>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 text-xs text-amber-800">
+            <strong>Payment Plan Opportunity:</strong> The 159 self-pay patients (insured + uninsured) collected only $19,833 of $141,303 allowable (14%). An in-house billing specialist with direct patient contact can implement flexible payment plans — even recovering 25% of currently written-off self-pay would add ~$30,000/year in collections. This increases billing specialist workload moderately but reduces write-offs meaningfully.
           </div>
         </div>
       )}
