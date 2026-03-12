@@ -134,6 +134,13 @@ export function runProFormaFromSettings(settings) {
         total: totalValue,
       },
       net,
+      gf: {
+        gfFundedCosts,
+        gfCashOffsets,
+        gfNetLevyImpact,
+        undesignatedDraw,
+        millRateImpact,
+      },
     };
   });
 }
