@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ModelProvider } from './components/machias/ModelContext.jsx';
 
 import AppLayout from './components/machias/AppLayout';
+import Layout from './Layout';
 import Dashboard from './pages/Dashboard';
 import ProForma from './pages/ProForma';
 import Positions from './pages/Positions';
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
 
   return (
     <ModelProvider>
+      <Layout>
       <Routes>
         <Route path="/" element={<Navigate to="/Dashboard" replace />} />
         <Route element={<AppLayout />}>
@@ -72,6 +74,7 @@ const AuthenticatedApp = () => {
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      </Layout>
     </ModelProvider>
   );
 };
