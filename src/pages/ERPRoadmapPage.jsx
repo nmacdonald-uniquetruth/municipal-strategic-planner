@@ -237,17 +237,19 @@ export default function ERPRoadmapPage() {
                 <p className="text-xs font-semibold text-red-700 mb-2">Current State Problems</p>
                 <div className="space-y-1.5">
                   {[
-                    'Payroll processed manually in legacy Trio or spreadsheets',
+                    'Legacy Trio with paper timecards — manual timesheet entry process',
+                    'Harris Trio does have automatic GL journal entry on payroll run',
+                    'No HRIS or benefit administration functionality in Trio',
                     'School payroll reconciled separately — manual W-2 coordination',
                     'No employee self-service — all changes require HR/payroll staff',
                     'PFML tracking manual — high compliance risk',
                     'Benefits enrollment paper-based',
-                    'Time & attendance not integrated — manual timesheet entry',
-                    'No automatic journal entry to GL — manual posting',
+                    'LMS currently handled by NEOGOV — goal is role-based course assignment integrated into new system',
                     '941 and W-2 filings require manual data export/import',
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-1.5 text-xs text-red-700">
-                      <span className="text-red-400 flex-shrink-0 mt-0.5">✗</span>{item}
+                      <span className={`flex-shrink-0 mt-0.5 ${i === 1 ? 'text-amber-500' : 'text-red-400'}`}>{i === 1 ? '~' : '✗'}</span>
+                      <span className={i === 1 ? 'text-amber-700' : ''}>{item}</span>
                     </div>
                   ))}
                 </div>
