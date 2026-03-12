@@ -54,6 +54,7 @@ const AuthenticatedApp = () => {
           <Route path="/MathVerify" element={<MathVerify />} />
           <Route path="/ModelSettings" element={<ModelSettings />} />
           <Route path="/AIPlanner" element={<AIPlanner />} />
+          <Route path="/Narrative" element={<Narrative />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
