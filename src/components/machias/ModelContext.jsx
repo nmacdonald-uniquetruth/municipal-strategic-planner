@@ -120,8 +120,19 @@ export function ModelProvider({ children }) {
     yearEndProcedures: addMonths(startDate, 5),
   };
 
+  // Compute FD and TM fully loaded costs
+  const healthAnnual = settings.health_tier === 'individual' ? settings.health_individual_annual : settings.health_family_annual;
+  const fd_loaded_cost = calculateFullyLoaded(settings.fd_base_salary, settings.health_tier, healthAnnual, settings.fica_rate, settings.pers_rate, settings.wc_rate);
+  const tm_loaded_cost = calculateFullyLoaded(settings.tm_base_salary, settings.health_tier, healthAnnual, settings.fica_rate, settings.pers_rate, settings.wc_rate);
+
+  const computedSettings = {
+    ...settings,
+    fd_loaded_cost: Math.round(fd_loaded_cost),
+    tm_loaded_cost: Math.round(tm_loaded_cost),
+  };
+
   return (
-    <ModelContext.Provider value={{ settings, updateSettings, loading, milestoneDates, addMonths, startDate }}>
+    <ModelContext.Provider value={{ settings: computedSettings, updateSettings, loading, milestoneDates, addMonths, startDate }}>
       {children}
     </ModelContext.Provider>
   );
