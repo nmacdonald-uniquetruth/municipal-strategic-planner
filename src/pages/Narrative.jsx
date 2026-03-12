@@ -223,7 +223,7 @@ export default function Narrative() {
         {/* 1 — Context */}
         <Section id="context" icon={MapPin} title="1. The Machias Context — Why This Plan, Why Now">
           <p>
-            Machias is the shire town of Washington County, Maine's largest and most rural county. As county seat, Machias anchors regional government, courts, healthcare, and commerce for a wide geographic area. The Town operates a General Fund, five enterprise funds (Ambulance, Sewer, Transfer Station, Telebusiness Center, and 7 Court Street), and provides financial administration support — formally or informally — to several neighboring municipalities.
+            Machias is the shire town of Washington County. As county seat, Machias anchors regional government, courts, healthcare, and commerce for a wide geographic area. The Town operates a General Fund, five enterprise funds (Ambulance, Sewer, Transfer Station, Telebusiness Center, and 7 Court Street), and provides financial administration support — formally or informally — to several neighboring municipalities.
           </p>
 
           <SubSection title="Current Administrative Capacity — The Gap">
