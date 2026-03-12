@@ -23,7 +23,8 @@ export function runProFormaFromSettings(settings) {
   // GA duties + accounting support funded by the GA stipend + reallocation of clerk stipends.
   // Full-time SA is hired in Y2. GA coordinator cost in Y1 is $0 (absorbed by the PT role).
   const usePartTimeY1 = s.y1_staffing_model === 'parttime_stipend';
-  const clerkStipendRealloc = s.clerk_stipend_realloc || 20000;
+  // Part-time person is funded by: GA stipend ($10k) + clerk stipend elimination ($26k) = $36k
+  const clerkStipendRealloc = s.clerk_stipend_realloc || s.stipend_elimination || 26000;
 
   return [1, 2, 3, 4, 5].map((yr) => {
     const esc = (v) => Math.round(v * Math.pow(1 + wg, yr - 1));
