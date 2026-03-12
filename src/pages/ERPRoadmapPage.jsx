@@ -100,8 +100,8 @@ export default function ERPRoadmapPage() {
             </div>
             <div className="rounded-xl bg-slate-50 p-4 border border-slate-200">
               <p className="font-semibold text-slate-700 text-xs mb-1">Modern ERP + No New Staff</p>
-              <p className="text-xs text-slate-500">Automates workflows. But the FD still can't implement it without SA capacity. Implementation project will fail without dedicated finance staff. And automation of wrong processes makes bad processes faster.</p>
-              <p className="text-xs text-red-700 font-semibold mt-2">Likely failure mode — not recommended</p>
+              <p className="text-xs text-slate-500">The FD could lead implementation, but it would take significantly longer and delay other strategic priorities. The question is not "can it be done" but "at what cost and timeline." The SA would work closely with the FD throughout — it is not a solo SA project. Automation of wrong processes also makes bad processes faster.</p>
+              <p className="text-xs text-amber-700 font-semibold mt-2">Higher risk — slower timeline, higher implementation cost</p>
             </div>
             <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200">
               <p className="font-semibold text-emerald-800 text-xs mb-1">Staff + Modern ERP (This Plan)</p>
