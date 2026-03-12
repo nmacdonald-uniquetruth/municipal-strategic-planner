@@ -78,6 +78,22 @@ export default function ModelSettingsEditor() {
         <Field label="Staff Accountant Base" value={local.sa_base_salary} onChange={set('sa_base_salary')} prefix="$" />
         <Field label="Billing Specialist Base" value={local.bs_base_salary} onChange={set('bs_base_salary')} prefix="$" />
         <Field label="GA Coordinator Stipend" value={local.ga_stipend} onChange={set('ga_stipend')} prefix="$" />
+        <div className="col-span-2 md:col-span-3">
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">Year 1 Staffing Model</Label>
+          <p className="text-[9px] text-slate-400 mb-1">Full-time SA hired in Y1, or part-time individual funded by GA stipend + clerk stipend reallocation with full SA in Y2</p>
+          <div className="flex gap-2 mt-1">
+            <Select value={local.y1_staffing_model || 'fulltime_sa'} onValueChange={set('y1_staffing_model')}>
+              <SelectTrigger className="h-8 text-xs w-64"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="fulltime_sa" className="text-xs">Full-Time SA — hired Year 1</SelectItem>
+                <SelectItem value="parttime_stipend" className="text-xs">Part-Time + Stipend Reallocation — full SA in Year 2</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        {(local.y1_staffing_model === 'parttime_stipend') && (
+          <Field label="Clerk Stipend Reallocation (Y1)" value={local.clerk_stipend_realloc ?? 20000} onChange={set('clerk_stipend_realloc')} prefix="$" />
+        )}
         <Field label="Revenue Coordinator Base" value={local.rc_base_salary} onChange={set('rc_base_salary')} prefix="$" />
         <Field label="Controller Base" value={local.controller_base_salary} onChange={set('controller_base_salary')} prefix="$" />
         <div>

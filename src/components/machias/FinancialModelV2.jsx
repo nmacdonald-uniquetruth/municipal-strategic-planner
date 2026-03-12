@@ -19,14 +19,27 @@ export function runProFormaFromSettings(settings) {
   const ctrlFL = fl(s.controller_base_salary);
   const wg = s.wage_growth_rate;
 
+  // Part-time Y1 model: in Y1, instead of a full-time SA, a part-time contractor covers
+  // GA duties + accounting support funded by the GA stipend + reallocation of clerk stipends.
+  // Full-time SA is hired in Y2. GA coordinator cost in Y1 is $0 (absorbed by the PT role).
+  const usePartTimeY1 = s.y1_staffing_model === 'parttime_stipend';
+  const clerkStipendRealloc = s.clerk_stipend_realloc || 20000;
+
   return [1, 2, 3, 4, 5].map((yr) => {
     const esc = (v) => Math.round(v * Math.pow(1 + wg, yr - 1));
     const entEsc = (v) => v * Math.pow(1 + s.enterprise_growth_rate, yr - 1);
 
     // Costs
-    const saCost = esc(saFL);
+    // Part-time Y1: SA cost = GA stipend + clerk stipend reallocation (no benefits, no full hire)
+    //   GA coordinator cost = $0 in Y1 (duties absorbed by part-time person)
+    //   Y2+: full-time SA hired, GA coordinator resumes normal stipend
+    const saCost = usePartTimeY1 && yr === 1
+      ? (s.ga_stipend + clerkStipendRealloc)  // stipend-funded part-time role
+      : esc(saFL);
     const bsCost = yr === 1 ? Math.round(bsFL * (6 / 12)) : esc(bsFL);
-    const gaCost = yr === 1 ? Math.round(gaFL * (4 / 12)) : esc(gaFL);
+    const gaCost = usePartTimeY1 && yr === 1
+      ? 0  // GA duties covered by part-time person in Y1
+      : (yr === 1 ? Math.round(gaFL * (4 / 12)) : esc(gaFL));
     // Revenue Coordinator: only hire when regional services revenue covers fully loaded cost
     const rcFullyLoaded = esc(rcFL);
     const regionalAtYr = (() => {
