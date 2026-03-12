@@ -572,7 +572,7 @@ export default function ERPRoadmapPage() {
           </div>
 
           <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-4 text-xs text-blue-800">
-            <strong>Funding strategy:</strong> The {fmt(settings.erp_designated_fund_offset)} designated fund offset reduces the net Year 1 appropriation to {fmt(settings.erp_y1_cost - settings.erp_designated_fund_offset)}. If ARPA funds or USDA Rural Development grants are available, ERP software implementation is an eligible use — potentially reducing the net GF cost to zero. The GA Coordinator should evaluate grant opportunities before the Town Meeting appropriation vote.
+            <strong>Funding strategy:</strong> The {fmt(settings.erp_designated_fund_offset)} offset is drawn from unused designated funds (set aside 10+ years ago), not from the Ambulance Fund or undesignated reserves. This reduces the net Year 1 GF appropriation to {fmt(settings.erp_y1_cost - settings.erp_designated_fund_offset)}. If ARPA funds or USDA Rural Development grants are available, ERP software implementation is an eligible use — potentially reducing the net GF cost further. Evaluate grant opportunities before the Town Meeting appropriation vote.
           </div>
         </div>
       )}
