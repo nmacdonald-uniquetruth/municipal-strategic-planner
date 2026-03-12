@@ -47,7 +47,10 @@ export function runProFormaFromSettings(settings) {
     const transports = s.ems_transports * Math.pow(1 + s.transport_growth_rate, yr - 1);
     const gross = transports * s.avg_revenue_per_transport;
     const comstarAvoided = Math.round(gross * s.comstar_collection_rate * s.comstar_fee_rate);
-    const collectionImprovement = yr === 1 ? 0 : Math.round(gross * (s.inhouse_steady_rate - s.comstar_collection_rate));
+    // Y1: improved collection 87.4% → 90% yields ~$27,780; Y2+: full inhouse_steady_rate vs comstar
+    const collectionImprovement = yr === 1
+      ? Math.round(gross * (0.90 - s.comstar_collection_rate))
+      : Math.round(gross * (s.inhouse_steady_rate - s.comstar_collection_rate));
 
     // Stipends, airport, control
     const stipendSavings = s.stipend_elimination;
