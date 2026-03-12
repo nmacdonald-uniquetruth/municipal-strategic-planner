@@ -89,7 +89,11 @@ function Stat({ label, value, sub, color = 'slate' }) {
 
 const fmt  = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
 const pct  = (n) => `${(n * 100).toFixed(1)}%`;
-const fmtK = (n) => `$${Math.round(n / 1000)}K`;
+const fmtK = (n) => {
+  const val = Math.abs(n);
+  if (val >= 1000000) return `$${(val / 1000000).toFixed(2)}M`;
+  return `$${Math.round(val / 1000)}K`;
+};
 
 // ─── Table of Contents sidebar ───────────────────────────────────────────────
 
