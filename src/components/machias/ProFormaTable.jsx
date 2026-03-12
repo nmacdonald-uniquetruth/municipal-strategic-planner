@@ -60,13 +60,12 @@ export default function ProFormaTable({ data, settings }) {
               <td className="p-3" colSpan={6}>POSITION COSTS</td>
             </tr>
             {[
-              ['Staff Accountant', 'staffAccountant'],
-              ['Billing Specialist', 'billingSpecialist'],
-              ['GA Coordinator', 'gaCoordinator'],
+              [settings?.y1_staffing_model === 'parttime_stipend' ? 'PT Accounting Support (Y1) / Staff Accountant (Y2+)' : 'Staff Accountant', 'staffAccountant'],
+              ['Billing Specialist (Amb. Fund)', 'billingSpecialist'],
+              [settings?.y1_staffing_model === 'parttime_stipend' ? 'GA Coordinator (Y2+)' : 'GA Coordinator', 'gaCoordinator'],
               ['Revenue Coordinator', 'revenueCoordinator'],
               [y5Label, 'controller'],
-              ['Implementation', 'implementation'],
-              ['ERP', 'erp'],
+              ['ERP / Implementation', 'implementation'],
             ].map(([label, key]) => (
               <tr key={key} className="border-b border-slate-50 hover:bg-slate-50/50">
                 <td className="p-3 pl-6 text-slate-600">{label}</td>
