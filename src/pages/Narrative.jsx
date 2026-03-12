@@ -351,10 +351,10 @@ export default function Narrative() {
               headers={['Benefit', 'Rate / Amount', 'Applies To']}
               rows={[
                 ['FICA (Social Security + Medicare)', pct(s.fica_rate), 'All non-stipend positions'],
-                ['Employer Retirement Match (457)', pct(s.pers_rate), 'Admin positions — up to 5% match (not MainePERS)'],
+                ['Maine PERS (retirement)', pct(s.pers_rate), 'All non-stipend positions'],
                 ["Workers' Compensation", pct(s.wc_rate), 'All non-stipend positions'],
                 [`Health Insurance (${healthLabel} tier)`, `${fmt(healthAnnual)}/yr`, 'All full-time positions'],
-                ['Total benefit load on salary', pct(s.fica_rate + s.pers_rate + s.wc_rate), '+ health separately (FICA + 5% retirement match + WC)'],
+                ['Total benefit load on salary', pct(s.fica_rate + s.pers_rate + s.wc_rate), '+ health separately'],
               ]}
             />
           </SubSection>
