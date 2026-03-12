@@ -81,6 +81,9 @@ export default function ExportExecSummary() {
           <strong>Core Finding:</strong> The Town of Machias currently spends over $229,000/year in structural inefficiency — executive compensation applied to transactional financial tasks, outsourced billing fees ({fmt(d1.value.comstarAvoided)}/yr to Comstar), and informal stipend arrangements ({fmt(settings.stipend_elimination)}/yr). This plan formalizes that expenditure into three dedicated positions at the appropriate staffing level, with no property tax increase required.
         </div>
 
+        <h2>Context</h2>
+        <p>Machias is the county seat of Washington County, Maine. The town serves as the regional hub for county government, judicial services, and healthcare in a sparsely populated coastal and inland region. The restructuring described in this plan is designed to strengthen Machias's capacity to deliver professional municipal services while leveraging regional relationships with smaller neighboring communities.</p>
+
         <h2>The Problem</h2>
         <p>The Finance Director ({fmt(settings.fd_loaded_cost)}/yr fully loaded) currently spends an estimated 45% of time on transactional work — accounts payable, payroll processing, EMS billing oversight, and informal support to neighboring towns. The Town Manager ({fmt(settings.tm_loaded_cost)}/yr) spends 18–22% on financial administration oversight. Simultaneously, Machias pays Comstar {pct(settings.comstar_fee_rate)} of gross EMS collections ({fmt(d1.value.comstarAvoided)}/yr) to manage billing that an in-house specialist can perform at lower cost while improving collection rates. Annual auditors have flagged separation-of-duties deficiencies with an estimated control risk exposure of {fmt(settings.control_risk_exposure)}/year.</p>
 
