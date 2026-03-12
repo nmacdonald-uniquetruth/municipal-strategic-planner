@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS = {
   wage_growth_rate: 0.04,
   health_tier: 'family',
   fica_rate: 0.0765,
-  pers_rate: 0.085,
+  pers_rate: 0.05, // Admin positions: 5% employer 457 match, not MainePERS
   wc_rate: 0.025,
   health_individual_annual: 17721,
   health_family_annual: 30938,
