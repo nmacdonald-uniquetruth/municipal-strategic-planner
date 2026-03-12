@@ -172,6 +172,8 @@ export default function RegionalServices() {
 
   const totalY1Regional = data[0].value.regionalServices;
   const total5yr = data.reduce((s, d) => s + d.value.regionalServices + d.value.emsExternal, 0);
+  const y5HireLabel = settings.y5_senior_hire === 'controller' ? 'Controller' : 'Staff Accountant (2nd)';
+  const isPartTime = settings.y1_staffing_model === 'parttime_stipend';
 
   // Pricing model — based on loaded staff costs
   const saFL = Math.round(settings.sa_base_salary * (1 + settings.fica_rate + settings.pers_rate + settings.wc_rate) + settings.health_family_annual);
@@ -264,7 +266,7 @@ export default function RegionalServices() {
                 towns: ['Whitneyville', 'Northfield'],
                 actions: ['Revenue Coordinator hire triggered', 'Bundled service model for smallest towns', 'ERP multi-entity fully operational', 'External EMS billing for neighboring Ambulance Services'],
                 revenue: fmt(data[2].value.regionalServices),
-                note: 'Revenue Coordinator hired when this revenue covers fully loaded position cost',
+                note: `Revenue Coordinator hired when this revenue covers fully loaded position cost. Y5 senior hire: ${y5HireLabel} (half-year).`,
               },
             ].map((ph, i) => {
               const colors = {
