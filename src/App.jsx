@@ -19,6 +19,13 @@ import MathVerify from './pages/MathVerify';
 import ModelSettings from './pages/ModelSettings';
 import AIPlanner from './pages/AIPlanner';
 import Narrative from './pages/Narrative';
+import RegionalServices from './pages/RegionalServices';
+import TransferStation from './pages/TransferStation';
+import SensitivityAnalysis from './pages/SensitivityAnalysis';
+import ReferencesAndResearch from './pages/ReferencesAndResearch';
+import QandA from './pages/QandA';
+import CommunicationStrategy from './pages/CommunicationStrategy';
+import PerformanceMetrics from './pages/PerformanceMetrics';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -55,6 +62,13 @@ const AuthenticatedApp = () => {
           <Route path="/ModelSettings" element={<ModelSettings />} />
           <Route path="/AIPlanner" element={<AIPlanner />} />
           <Route path="/Narrative" element={<Narrative />} />
+          <Route path="/RegionalServices" element={<RegionalServices />} />
+          <Route path="/TransferStation" element={<TransferStation />} />
+          <Route path="/SensitivityAnalysis" element={<SensitivityAnalysis />} />
+          <Route path="/ReferencesAndResearch" element={<ReferencesAndResearch />} />
+          <Route path="/QandA" element={<QandA />} />
+          <Route path="/CommunicationStrategy" element={<CommunicationStrategy />} />
+          <Route path="/PerformanceMetrics" element={<PerformanceMetrics />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
