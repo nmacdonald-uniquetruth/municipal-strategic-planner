@@ -229,7 +229,7 @@ export default function Narrative() {
           <SubSection title="Current Administrative Capacity — The Gap">
             <p>The Town's Finance Department consists of the Finance Director and a Town Clerk. This staffing level is appropriate for a very small municipality with simple, single-fund operations. Machias is neither small nor simple:</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-              <Stat label="Annual Transports" value={s.ems_transports.toLocaleString()} sub="Ambulance Service" color="slate" />
+              <Stat label="Annual Calls" value={s.ems_transports.toLocaleString()} sub="Ambulance Service" color="slate" />
               <Stat label="Enterprise Funds" value="5" sub="Ambulance, Sewer, TS, Telebus, Court St" color="slate" />
               <Stat label="Tax Levy" value={fmtK(s.annual_tax_levy)} sub="Annual GF levy" color="slate" />
               <Stat label="Assessed Value" value={`$${(s.total_assessed_value / 1000000).toFixed(0)}M`} sub="Total assessed value" color="slate" />
@@ -307,13 +307,13 @@ export default function Narrative() {
 
           <SubSection title="The Comstar Fee Problem">
             <p>
-              Machias contracts with Comstar for EMS billing at a confirmed rate of <strong>{pct(s.comstar_fee_rate)} of gross collections</strong>. At {s.ems_transports.toLocaleString()} annual transports and {fmt(s.avg_revenue_per_transport)} average revenue per transport:
+              Machias contracts with Comstar for EMS billing at a confirmed rate of <strong>{pct(s.comstar_fee_rate)} of gross collections</strong>. At {s.ems_transports.toLocaleString()} annual calls and {fmt(s.avg_revenue_per_transport)} average revenue per call:
             </p>
             <DataTable
               headers={['Metric', 'Value', 'Notes']}
               rows={[
-                ['Annual transports', s.ems_transports.toLocaleString(), `Growing at ${pct(s.transport_growth_rate)}/yr`],
-                ['Avg revenue per transport', fmt(s.avg_revenue_per_transport), 'Gross, pre-collection'],
+                ['Annual calls', s.ems_transports.toLocaleString(), `Growing at ${pct(s.transport_growth_rate)}/yr`],
+                ['Avg revenue per call', fmt(s.avg_revenue_per_transport), 'Gross, pre-collection'],
                 ['Gross annual EMS revenue', fmt(s.ems_transports * s.avg_revenue_per_transport), 'Before collection rate'],
                 ['Comstar collection rate', pct(s.comstar_collection_rate), 'Current actual rate'],
                 ['Comstar fee rate', pct(s.comstar_fee_rate), 'Confirmed contract rate'],
@@ -440,7 +440,7 @@ export default function Narrative() {
         {/* 4 — EMS Billing */}
         <Section id="ems" icon={DollarSign} title="4. EMS Billing Transition — Comstar to In-House">
           <p>
-            The Machias Ambulance Service generated approximately <strong>{fmt(s.ems_transports * s.avg_revenue_per_transport)}</strong> in gross billing in the most recent year on {s.ems_transports.toLocaleString()} transports. Comstar currently collects {pct(s.comstar_collection_rate)} of that gross and charges {pct(s.comstar_fee_rate)} of gross collections — roughly <strong>{fmt(d1?.value?.comstarAvoided)}</strong> in fees in Year 1.
+            The Machias Ambulance Service generated approximately <strong>{fmt(s.ems_transports * s.avg_revenue_per_transport)}</strong> in gross billing in the most recent year on {s.ems_transports.toLocaleString()} calls. Comstar currently collects {pct(s.comstar_collection_rate)} of that gross and charges {pct(s.comstar_fee_rate)} of gross collections — roughly <strong>{fmt(d1?.value?.comstarAvoided)}</strong> in fees in Year 1.
           </p>
 
           <SubSection title="The Case for In-House Billing">
@@ -450,7 +450,7 @@ export default function Narrative() {
                 <p>Annual fee: {fmt(d1?.value?.comstarAvoided)} (Y1), growing with transport volume</p>
                 <p>Limited visibility into denial management and appeal rates</p>
                 <p>No integration with local EMS run records</p>
-                <p>Fee compounds as transports grow at {pct(s.transport_growth_rate)}/yr</p>
+                <p>Fee compounds as calls grow at {pct(s.transport_growth_rate)}/yr</p>
               </Callout>
               <Callout color="emerald" label="Proposed In-House">
                 <p>Y1 collection rate: {pct(s.inhouse_y1_rate)} (ramp period)</p>
@@ -464,7 +464,7 @@ export default function Narrative() {
 
           <SubSection title="Year-by-Year EMS Financial Impact">
             <DataTable
-              headers={['Fiscal Year', 'Transports', 'Comstar Fee Avoided', 'Collection Improvement', 'BS Cost (Amb Fund)', 'Net Ambulance Fund Benefit']}
+               headers={['Fiscal Year', 'Calls', 'Comstar Fee Avoided', 'Collection Improvement', 'BS Cost (Amb Fund)', 'Net Ambulance Fund Benefit']}
               rows={data.map(d => [
                 d.fiscalYear,
                 Math.round(s.ems_transports * Math.pow(1 + s.transport_growth_rate, d.year - 1)).toLocaleString(),
@@ -487,7 +487,7 @@ export default function Narrative() {
               {[
                 { phase: 'Month 1–6', title: 'Parallel operation', body: 'Billing Specialist hired in Month 7. Prior to hire, begin documentation of current Comstar processes, run data, and denial patterns. Negotiate transition timeline with Comstar.' },
                 { phase: 'Month 7–9', title: 'Parallel billing run', body: `Billing Specialist begins processing alongside Comstar. Compare results. Target: achieve ≥ ${pct(s.inhouse_y1_rate)} collection rate before cutover.` },
-                { phase: 'Month 10', title: 'Comstar cutover', body: 'Full transition to in-house billing. Comstar contract terminates. All new transports billed in-house. Begin denial management protocol.' },
+                { phase: 'Month 10', title: 'Comstar cutover', body: 'Full transition to in-house billing. Comstar contract terminates. All new calls billed in-house. Begin denial management protocol.' },
                 { phase: 'Year 2+', title: 'External EMS billing', body: 'Offer EMS billing services to neighboring Ambulance Services (Jonesport, Harrington, Whiting) as a regional service. Projected revenue: $15K (Y2), $30K (Y3), $45K (Y4), $55K (Y5).' },
               ].map(step => (
                 <div key={step.phase} className="flex gap-3 rounded-lg border border-slate-200 p-3">
