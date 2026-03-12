@@ -8,9 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { SectionHeader } from '../components/machias/SectionHeader';
 import { ClipboardList, Gavel, Plus, Pencil, Trash2, CalendarDays, CheckCircle2, Circle, Clock, AlertTriangle } from 'lucide-react';
-import DecisionTracker from '../components/machias/DecisionTracker';
 import SectionHdr from '../components/machias/SectionHeader';
 
 const STATUS_CONFIG = {
