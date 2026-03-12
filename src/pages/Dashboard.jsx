@@ -124,10 +124,23 @@ export default function Dashboard() {
       </div>
 
       {/* Charts */}
-      <SectionHeader title="5-Year Financial Pro Forma" subtitle="Base case: all revenue streams active" icon={TrendingUp} />
+      <div className="flex items-center gap-2">
+        <SectionHeader title="5-Year Financial Pro Forma" subtitle="Base case: all revenue streams active" icon={TrendingUp} />
+        <InfoTooltip title="How to read the Pro Forma chart">
+          <p>The stacked bars show three value categories: <strong>Structural</strong> (avoided costs, enterprise overhead, capacity), <strong>Regional</strong> (contracts + EMS external + Transfer Station), and <strong>ERP</strong> (starting Year 2).</p>
+          <p>The orange line shows total costs. When stacked bars exceed the line, the restructuring is net-positive for that year.</p>
+          <p>Note: the chart includes all value categories including non-cash items. See "5-Yr Cash Net" for actual dollars only.</p>
+        </InfoTooltip>
+      </div>
       <ProFormaChart data={data} />
 
-      <SectionHeader title="Payback Timeline" subtitle="Quarterly cost-value analysis through 24 months" icon={Clock} />
+      <div className="flex items-center gap-2">
+        <SectionHeader title="Payback Timeline" subtitle="Quarterly cost-value analysis through 24 months" icon={Clock} />
+        <InfoTooltip title="Payback Timeline">
+          <p>This chart tracks the cash-only cumulative net — actual dollars deposited or saved, minus actual costs — quarter by quarter through the first two fiscal years.</p>
+          <p>Cash break-even is projected around Year 2, when cumulative cash offsets exceed cumulative costs. Non-cash value (FD/TM capacity, control risk) is excluded here intentionally.</p>
+        </InfoTooltip>
+      </div>
       <PaybackChart />
 
       {/* Three pillars summary */}
