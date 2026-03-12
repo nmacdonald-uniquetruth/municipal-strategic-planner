@@ -52,14 +52,18 @@ export default function Positions() {
           </div>
 
           <div className="rounded-xl bg-slate-50 p-4">
-            <h4 className="text-xs font-semibold text-slate-800 mb-2">Clerk Office — $26K/yr informal stipends</h4>
+            <h4 className="text-xs font-semibold text-slate-800 mb-2">Clerk Office — {fmt(settings.stipend_elimination)}/yr informal stipends</h4>
             <div className="space-y-1.5 text-xs text-slate-600">
               <p>• $350/week Deputy + $150/week Clerk since July 2025</p>
               <p>• ~$19,500 already paid as of March 2026</p>
               <p>• Financial ops outside statutory scope</p>
               <p>• Deputy has expressed workload is unsustainable</p>
             </div>
-            <p className="mt-3 text-sm font-bold text-slate-900">$26,000/yr — eliminated upon SA hire</p>
+            <p className="mt-3 text-sm font-bold text-slate-900">
+              {fmt(settings.stipend_elimination)}/yr — {settings.y1_staffing_model === 'parttime_stipend'
+                ? 'reallocated Day 1 to fund part-time accounting support'
+                : 'eliminated upon SA hire'}
+            </p>
           </div>
 
           <div className="rounded-xl bg-slate-50 p-4">
