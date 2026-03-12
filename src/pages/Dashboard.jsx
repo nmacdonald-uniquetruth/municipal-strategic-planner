@@ -164,6 +164,7 @@ export default function Dashboard() {
             Transfer Station member fees, and external EMS billing revenue.
           </p>
           <p className="mt-3 text-lg font-bold text-emerald-800">~$900K over 5 years</p>
+          <Link to="/Narrative" className="mt-2 text-[10px] text-emerald-600 hover:underline block">Read full narrative →</Link>
         </div>
 
         <div className="rounded-2xl border border-amber-200 bg-amber-50/30 p-5">
@@ -172,10 +173,11 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-amber-800">Category 2: Budget Impact</h3>
           </div>
           <p className="text-xs text-amber-700 leading-relaxed">
-            Real cost reductions. Comstar fee avoided ($49K+ and growing), stipend elimination ($26K/yr),
+            Real cost reductions. Comstar fee avoided (${data[0]?.value?.comstarAvoided?.toLocaleString()}+ and growing), stipend elimination (${settings.stipend_elimination?.toLocaleString()}/yr),
             airport inspection savings, enterprise overhead allocation.
           </p>
           <p className="mt-3 text-lg font-bold text-amber-800">Direct GF reductions</p>
+          <Link to="/Narrative" className="mt-2 text-[10px] text-amber-600 hover:underline block">Read full narrative →</Link>
         </div>
 
         <div className="rounded-2xl border border-blue-200 bg-blue-50/30 p-5">
@@ -185,9 +187,10 @@ export default function Dashboard() {
           </div>
           <p className="text-xs text-blue-700 leading-relaxed">
             Time redirected to strategic work. FD: 45-60% capacity recovered. TM: 18-22% recovered.
-            Control risk mitigation $28K-$42K/yr. Enables economic development.
+            Control risk mitigation ${data[0]?.value?.controlRisk?.toLocaleString()}–${data[1]?.value?.controlRisk?.toLocaleString()}/yr. Enables economic development.
           </p>
           <p className="mt-3 text-lg font-bold text-blue-800">~$700K time value</p>
+          <Link to="/Narrative" className="mt-2 text-[10px] text-blue-600 hover:underline block">Read full narrative →</Link>
         </div>
       </div>
     </div>
