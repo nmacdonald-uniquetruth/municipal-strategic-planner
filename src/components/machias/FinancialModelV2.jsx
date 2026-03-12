@@ -66,10 +66,9 @@ export function runProFormaFromSettings(settings) {
     const entTotal = Math.round(entFunds.reduce((a, v) => a + v, 0) * Math.pow(1 + s.enterprise_growth_rate, yr - 1));
 
     // FD / TM capacity
-    const fdPct = yr === 1 ? 0.45 : yr === 2 ? 0.55 : 0.60;
-    const tmPct = yr === 1 ? 0.18 : 0.22;
-    const fdCapacity = Math.round(s.fd_loaded_cost * fdPct);
-    const tmCapacity = Math.round(s.tm_loaded_cost * tmPct);
+    // Year 1: use actuals from CONTROLS sheet audit; Year 2+: formula-based
+    const fdCapacity = yr === 1 ? 50229 : Math.round(s.fd_loaded_cost * (yr === 2 ? 0.55 : 0.60));
+    const tmCapacity = yr === 1 ? 21587 : Math.round(s.tm_loaded_cost * (yr === 2 ? 0.22 : 0.22));
 
     // EMS
     const transports = s.ems_transports * Math.pow(1 + s.transport_growth_rate, yr - 1);
