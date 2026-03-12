@@ -134,10 +134,11 @@ export default function ProFormaTable({ data }) {
             <tr className="bg-slate-800 text-slate-200 text-[11px]">
               <td className="p-3 font-medium">
                 <span>Net Cost After Regional Revenue</span>
-                <div className="text-[9px] text-slate-400 font-normal mt-0.5">Total Costs minus Regional Revenue (cash only)</div>
+                <div className="text-[9px] text-slate-400 font-normal mt-0.5">Total Costs minus Regional Revenue + Comstar + Collection + Stipends + Airport</div>
               </td>
               {data.map(d => {
-                const netAfterRegional = d.costs.total - d.value.regionalTotal;
+                const trueCashOffsets = d.value.regionalTotal + d.value.comstarAvoided + d.value.collectionImprovement + d.value.stipendSavings + d.value.airportSavings;
+                const netAfterRegional = d.costs.total - trueCashOffsets;
                 return (
                   <td key={d.fiscalYear} className={`p-3 text-right font-mono ${netAfterRegional <= 0 ? 'text-emerald-300' : 'text-amber-300'}`}>
                     {netAfterRegional <= 0 ? fmt(Math.abs(netAfterRegional)) + ' surplus' : fmt(netAfterRegional) + ' gap'}
