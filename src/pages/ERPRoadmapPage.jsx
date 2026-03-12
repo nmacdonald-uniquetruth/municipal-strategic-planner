@@ -376,6 +376,150 @@ export default function ERPRoadmapPage() {
         </div>
       )}
 
+      {/* OPERATIONAL FOOTPRINT */}
+      {activeTab === 'footprint' && (
+        <div className="space-y-5">
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900 text-sm mb-2">Machias Operational Footprint & Service Complexity</h3>
+            <p className="text-xs text-slate-600 leading-relaxed mb-3">Standard per-capita benchmarking systematically understates the complexity of municipalities like Machias — small-population county seats that anchor regional public safety, infrastructure, and administrative services for a much larger surrounding area. A service-complexity weighted analysis places Machias at approximately <strong>2.5–3.0× the operational intensity</strong> of a typical 2,000-person Maine municipality.</p>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: 'Residential Population', value: '2,105', sub: 'Town of Machias' },
+                { label: 'Effective Service Pop.', value: '6,000–8,000', sub: 'Complexity-weighted equivalent' },
+                { label: 'Complexity Multiplier', value: '2.5–3.0×', sub: 'vs. typical 2,000-person Maine town' },
+              ].map((s, i) => (
+                <div key={i} className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-center">
+                  <p className="text-xl font-bold text-slate-900">{s.value}</p>
+                  <p className="text-xs font-medium text-slate-600 mt-0.5">{s.label}</p>
+                  <p className="text-[10px] text-slate-400">{s.sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Current Service Portfolio */}
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-900 text-white px-5 py-3">
+              <h3 className="font-bold text-sm">A. Current Service Portfolio</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Service Area</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Scope</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Coverage Pop.</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Complexity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['EMS Ambulance', '10-town regional coverage, ~2,000 calls/year, QA/QI structure', '4,500–6,000', 'High'],
+                    ['Fire — Primary', 'Machias, Northfield, Whitneyville; full-time engineers plus volunteers', '2,440', 'High'],
+                    ['Fire — Mutual Aid', 'Marshfield, Machiasport, Jonesboro, East Machias', '3,500 addl.', 'Moderate'],
+                    ['Police', 'Full department, 24/7, 3 full-time officers plus 12 reserves', '2,000', 'Moderate'],
+                    ['Airport', 'FAA compliance, capital grants, engineering oversight, fuel farm; inspection currently at reduced hours', 'Regional', 'High'],
+                    ['Sewer Enterprise', 'Contracted operations, infrastructure lifecycle management', '2,000', 'Moderate'],
+                    ['Transfer Station', 'Host municipality, Roque Bluffs interlocal, significant expansion potential', '2,300 current', 'Moderate–High'],
+                    ['General Assistance', 'Currently processed by Town Manager, Title 22 compliance', '2,000', 'Moderate'],
+                    ['County Seat Functions', 'High public transaction volume, FOAA requests, public records management', 'Regional', 'Moderate'],
+                    ['Telebusiness Center', 'Municipal HQ with VA, DMV, AOS, and private professional tenants', 'Internal', 'Low–Moderate'],
+                    ['7 Court Street', 'Proposed enterprise account; rental $1,300/mo (3/4) + $450–500/mo (1/4); projected $21K–$21.6K/yr gross', 'External', 'Moderate'],
+                  ].map(([area, scope, pop, complexity], i) => (
+                    <tr key={i} className="border-t border-slate-100 hover:bg-slate-50">
+                      <td className="px-4 py-2.5 font-semibold text-slate-800">{area}</td>
+                      <td className="px-4 py-2.5 text-slate-600 leading-relaxed">{scope}</td>
+                      <td className="px-4 py-2.5 text-slate-700">{pop}</td>
+                      <td className={`px-4 py-2.5 font-semibold ${complexity === 'High' ? 'text-red-700' : complexity.includes('Moderate–High') ? 'text-amber-700' : 'text-slate-600'}`}>{complexity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* True Operational Service Population */}
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-800 text-white px-5 py-3">
+              <h3 className="font-bold text-sm">B. True Operational Service Population</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Service Function</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Residents Served</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Basis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['EMS Ambulance', '4,500–6,000', '10 contracted towns, ~2,000 calls/year'],
+                    ['Primary Fire Coverage', '2,440', 'Machias 2,060 + Northfield 178 + Whitneyville 202'],
+                    ['Mutual Aid Fire', '3,500 estimated', 'Marshfield, Machiasport, Jonesboro, East Machias'],
+                    ['Transfer Station — Current', '2,359', 'Machias + Roque Bluffs'],
+                    ['Transfer Station — Full Build', '4,978', 'All 7 member towns including Machiasport'],
+                    ['Police & County Services', '2,000', 'Resident base plus county seat transactional volume'],
+                  ].map(([fn, pop, basis], i) => (
+                    <tr key={i} className={`border-t border-slate-100 ${i === 5 ? 'bg-slate-900 text-white font-bold' : ''}`}>
+                      <td className={`px-4 py-2.5 font-semibold ${i === 5 ? 'text-white' : 'text-slate-800'}`}>{fn}</td>
+                      <td className={`px-4 py-2.5 ${i === 5 ? 'text-white' : 'text-slate-700'}`}>{pop}</td>
+                      <td className={`px-4 py-2.5 ${i === 5 ? 'text-slate-300' : 'text-slate-600'}`}>{basis}</td>
+                    </tr>
+                  ))}
+                  <tr className="border-t-2 border-slate-800 bg-slate-900">
+                    <td className="px-4 py-2.5 font-bold text-white">EFFECTIVE SERVICE POPULATION</td>
+                    <td className="px-4 py-2.5 font-bold text-emerald-400">6,000–8,000</td>
+                    <td className="px-4 py-2.5 text-slate-300">Complexity-weighted operational equivalent</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Peer Benchmarking */}
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-800 text-white px-5 py-3">
+              <h3 className="font-bold text-sm">C. Normalized Performance Comparison — Machias vs. Peers</h3>
+              <p className="text-[10px] text-slate-400">All peers share Machias's core structural characteristics: small residential population serving as anchor for a larger rural service area</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    {['Metric','Townsend MT','Heppner OR','Ossipee NH','McCall ID','Ainsworth NE','Machias Current','Machias Proposed'].map((h,i) => (
+                      <th key={i} className={`text-left px-3 py-2 font-semibold text-slate-600 ${i >= 6 ? 'bg-emerald-50' : ''}`}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['Admin FTE/1,000 service pop.','0.9','0.7','0.6','0.8','1.1','0.6','0.9'],
+                    ['Admin cost/service capita','$312','$287','$198','$276','$341','$186','$238'],
+                    ['EMS collection rate','74%','N/A','81%','78%','70%','75%','82%'],
+                    ['Non-tax revenue % of operating','18%','12%','22%','31%','9%','11%','24%'],
+                    ['Transfer Station cost recovery','65%','N/A','80%','75%','55%','13%','58%'],
+                    ['Months to close after fiscal year','3–4','4–5','2–3','2–3','5–6','4–5','2–3'],
+                    ['Segregation of duties rating','Moderate','Moderate','Strong','Strong','Weak','Weak–Mod','Strong'],
+                    ['Shared service revenue contracts','0','0','4 towns','3 depts.','0','0','2–5 proposed'],
+                  ].map((row, i) => (
+                    <tr key={i} className="border-t border-slate-100">
+                      <td className="px-3 py-2 font-semibold text-slate-800">{row[0]}</td>
+                      {row.slice(1,6).map((v, j) => <td key={j} className="px-3 py-2 text-slate-600">{v}</td>)}
+                      <td className="px-3 py-2 font-bold text-amber-700 bg-amber-50">{row[6]}</td>
+                      <td className="px-3 py-2 font-bold text-emerald-700 bg-emerald-50">{row[7]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-xs text-slate-600 italic">
+              Machias currently spends only $186 per service-area capita on administration — the lowest among all peers — despite operating the most complex service portfolio relative to residential population. The proposed structure brings Machias to $238 per service capita, still below the national peer average of $283.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* FINANCIAL ANALYSIS */}
       {activeTab === 'financial' && (
         <div className="space-y-4">
