@@ -64,12 +64,12 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-4 flex-wrap justify-end">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">${cashOnly5yr.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-emerald-400">${(cashOnly5yr / 1000000).toFixed(2)}M</p>
               <p className="text-[10px] text-slate-400">5-Yr Cash Net</p>
               <p className="text-[9px] text-slate-500">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-300">${cumulative.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-slate-300">${(cumulative / 1000000).toFixed(2)}M</p>
               <p className="text-[10px] text-slate-400">5-Yr Total Value</p>
               <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
             </div>

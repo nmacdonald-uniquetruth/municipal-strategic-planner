@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 
-const formatCurrency = (v) => `$${(v / 1).toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+const formatCurrency = (v) => v >= 1000000 ? `$${(v / 1000000).toFixed(1)}M` : `$${(v / 1000).toFixed(0)}K`;
 
 export default function ProFormaChart({ data }) {
   const chartData = data.map(d => ({
