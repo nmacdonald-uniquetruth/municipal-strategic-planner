@@ -74,25 +74,34 @@ export default function AppLayout() {
           </button>
         </div>
 
-        <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
-          {NAV.map(({ path, label, icon: Icon }) => {
-            const active = pathname === path;
-            return (
-              <Link
-                key={path}
-                to={path}
-                onClick={() => setMobileOpen(false)}
-                className={`
-                  flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all
-                  ${active ? 'bg-white/15 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}
-                  ${collapsed ? 'justify-center' : ''}
-                `}
-              >
-                <Icon className="h-4 w-4 flex-shrink-0" />
-                {!collapsed && <span className="truncate">{label}</span>}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 p-2 overflow-y-auto space-y-3">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label}>
+              {!collapsed && (
+                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-1">{group.label}</p>
+              )}
+              <div className="space-y-0.5">
+                {group.items.map(({ path, label, icon: NavIcon }) => {
+                  const active = pathname === path;
+                  return (
+                    <Link
+                      key={path}
+                      to={path}
+                      onClick={() => setMobileOpen(false)}
+                      className={`
+                        flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all
+                        ${active ? 'bg-white/15 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}
+                        ${collapsed ? 'justify-center' : ''}
+                      `}
+                    >
+                      <NavIcon className="h-4 w-4 flex-shrink-0" />
+                      {!collapsed && <span className="truncate">{label}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         <div className={`p-3 border-t border-white/10 ${collapsed ? 'hidden' : ''}`}>
