@@ -4,7 +4,9 @@ import { useModel } from '../components/machias/ModelContext';
 import ProFormaTable from '../components/machias/ProFormaTable';
 import ProFormaChart from '../components/machias/ProFormaChart';
 import SectionHeader from '../components/machias/SectionHeader';
-import { TrendingUp } from 'lucide-react';
+import InfoTooltip from '../components/machias/InfoTooltip';
+import { Link } from 'react-router-dom';
+import { TrendingUp, BookOpen } from 'lucide-react';
 
 export default function ProForma() {
   const { settings } = useModel();
