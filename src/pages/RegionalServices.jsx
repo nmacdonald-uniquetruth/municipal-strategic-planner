@@ -205,7 +205,7 @@ export default function RegionalServices() {
           { label: 'Y1 Contract Revenue', value: fmt(totalY1Regional), sub: 'Partial year (4 months)' },
           { label: 'Y3 Annual Revenue', value: fmt(data[2].value.regionalServices), sub: 'All 5 towns active' },
           { label: '5-Yr Total (incl EMS ext)', value: fmtK(total5yr), sub: 'Municipal + EMS billing' },
-          { label: 'Towns Served by Y3', value: '5', sub: 'Roque Bluffs → Northfield' },
+          { label: 'Y5 Senior Hire', value: settings.y5_senior_hire === 'controller' ? 'Controller' : '2nd Staff Acct.', sub: settings.y5_senior_hire === 'controller' ? 'Half-year Y5' : 'Half-year Y5 hire' },
         ].map((s, i) => (
           <div key={i} className="rounded-xl border border-slate-200 bg-white p-4">
             <p className="text-2xl font-bold text-slate-900">{s.value}</p>
