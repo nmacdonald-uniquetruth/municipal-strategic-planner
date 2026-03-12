@@ -63,7 +63,7 @@ export default function ProFormaTable({ data }) {
               ['Billing Specialist', 'billingSpecialist'],
               ['GA Coordinator', 'gaCoordinator'],
               ['Revenue Coordinator', 'revenueCoordinator'],
-              ['Controller', 'controller'],
+              [data[4]?.costs?.controller > 0 ? (data[4]?.costs?.controller && 'controller') : 'Controller / SA2', 'controller'],
               ['Implementation', 'implementation'],
               ['ERP', 'erp'],
             ].map(([label, key]) => (
