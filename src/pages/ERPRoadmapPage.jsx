@@ -24,6 +24,7 @@ export default function ERPRoadmapPage() {
     ['payroll', 'Payroll & HRIS'],
     ['procurement', 'Procurement Guide'],
     ['financial', 'Financial Analysis'],
+    ['footprint', 'Operational Footprint'],
   ];
 
   return (
