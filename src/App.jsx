@@ -18,6 +18,7 @@ import Milestones from './pages/Milestones';
 import MathVerify from './pages/MathVerify';
 import ModelSettings from './pages/ModelSettings';
 import AIPlanner from './pages/AIPlanner';
+import Narrative from './pages/Narrative';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();

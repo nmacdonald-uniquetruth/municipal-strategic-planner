@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
-  ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare
+  ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen
 } from 'lucide-react';
 
 const NAV = [
   { path: '/Dashboard', label: 'Overview', icon: LayoutDashboard },
+  { path: '/Narrative', label: 'Full Narrative', icon: BookOpen },
   { path: '/ProForma', label: 'Financial Model', icon: TrendingUp },
   { path: '/Positions', label: 'Positions', icon: Users },
   { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
