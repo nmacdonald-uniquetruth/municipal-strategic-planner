@@ -21,7 +21,7 @@ export default function CommunicationStrategy() {
       messages: [
         `The restructuring is levy-neutral: Year 1 GF impact is ${d1.gf.gfNetLevyImpact <= 0 ? `a surplus of ${fmt(Math.abs(d1.gf.gfNetLevyImpact))}` : fmt(d1.gf.gfNetLevyImpact)}.`,
         'Every position has a defined trigger and a defined funding source.',
-        `Comstar fees of ${fmt(d1.value.comstarAvoided)}/yr can be avoided with an in-house Billing Specialist funded by the Ambulance Fund — not the General Fund.`,
+        `Comstar fees are currently ${fmt(d1.value.comstarAvoided)}/yr and will increase as EMS revenue grows — the contract is under active negotiation and fees could change. In-house billing eliminates this variable cost entirely.`,
         'The auditors have flagged separation-of-duties risk. This plan directly addresses it.',
         'Roque Bluffs and Machiasport have expressed interest in paid interlocal agreements.',
       ],
@@ -116,8 +116,8 @@ export default function CommunicationStrategy() {
     { headline: 'Right Work, Right Level', body: `The Finance Director spends 45% of their time on tasks appropriate for a Staff Accountant. This plan fixes that misallocation without adding cost to the General Fund.`, audience: 'Select Board, Budget Committee', priority: 'Primary' },
     { headline: 'Machias as Regional Leader', body: `Neighboring towns want to pay Machias for financial services. This plan positions Machias as the county seat of financial administration — a role that generates revenue and strengthens regional relationships.`, audience: 'Select Board, Public', priority: 'Secondary' },
     { headline: 'Audit Risk is Real', body: `Annual auditors have flagged separation-of-duties deficiencies. The control risk exposure is estimated at ${fmt(settings.control_risk_exposure)}/year. This plan directly addresses the root cause.`, audience: 'Budget Committee, Board', priority: 'Secondary' },
-    { headline: 'The Ambulance Fund Funds the Billing Specialist', body: `The single most confusing aspect. The BS is paid by the Ambulance Fund — not taxpayers. It eliminates ${fmt(d1.value.comstarAvoided)}/year in Comstar fees.`, audience: 'All — clarify proactively', priority: 'Clarification' },
-    { headline: 'Phased and Triggered', body: `Revenue Coordinator and Controller positions only happen when revenues cover their costs. No speculative hiring. No budget risk.`, audience: 'Budget Committee, Skeptics', priority: 'Secondary' },
+    { headline: 'The Ambulance Fund Funds the Billing Specialist', body: `The single most confusing aspect. The BS is paid by the Ambulance Fund — not taxpayers. It eliminates Comstar fees that are currently ${fmt(d1.value.comstarAvoided)}/yr and will grow as EMS revenue grows. Note: Comstar contract is currently under negotiation — fees could change in either direction. In-house billing eliminates this variable entirely.`, audience: 'All — clarify proactively', priority: 'Clarification' },
+    { headline: 'Phased and Triggered', body: `The Revenue Coordinator and the Year 5 senior hire (a second Staff Accountant or Controller, depending on complexity at that time) only happen when revenues cover their costs. No speculative hiring. No budget risk. The Select Board will decide which Y5 hire is appropriate based on conditions at that time.`, audience: 'Budget Committee, Skeptics', priority: 'Secondary' },
   ];
 
   const colorMap = {
