@@ -43,7 +43,15 @@ export default function Dashboard() {
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Core Finding</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Core Finding</p>
+              <InfoTooltip title="Why $229,000+ in structural inefficiency?">
+                <p>The Finance Director's fully loaded cost is <strong>${settings.fd_loaded_cost?.toLocaleString()}/yr</strong>. At current utilization, 45–60% of FD time is spent on transactional tasks (AP, payroll, EMS billing oversight) that don't require a Finance Director's expertise.</p>
+                <p>Comstar currently charges <strong>{(settings.comstar_fee_rate * 100).toFixed(2)}%</strong> of gross EMS collections — approximately <strong>${data[0]?.value?.comstarAvoided?.toLocaleString()}/yr</strong> — to manage billing that an in-house Billing Specialist can handle.</p>
+                <p>Informal stipend arrangements of <strong>${settings.stipend_elimination?.toLocaleString()}/yr</strong> exist for work that should be consolidated into formal roles.</p>
+                <p className="text-slate-500 text-xs">See the <strong>Full Narrative → Section 2</strong> for the complete problem statement.</p>
+              </InfoTooltip>
+            </div>
             <p className="text-lg font-bold mt-1">$229,000+ in annual structural inefficiency</p>
             <p className="text-xs text-slate-400 mt-1 max-w-xl">
               Executive compensation on transactional work, outsourced billing fees, informal stipends, and airport inspection overage.
