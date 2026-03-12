@@ -320,9 +320,10 @@ export default function RegionalServices() {
       {activeTab === 'pricing' && (
         <div className="space-y-5">
           <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 text-sm text-amber-800">
-            <strong>Pricing Philosophy:</strong> Contracts are priced based on fully loaded staff costs plus a 25% overhead recovery factor. The goal is cost recovery + modest margin — not profit maximization. This keeps contracts attractive to small towns while ensuring Machias recoups all direct costs.
+            <strong>Pricing Philosophy:</strong> Managed services fees are derived from estimated staff time at a blended rate of $55–$75/hr (SA at $55/hr, FD at $85/hr), reflecting fully loaded internal costs with a modest recovery margin. All fees subject to interlocal agreement terms and annual CPI adjustment. Direct cost to serve one town (130 SA hrs + 24 FD oversight hrs): approximately $7,900/yr.
           </div>
 
+          {/* Staff cost basis */}
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <h3 className="font-semibold text-slate-800 text-sm mb-3">Staff Cost Basis (from Model Settings)</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -343,53 +344,83 @@ export default function RegionalServices() {
             <p className="text-[10px] text-slate-400 mt-3">* Change staff salaries in <Link to="/ModelSettings" className="underline">Model Settings</Link> to update all pricing calculations automatically.</p>
           </div>
 
-          <div className="space-y-3">
-            {SERVICE_TIERS.map((tier, i) => {
-              const annualPrice = [tier1AnnualCost, tier2AnnualCost, tier3AnnualCost][i];
-              const monthlyPrice = Math.round(annualPrice / 12);
-              return (
-                <div key={i} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-                  <div className="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
-                    <div>
-                      <h3 className="font-bold text-sm">{tier.tier}</h3>
-                      <p className="text-[10px] text-slate-400">{tier.staff_level} · {tier.hours_per_month}/month</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl font-bold text-emerald-400">{fmt(annualPrice)}/yr</p>
-                      <p className="text-[10px] text-slate-400">({fmt(monthlyPrice)}/month)</p>
-                    </div>
-                  </div>
-                  <div className="px-5 py-4">
-                    <p className="text-xs text-slate-600 mb-3">{tier.description}</p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
-                      {tier.includes.map((item, j) => (
-                        <div key={j} className="flex items-center gap-1.5 text-xs text-slate-700">
-                          <span className="text-emerald-500 font-bold">✓</span> {item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Tier 1: Managed Services Detail */}
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-900 text-white px-5 py-3">
+              <h3 className="font-bold text-sm">Tier 1 — Complete Managed Financial Services</h3>
+              <p className="text-[10px] text-slate-400">Recurring annual services · Staff Accountant + FD oversight · Minimum 12-month interlocal agreement</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600 w-1/3">Service Component</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600 w-1/5">Annual Fee Range</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Scope</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TIER1_MANAGED.map((row, i) => (
+                    <tr key={i} className={`border-t border-slate-100 ${row.highlight ? 'bg-emerald-50' : ''}`}>
+                      <td className={`px-4 py-2.5 font-semibold ${row.highlight ? 'text-emerald-800' : 'text-slate-800'}`}>{row.component}</td>
+                      <td className={`px-4 py-2.5 font-mono font-bold ${row.highlight ? 'text-emerald-700' : 'text-slate-700'}`}>{row.feeRange}</td>
+                      <td className={`px-4 py-2.5 leading-relaxed ${row.highlight ? 'text-emerald-700' : 'text-slate-600'}`}>{row.scope}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
+          {/* Tier 2: Project-Based */}
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-800 text-white px-5 py-3">
+              <h3 className="font-bold text-sm">Tier 2 — Project-Based Engagements</h3>
+              <p className="text-[10px] text-slate-400">Fixed-scope deliverables · Fees invoiced at completion or milestone schedule · FD/SA allocation depends on client complexity</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600 w-1/3">Project Type</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600 w-1/5">Fixed Fee Range</th>
+                    <th className="text-left px-4 py-2 font-semibold text-slate-600">Deliverables</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TIER2_PROJECTS.map((row, i) => (
+                    <tr key={i} className="border-t border-slate-100">
+                      <td className="px-4 py-2.5 font-semibold text-slate-800">{row.project}</td>
+                      <td className="px-4 py-2.5 font-mono font-bold text-slate-700">{row.feeRange}</td>
+                      <td className="px-4 py-2.5 text-slate-600 leading-relaxed">{row.deliverables}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-500 italic">
+              A municipality with open audit findings, a nonstandard COA, or no prior financial staff will require proportionally more Finance Director hours than a municipality with clean books and standard TRIO configuration.
+            </div>
+          </div>
+
+          {/* Contract comparison */}
           <div className="rounded-xl border border-slate-200 overflow-hidden">
             <div className="bg-slate-50 px-4 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider grid grid-cols-5">
-              <span>Municipality</span><span>Tier</span><span>Model Price</span><span>Actual Contract</span><span>Variance</span>
+              <span>Municipality</span><span>Tier</span><span>Model Price</span><span>Actual Contract</span><span>Margin</span>
             </div>
             {TOWNS.map((town, i) => {
               const tierIdx = parseInt(town.tier.slice(-1)) - 1;
               const modelPrice = [tier1AnnualCost, tier2AnnualCost, tier3AnnualCost][Math.min(tierIdx, 2)];
               const actual = settings[town.contractKey];
               const variance = actual - modelPrice;
+              const margin = modelPrice > 0 ? Math.round((variance / modelPrice) * 100) : 0;
               return (
                 <div key={i} className="px-4 py-2 grid grid-cols-5 text-xs border-t border-slate-100">
                   <span className="font-medium text-slate-800">{town.name}</span>
                   <span className="text-slate-600">{town.tier}</span>
                   <span className="font-mono text-slate-700">{fmt(modelPrice)}</span>
                   <span className="font-mono text-slate-700">{fmt(actual)}</span>
-                  <span className={`font-mono font-semibold ${variance >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>{variance >= 0 ? '+' : ''}{fmt(variance)}</span>
+                  <span className={`font-mono font-semibold ${variance >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>{variance >= 0 ? '+' : ''}{fmt(variance)} ({margin}%)</span>
                 </div>
               );
             })}
@@ -397,7 +428,7 @@ export default function RegionalServices() {
 
           <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs text-slate-600 space-y-1">
             <p><strong>Adjusting contracts:</strong> Go to <Link to="/ModelSettings" className="underline text-slate-800">Model Settings → Regional Services</Link> to change any contract value. All projections, pro forma, and the pricing comparison above will update automatically.</p>
-            <p><strong>Pricing adjustment factors:</strong> Small towns may need subsidized rates to close — consider a first-year discount of 10–15% to secure the contract, then escalate 4%/yr. Contracts currently escalate at 4%/yr in the model.</p>
+            <p><strong>Pricing adjustment factors:</strong> Small towns may need subsidized rates to close — consider a first-year discount of 10–15% to secure the contract, then escalate 4%/yr with annual CPI adjustment.</p>
           </div>
         </div>
       )}
