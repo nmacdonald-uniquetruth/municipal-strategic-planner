@@ -3,6 +3,8 @@ import { base44 } from '@/api/base44Client';
 
 const DEFAULT_SETTINGS = {
   start_date: '2026-07-01',
+  fd_base_salary: 68000,
+  tm_base_salary: 75000,
   sa_base_salary: 65000,
   bs_base_salary: 55000,
   ga_stipend: 10000,
@@ -34,8 +36,6 @@ const DEFAULT_SETTINGS = {
   stipend_elimination: 26000,
   airport_savings: 2527,
   control_risk_exposure: 56000,
-  fd_loaded_cost: 86824,
-  tm_loaded_cost: 96013,
   rb_annual_contract: 19000,
   machiasport_annual_contract: 20000,
   marshfield_annual_contract: 15000,
@@ -52,6 +52,14 @@ const DEFAULT_SETTINGS = {
   current_mill_rate: 14.5,
   annual_tax_levy: 2871000,
 };
+
+// Calculate fully loaded costs from base salaries
+function calculateFullyLoaded(baseSalary, healthTier, healthAnnual, ficaRate, persRate, wcRate) {
+  const fica = baseSalary * ficaRate;
+  const pers = baseSalary * persRate;
+  const wc = baseSalary * wcRate;
+  return baseSalary + fica + pers + wc + healthAnnual;
+}
 
 const ModelContext = createContext(null);
 
