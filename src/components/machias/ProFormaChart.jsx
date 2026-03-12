@@ -1,7 +1,11 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 
-const formatCurrency = (v) => `$${(v / 1).toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+const formatCurrency = (v) => {
+  if (Math.abs(v) >= 1000000) return (v / 1000000).toFixed(2) + 'M';
+  if (Math.abs(v) >= 1000) return '$' + (v / 1000).toFixed(0) + 'K';
+  return '$' + v.toLocaleString();
+};
 
 export default function ProFormaChart({ data }) {
   const chartData = data.map(d => ({
