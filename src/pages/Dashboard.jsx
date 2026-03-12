@@ -109,10 +109,10 @@ export default function Dashboard() {
         </div>
         <div className="relative">
           <StatCard
-            label="Y1 GF Levy Impact"
-            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `($${Math.abs(data[0]?.gf?.gfNetLevyImpact).toLocaleString()}) surplus` : `+$${data[0]?.gf?.gfNetLevyImpact.toLocaleString()}`}
+            label="Tax Levy"
+            value={`$${(settings.annual_tax_levy / 1000000).toFixed(2)}M`}
             icon={ShieldCheck}
-            sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
+            sub="Annual GF levy"
           />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="General Fund Levy Impact">
