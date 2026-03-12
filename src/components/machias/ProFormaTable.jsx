@@ -77,6 +77,52 @@ export default function ProFormaTable({ data }) {
               {data.map(d => <td key={d.fiscalYear} className="p-3 text-right font-mono">-{fmt(d.costs.total)}</td>)}
             </tr>
 
+            {/* GF Fiscal Impact */}
+            <tr className="bg-slate-700 text-white">
+              <td className="p-3 font-semibold text-xs" colSpan={6}>GENERAL FUND LEVY IMPACT</td>
+            </tr>
+            <tr className="border-b border-slate-100 text-[11px]">
+              <td className="p-3 pl-6 text-slate-600">GF-Funded Costs (SA + GA + ERP)</td>
+              {data.map(d => <td key={d.fiscalYear} className="p-3 text-right font-mono text-red-600">-{fmt(d.gf.gfFundedCosts)}</td>)}
+            </tr>
+            <tr className="border-b border-slate-100 text-[11px]">
+              <td className="p-3 pl-6 text-slate-600">Cash Offsets to GF</td>
+              {data.map(d => <td key={d.fiscalYear} className="p-3 text-right font-mono text-emerald-600">{fmt(d.gf.gfCashOffsets)}</td>)}
+            </tr>
+            <tr className="bg-slate-100 border-b border-slate-200 text-[11px] font-semibold">
+              <td className="p-3 pl-6 text-slate-700">
+                Net GF Levy Impact
+                <div className="text-[9px] font-normal text-slate-400">Negative = levy reduction / surplus</div>
+              </td>
+              {data.map(d => (
+                <td key={d.fiscalYear} className={`p-3 text-right font-mono font-bold ${d.gf.gfNetLevyImpact <= 0 ? 'text-emerald-700' : 'text-amber-700'}`}>
+                  {d.gf.gfNetLevyImpact <= 0 ? `(${fmt(Math.abs(d.gf.gfNetLevyImpact))}) surplus` : fmt(d.gf.gfNetLevyImpact)}
+                </td>
+              ))}
+            </tr>
+            <tr className="border-b border-slate-100 text-[11px]">
+              <td className="p-3 pl-6 text-slate-600">
+                Mill Rate Impact
+                <div className="text-[9px] font-normal text-slate-400">Per $1,000 assessed value</div>
+              </td>
+              {data.map(d => (
+                <td key={d.fiscalYear} className={`p-3 text-right font-mono ${d.gf.millRateImpact <= 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  {d.gf.millRateImpact <= 0 ? `(${Math.abs(d.gf.millRateImpact).toFixed(3)}) relief` : `+${d.gf.millRateImpact.toFixed(3)}`}
+                </td>
+              ))}
+            </tr>
+            <tr className="border-b border-slate-100 text-[11px]">
+              <td className="p-3 pl-6 text-slate-600">
+                Undesignated Fund Draw Required
+                <div className="text-[9px] font-normal text-slate-400">Only if levy impact is positive</div>
+              </td>
+              {data.map(d => (
+                <td key={d.fiscalYear} className={`p-3 text-right font-mono ${d.gf.undesignatedDraw === 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                  {d.gf.undesignatedDraw === 0 ? '—' : fmt(d.gf.undesignatedDraw)}
+                </td>
+              ))}
+            </tr>
+
             <tr className="bg-slate-900 text-white font-bold">
               <td className="p-3">NET ANNUAL VALUE</td>
               {data.map(d => (
