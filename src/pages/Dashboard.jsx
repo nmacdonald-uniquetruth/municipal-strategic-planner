@@ -15,6 +15,14 @@ export default function Dashboard() {
   const y1Net = data[0]?.net || 0;
   const y5Value = data[4]?.value.total || 0;
 
+  // Cash-only 5-year net (excludes FD/TM capacity, control risk, ERP value, enterprise overhead)
+  const cashOnly5yr = data.reduce((s, d) => {
+    const cashRev = d.value.comstarAvoided + d.value.collectionImprovement +
+      d.value.stipendSavings + d.value.airportSavings +
+      d.value.regionalServices + d.value.emsExternal + d.value.transferStation;
+    return s + cashRev - d.costs.total;
+  }, 0);
+
   return (
     <div className="space-y-8">
       {/* Header */}
