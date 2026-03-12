@@ -7,7 +7,8 @@ export function runProFormaFromSettings(settings) {
   function fl(base, isStipend = false) {
     if (isStipend) return base;
     const fica = base * s.fica_rate;
-    const icma = base * s.icma_403b_match_rate;
+    const icmaRate = s.icma_403b_match_rate ?? 0.05;
+    const icma = base * icmaRate;
     const wc = base * s.wc_rate;
     return Math.round(base + fica + icma + wc + healthAnnual);
   }
