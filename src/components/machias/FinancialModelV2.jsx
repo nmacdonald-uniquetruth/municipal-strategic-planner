@@ -79,6 +79,30 @@ export function runProFormaFromSettings(settings) {
     const totalValue = structuralTotal + regionalTotal + erpValue;
     const net = Math.round(totalValue - totalCosts);
 
+    // General Fund fiscal impact analysis
+    // Cash offsets that directly reduce GF levy pressure:
+    //   - Comstar fee avoided (saves GF spend)
+    //   - Collection improvement (new cash to Ambulance Fund, offsets transfer needs)
+    //   - Stipend savings (direct GF expenditure reduction)
+    //   - Airport savings (direct GF expenditure reduction)
+    //   - Regional services contracts (new GF revenue)
+    //   - Enterprise overhead transfers (pre-existing, but sustains cost coverage)
+    // Non-cash / capacity items excluded from GF calc (FD/TM capacity, controlRisk)
+    const gfCashOffsets = Math.round(
+      comstarAvoided + collectionImprovement + stipendSavings + airportSavings +
+      regionalServices + emsExternal + entTotal
+    );
+    // GF-funded costs only: SA + GA + airportStipend + ERP (BS funded by Ambulance Fund)
+    const gfFundedCosts = saCost + gaCost + rcCost + ctrlCost + airportStipend + implCost;
+    // Net GF levy impact: negative = reduced levy pressure / savings; positive = requires levy increase
+    const gfNetLevyImpact = Math.round(gfFundedCosts - gfCashOffsets);
+    // Undesignated fund draw needed (only if GF impact is still positive after cash offsets)
+    const undesignatedDraw = Math.max(0, gfNetLevyImpact);
+    // Mill rate equivalent of remaining gap (if any)
+    const millRateImpact = s.total_assessed_value > 0
+      ? parseFloat((gfNetLevyImpact / s.total_assessed_value * 1000).toFixed(4))
+      : 0;
+
     return {
       year: yr,
       fiscalYear: `FY${2026 + yr}`,
