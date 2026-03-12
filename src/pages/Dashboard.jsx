@@ -144,7 +144,15 @@ export default function Dashboard() {
       <PaybackChart />
 
       {/* Three pillars summary */}
-      <SectionHeader title="Value Categories" subtitle="Understanding what the numbers measure" icon={Target} />
+      <div className="flex items-center gap-2">
+        <SectionHeader title="Value Categories" subtitle="Understanding what the numbers measure" icon={Target} />
+        <InfoTooltip title="Why three value categories?">
+          <p>Not all financial value is cash. To give an honest picture, the model separates value into three distinct categories so stakeholders can decide which they find credible.</p>
+          <p><strong>Category 1 (Non-Tax Revenue)</strong> — actual dollars deposited. Most conservative. Use this for budget planning.</p>
+          <p><strong>Category 2 (Budget Impact)</strong> — real cost reductions and avoided expenditures. Directly reduces the levy, but some items are opportunity costs.</p>
+          <p><strong>Category 3 (Capacity Value)</strong> — time redirected from the FD and TM to higher-value work. Real but hardest to quantify. The model uses conservative hourly values.</p>
+        </InfoTooltip>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-5">
           <div className="flex items-center gap-2 mb-3">
