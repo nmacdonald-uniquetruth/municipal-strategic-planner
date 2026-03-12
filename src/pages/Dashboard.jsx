@@ -11,6 +11,12 @@ import { Link } from 'react-router-dom';
 import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
 import ExportExecSummary from '../components/machias/ExportExecSummary';
 
+const formatShortCurrency = (value) => {
+  if (value >= 1000000) return `$${(value / 1000000).toFixed(2)}M`;
+  if (value >= 1000) return `$${(value / 1000).toFixed(0)}K`;
+  return `$${value.toLocaleString()}`;
+};
+
 export default function Dashboard() {
   const { settings } = useModel();
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
@@ -64,12 +70,12 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-4 flex-wrap justify-end">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">${(cashOnly5yr / 1000000).toFixed(2)}M</p>
+              <p className="text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnly5yr)}</p>
               <p className="text-[10px] text-slate-400">5-Yr Cash Net</p>
               <p className="text-[9px] text-slate-500">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-300">${(cumulative / 1000000).toFixed(2)}M</p>
+              <p className="text-2xl font-bold text-slate-300">{formatShortCurrency(cumulative)}</p>
               <p className="text-[10px] text-slate-400">5-Yr Total Value</p>
               <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
             </div>
@@ -85,7 +91,7 @@ export default function Dashboard() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="relative">
-           <StatCard label="Year 1 Net" value={`$${y1Net.toLocaleString()}`} icon={DollarSign} sub="Base case, all 3 positions" />
+           <StatCard label="Year 1 Net" value={formatShortCurrency(y1Net)} icon={DollarSign} sub="Base case, all 3 positions" />
            <div className="absolute top-2 right-2">
              <InfoTooltip title="Year 1 Net Value">
               <p>This is the net of all projected value (structural savings, regional revenue, EMS improvement, capacity) minus the total cost of all new positions and ERP implementation in Year 1.</p>
@@ -94,7 +100,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-           <StatCard label="Year 5 Gross Value" value={`$${y5Value.toLocaleString()}`} icon={TrendingUp} sub="Structural + regional" />
+           <StatCard label="Year 5 Gross Value" value={formatShortCurrency(y5Value)} icon={TrendingUp} sub="Structural + regional" />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="Year 5 Gross Value">
               <p>The total projected annual value of the restructuring by Year 5, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
