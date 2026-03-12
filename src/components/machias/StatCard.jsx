@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 export default function StatCard({ label, value, sub, icon: Icon, trend, className }) {
   return (
-    <div className={cn("relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white p-5 transition-shadow hover:shadow-lg", className)}>
+    <div className={cn("relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white p-5", className)}>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium tracking-wider text-slate-400 uppercase">{label}</p>
