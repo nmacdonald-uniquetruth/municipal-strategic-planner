@@ -408,6 +408,11 @@ export default function RegionalServices() {
           <p className="text-sm text-slate-600">
             Once the Billing Specialist is operational and the in-house EMS billing transition is complete, Machias can offer billing services to neighboring Ambulance Services — generating new revenue from existing capacity.
           </p>
+
+          <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 text-xs text-amber-800">
+            <strong>Note on Comstar fees:</strong> Comstar's fee is a percentage of collections — meaning it grows automatically as transport volume and revenue increase. This plan eliminates that escalating cost. The current contract is also under negotiation — the rate could go up or down. In-house billing provides cost certainty and removes Machias from that variable.
+          </div>
+
           <div className="rounded-xl border border-slate-200 overflow-hidden">
             <div className="bg-slate-900 text-white px-4 py-2 text-[10px] font-semibold uppercase tracking-wider grid grid-cols-4">
               <span>Fiscal Year</span><span>EMS Ext Revenue</span><span>Target Clients</span><span>Notes</span>
@@ -429,21 +434,40 @@ export default function RegionalServices() {
           </div>
 
           <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-4">
-            <h4 className="font-semibold text-blue-900 text-sm mb-2">EMS Billing Service Pricing</h4>
-            <p className="text-xs text-blue-800 mb-3">External EMS billing is offered at a flat fee per transport or a percentage of collections — whichever is lower. This undercuts Comstar's rate while maintaining positive margin for Machias.</p>
-            <div className="grid grid-cols-3 gap-3">
+            <h4 className="font-semibold text-blue-900 text-sm mb-1">EMS Billing Service Pricing Models</h4>
+            <p className="text-xs text-blue-800 mb-3">All models are priced below Comstar's current {(settings.comstar_fee_rate*100).toFixed(2)}% rate and provide a compelling value proposition to neighboring services.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {[
-                { label: 'Flat Fee Model', price: '$12–15/transport', note: 'Predictable for client, scalable for Machias' },
-                { label: 'Percentage Model', price: '3.5–4.0% of gross', note: 'Below Comstar\'s 5.22% — compelling pitch' },
-                { label: 'Hybrid Model', price: 'Lower of flat or %', note: 'Client-friendly; Machias absorbs volume risk' },
+                {
+                  label: 'Flat Annual Fee',
+                  price: '$8,000–$15,000/yr',
+                  note: 'Based on historical call volume. Predictable for client, simple to administer. Renews annually with CPI escalation. Best for smaller services with stable call volumes.',
+                  tag: 'Simple'
+                },
+                {
+                  label: 'Percentage of Collections',
+                  price: '3.5–4.0% of gross',
+                  note: `Below Comstar's ${(settings.comstar_fee_rate*100).toFixed(2)}% — a compelling pitch. Revenue grows with transport volume. Machias benefits from improving collections. Best for larger or growing services.`,
+                  tag: 'Scalable'
+                },
+                {
+                  label: 'Hybrid Model',
+                  price: '3.5% with annual minimum',
+                  note: 'Percentage of collections with a guaranteed annual floor (e.g., $8,000 minimum regardless of volume). Protects Machias from low-volume years. Client-friendly for variable call volumes.',
+                  tag: 'Recommended'
+                },
               ].map((m, i) => (
-                <div key={i} className="rounded-lg bg-white border border-blue-100 p-3 text-xs">
-                  <p className="font-semibold text-blue-900">{m.label}</p>
-                  <p className="text-lg font-bold text-blue-700 my-1">{m.price}</p>
-                  <p className="text-blue-600">{m.note}</p>
+                <div key={i} className={`rounded-lg border p-3 text-xs ${m.tag === 'Recommended' ? 'border-emerald-300 bg-emerald-50' : 'bg-white border-blue-100'}`}>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="font-semibold text-blue-900">{m.label}</p>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${m.tag === 'Recommended' ? 'bg-emerald-200 text-emerald-800' : 'bg-blue-100 text-blue-700'}`}>{m.tag}</span>
+                  </div>
+                  <p className="text-base font-bold text-blue-700 my-1">{m.price}</p>
+                  <p className="text-blue-600 leading-relaxed">{m.note}</p>
                 </div>
               ))}
             </div>
+            <p className="text-[10px] text-blue-600 mt-3 italic">Note: The flat fee per-transport model is not recommended — it creates perverse incentives around call classification and does not reflect actual billing complexity. Annual flat fee or hybrid percentage models are preferred.</p>
           </div>
         </div>
       )}
