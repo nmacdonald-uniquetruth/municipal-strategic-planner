@@ -333,18 +333,18 @@ export default function ERPRoadmapPage() {
                 <p className="text-xs font-semibold text-red-700 mb-2">Current State Problems</p>
                 <div className="space-y-1.5">
                   {[
-                    'Payroll processed manually in legacy Trio or spreadsheets',
-                    'School payroll reconciled separately — manual W-2 coordination',
-                    'No employee self-service — all changes require HR/payroll staff',
-                    'PFML tracking manual — high compliance risk',
-                    'Benefits enrollment paper-based',
-                    'Time & attendance not integrated — manual timesheet entry',
-                    'No automatic journal entry to GL — manual posting',
-                    '941 and W-2 filings require manual data export/import',
+                   'Legacy Trio with paper timecards — basic payroll but limited HRIS depth',
+                   'Trio has automatic GL journal entry — but lacks HRIS and benefit admin functionality',
+                   'NEOGOV in use today for LMS; goal is role-based course assignment in integrated system',
+                   'No background checks, leave tracking, performance management, or accrual tracking by role/tenure/union status',
+                   'School payroll reconciled separately — manual W-2 coordination',
+                   'No employee self-service — all changes require HR/payroll staff',
+                   'PFML tracking manual — high compliance risk',
+                   'Benefits enrollment paper-based; no carrier data feeds',
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-1.5 text-xs text-red-700">
-                      <span className="text-red-400 flex-shrink-0 mt-0.5">✗</span>{item}
-                    </div>
+                   <div key={i} className="flex items-start gap-1.5 text-xs text-red-700">
+                     <span className="text-red-400 flex-shrink-0 mt-0.5">✗</span>{item}
+                   </div>
                   ))}
                 </div>
               </div>
