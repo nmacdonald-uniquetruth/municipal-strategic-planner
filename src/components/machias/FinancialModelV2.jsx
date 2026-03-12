@@ -27,8 +27,21 @@ export function runProFormaFromSettings(settings) {
     const saCost = esc(saFL);
     const bsCost = yr === 1 ? Math.round(bsFL * (6 / 12)) : esc(bsFL);
     const gaCost = yr === 1 ? Math.round(gaFL * (4 / 12)) : esc(gaFL);
-    const rcCost = yr >= 3 ? esc(rcFL) : 0;
-    const ctrlCost = yr >= 5 ? Math.round(ctrlFL * 0.5) : 0;
+    // Revenue Coordinator: only hire when regional services revenue covers fully loaded cost
+    const rcFullyLoaded = esc(rcFL);
+    const regionalAtYr = (() => {
+      const rb = yr === 1 ? Math.round(s.rb_annual_contract * (4/12)) : Math.round(s.rb_annual_contract * Math.pow(1.04, yr-1));
+      const mac = yr === 1 ? Math.round(s.machiasport_annual_contract * (4/12)) : Math.round(s.machiasport_annual_contract * Math.pow(1.04, yr-1));
+      const marsh = yr >= 2 ? Math.round(s.marshfield_annual_contract * Math.pow(1.04, yr-2)) : 0;
+      const whit = yr >= 3 ? Math.round(s.whitneyville_annual_contract * Math.pow(1.04, yr-3)) : 0;
+      const north = yr >= 3 ? Math.round(s.northfield_annual_contract * Math.pow(1.04, yr-3)) : 0;
+      return rb + mac + marsh + whit + north;
+    })();
+    const rcCost = regionalAtYr >= rcFullyLoaded ? rcFullyLoaded : 0;
+
+    // Y5 senior hire: Controller (half-year) OR second Staff Accountant — model setting toggle
+    const useController = s.y5_senior_hire === 'controller';
+    const ctrlCost = yr >= 5 ? (useController ? Math.round(ctrlFL * 0.5) : esc(saFL)) : 0;
     const airportStipend = 2750;
     const implCost = yr === 1 ? s.erp_y1_cost || 0 : s.erp_ongoing_cost || 0;
     const totalCosts = saCost + bsCost + gaCost + rcCost + ctrlCost + airportStipend + implCost;
@@ -111,7 +124,7 @@ export function runProFormaFromSettings(settings) {
         billingSpecialist: bsCost,
         gaCoordinator: gaCost,
         revenueCoordinator: rcCost,
-        controller: ctrlCost,
+        controller: ctrlCost,  // may be SA2 depending on y5_senior_hire setting
         airportStipend,
         implementation: implCost,
         total: totalCosts,

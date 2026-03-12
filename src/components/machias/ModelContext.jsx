@@ -8,6 +8,7 @@ const DEFAULT_SETTINGS = {
   ga_stipend: 10000,
   rc_base_salary: 39000,
   controller_base_salary: 85000,
+  y5_senior_hire: 'staff_accountant',
   wage_growth_rate: 0.04,
   health_tier: 'family',
   fica_rate: 0.0765,

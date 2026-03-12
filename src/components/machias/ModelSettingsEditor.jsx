@@ -80,6 +80,17 @@ export default function ModelSettingsEditor() {
         <Field label="GA Coordinator Stipend" value={local.ga_stipend} onChange={set('ga_stipend')} prefix="$" />
         <Field label="Revenue Coordinator Base" value={local.rc_base_salary} onChange={set('rc_base_salary')} prefix="$" />
         <Field label="Controller Base" value={local.controller_base_salary} onChange={set('controller_base_salary')} prefix="$" />
+        <div>
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">Year 5 Senior Hire</Label>
+          <p className="text-[9px] text-slate-400 mb-1">Controller (½ yr) or 2nd Staff Accountant</p>
+          <Select value={local.y5_senior_hire || 'staff_accountant'} onValueChange={set('y5_senior_hire')}>
+            <SelectTrigger className="h-8 mt-1 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="staff_accountant" className="text-xs">2nd Staff Accountant</SelectItem>
+              <SelectItem value="controller" className="text-xs">Controller (½ year)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <Field label="Annual Wage Growth Rate" value={local.wage_growth_rate} onChange={set('wage_growth_rate')} suffix="%" />
         <div>
           <Label className="text-[10px] text-slate-500 uppercase font-medium">Default Health Tier</Label>
