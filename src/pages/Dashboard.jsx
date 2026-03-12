@@ -110,7 +110,7 @@ export default function Dashboard() {
         <div className="relative">
           <StatCard
             label="Y1 GF Levy Impact"
-            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `(${formatShortCurrency(Math.abs(data[0]?.gf?.gfNetLevyImpact))}) surplus` : `+${formatShortCurrency(data[0]?.gf?.gfNetLevyImpact)}`}
+            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `($${Math.abs(data[0]?.gf?.gfNetLevyImpact).toLocaleString()}) surplus` : `+$${data[0]?.gf?.gfNetLevyImpact.toLocaleString()}`}
             icon={ShieldCheck}
             sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
           />
@@ -123,7 +123,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : formatShortCurrency(data[0]?.gf?.undesignatedDraw)} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
+          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${data[0]?.gf?.undesignatedDraw.toLocaleString()}`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="Undesignated Fund Draw">
               <p>If GF-funded costs exceed GF cash offsets in Year 1, the gap would need to be covered by a draw from the undesignated fund balance (currently ~${settings.gf_undesignated_balance?.toLocaleString()}).</p>
