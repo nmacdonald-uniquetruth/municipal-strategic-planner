@@ -8,27 +8,45 @@ import { Link } from 'react-router-dom';
 const fmt  = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
 const fmtK = (n) => `$${Math.round(Math.abs(n) / 1000)}K`;
 
+// Tier 1: Managed services (annual fee range)
+const TIER1_MANAGED = [
+  { component: 'Complete Financial Administration', feeRange: '$9,000–$13,000', scope: 'Monthly GL posting, reconciliations, warrant prep, budget monitoring, annual close support, audit prep & auditor coordination; approx. 8–12 SA hrs/month per town.' },
+  { component: 'Payroll Administration', feeRange: '$4,000–$5,500', scope: 'Bi-weekly payroll processing, tax deposits, quarterly 941 filings, W-2 preparation. Priced per pay period or flat annual rate based on employee count.' },
+  { component: 'Budget Development Support', feeRange: '$2,500–$4,500', scope: 'Annual budget workbook preparation, department submissions, revenue analysis, Select Board presentation materials. FD attends budget committee meetings.' },
+  { component: 'Complete Package (all three)', feeRange: '$16,000–$22,000', scope: 'Bundled rate with 10% discount vs. à la carte. Minimum 12-month interlocal agreement. Direct cost to serve one town (130 SA hrs + 24 FD oversight hrs): ~$7,900/yr.', highlight: true },
+];
+
+// Tier 2: Project-based engagements
+const TIER2_PROJECTS = [
+  { project: 'Chart of Accounts Rebuild', feeRange: '$4,500–$7,500', deliverables: 'COA assessment against Maine municipal GASB standards; redesign with fund accounting structure; ERP/TRIO configuration documentation; staff training.' },
+  { project: 'Taxation Review & Assessment Analysis', feeRange: '$3,500–$5,500', deliverables: 'Mil rate review, property tax commitment analysis, abatement history, BETE/BETR compliance. Findings report with corrective action recommendations.' },
+  { project: 'Audit Preparation & Corrective Action Support', feeRange: '$5,000–$9,000', deliverables: 'Pre-audit reconciliation, schedule prep (fixed assets, debt service, fund balance), PBC list completion, management letter response drafting.' },
+  { project: 'ERP / Financial System Implementation Support', feeRange: '$6,000–$12,000', deliverables: 'Vendor evaluation, RFP development, COA configuration, data migration review, parallel testing, go-live support. Relevant for towns transitioning from TRIO.' },
+  { project: 'Policy & Internal Controls Development', feeRange: '$2,500–$5,000', deliverables: 'Cash handling, purchasing, AP/AR, payroll policy drafts. Internal control gap assessment vs. audit standards. Board-ready resolutions.' },
+  { project: 'Grant Administration Support', feeRange: '$1,500–$4,000/grant', deliverables: 'Application support, drawdown management, reporting, fund accounting setup, closeout documentation. Fee scales with grant complexity.' },
+];
+
 const SERVICE_TIERS = [
   {
-    tier: 'Tier 1 — Basic Bookkeeping',
-    description: 'Monthly reconciliation, journal entries, accounts payable processing, and monthly financial reports. Suitable for very small towns with simple GF-only operations.',
-    hours_per_month: '8–12 hrs',
-    staff_level: 'Staff Accountant',
-    includes: ['Monthly bank reconciliation', 'Accounts payable processing', 'Monthly financial statement', 'Annual budget preparation support', 'Year-end close assistance'],
+    tier: 'Tier 1 — Complete Managed Financial Services',
+    description: 'Recurring annual services delivered on a monthly basis under a minimum 12-month interlocal agreement. Priced at a blended rate of $55–$75/hr reflecting fully loaded internal costs.',
+    hours_per_month: '8–12 hrs (basic) / 16–24 hrs (full)',
+    staff_level: 'Staff Accountant + FD oversight',
+    includes: ['Monthly GL posting & reconciliation', 'Warrant preparation', 'Budget monitoring', 'Annual close support', 'Audit preparation & coordination', 'Payroll administration (optional)', 'Budget development support (optional)'],
   },
   {
-    tier: 'Tier 2 — Full Financial Administration',
-    description: 'All Tier 1 services plus payroll processing, grant financial reporting, audit preparation, and quarterly board presentations.',
-    hours_per_month: '16–24 hrs',
-    staff_level: 'Staff Accountant + FD oversight',
-    includes: ['All Tier 1 services', 'Payroll processing + W-2', 'Federal/state grant financial reporting', 'Audit preparation package', 'Quarterly board report', 'Budget narrative support'],
+    tier: 'Tier 2 — Project-Based Engagements',
+    description: 'Fixed-scope deliverables priced at completion or on a defined milestone schedule. Time allocation between FD and SA depends on client complexity and prior audit status.',
+    hours_per_month: 'Project-based',
+    staff_level: 'Staff Accountant + Finance Director (complexity-dependent)',
+    includes: ['COA rebuild', 'Taxation review & assessment analysis', 'Audit prep & corrective action', 'ERP/system implementation support', 'Policy & internal controls development', 'Grant administration support'],
   },
   {
     tier: 'Tier 3 — Comprehensive Financial Services',
-    description: 'All Tier 2 services plus enterprise fund oversight, capital planning support, debt service management, and on-site attendance at board meetings.',
+    description: 'All managed services plus enterprise fund oversight, capital planning support, debt service management, and on-site attendance at board meetings. Requires Revenue Coordinator.',
     hours_per_month: '32–40 hrs',
-    staff_level: 'Staff Accountant + FD + Controller',
-    includes: ['All Tier 2 services', 'Enterprise fund accounting', 'Capital improvement plan', 'Debt service scheduling', 'On-site board meeting attendance', 'GASB compliance review', 'Insurance procurement support'],
+    staff_level: 'Staff Accountant + FD + Revenue Coordinator',
+    includes: ['All Tier 1 services', 'Enterprise fund accounting', 'Capital improvement plan', 'Debt service scheduling', 'On-site board meeting attendance', 'GASB compliance review', 'Insurance procurement support'],
   },
 ];
 
