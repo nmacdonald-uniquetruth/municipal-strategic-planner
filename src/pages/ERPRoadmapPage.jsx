@@ -302,12 +302,14 @@ export default function ERPRoadmapPage() {
                 <span>Module</span><span>Priority</span><span>Rationale</span><span>Minimum Requirement</span>
               </div>
               {[
-                ['Employee Self-Service (ESS)', 'Critical', 'Reduces HR admin load immediately', 'Paystub, W-4, leave request, direct deposit'],
-                ['Time & Attendance', 'High', 'Manual timesheet entry is error-prone', 'Clock-in/out, PTO tracking, manager approval'],
-                ['Benefits Administration', 'High', 'ACA reporting + PFML coordination', 'Enrollment, carrier feeds, ACA 1095 generation'],
-                ['Onboarding/Offboarding', 'Medium', 'Consistent I-9, direct deposit, PERS enrollment', 'Checklist workflow, document storage'],
-                ['Performance Management', 'Low', 'Useful but not operationally critical Y1', 'Annual review workflow, goal tracking'],
-                ['Learning Management (LMS)', 'Low', 'Training tracking — nice to have', 'Compliance training completion tracking'],
+               ['Employee Self-Service (ESS)', 'Critical', 'Reduces HR admin load immediately', 'Paystub, W-4, leave request, direct deposit'],
+               ['Time & Attendance', 'High', 'Manual timesheet entry is error-prone', 'Clock-in/out, PTO tracking, manager approval'],
+               ['Accrual Tracking', 'High', 'By role, tenure, and union status — complex rules', 'Automated accruals; integration with leave balances'],
+               ['Benefits Administration', 'High', 'ACA reporting + PFML coordination', 'Enrollment, carrier feeds, ACA 1095 generation'],
+               ['Background Checks', 'Medium', 'Pre-hire compliance', 'Integrated background check workflow'],
+               ['Onboarding/Offboarding', 'Medium', 'Consistent I-9, direct deposit, PERS enrollment', 'Checklist workflow, document storage'],
+               ['Performance Management', 'Medium', 'Goal tracking, annual reviews', 'Annual review workflow, goal setting, ratings'],
+               ['Learning Management (LMS)', 'Medium', 'Currently NEOGOV — goal: role-based course assignment integrated with HR', 'Compliance training, role-based assignments, completion tracking'],
               ].map((row, i) => (
                 <div key={i} className="px-4 py-2 grid grid-cols-4 text-xs border-t border-blue-100">
                   <span className="font-medium text-blue-900">{row[0]}</span>
