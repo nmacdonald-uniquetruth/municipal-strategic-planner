@@ -34,14 +34,21 @@ export default function Dashboard() {
               This plan formalizes that expenditure into 3 dedicated positions — zero tax increase required.
             </p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap justify-end">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">${(cumulative / 1000).toFixed(0)}K</p>
-              <p className="text-[10px] text-slate-400">5-Year Net Value</p>
+              <p className="text-2xl font-bold text-emerald-400">${(cashOnly5yr / 1000).toFixed(0)}K</p>
+              <p className="text-[10px] text-slate-400">5-Yr Cash Net</p>
+              <p className="text-[9px] text-slate-500">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-400">~M8</p>
-              <p className="text-[10px] text-slate-400">Break-Even</p>
+              <p className="text-2xl font-bold text-slate-300">${(cumulative / 1000).toFixed(0)}K</p>
+              <p className="text-[10px] text-slate-400">5-Yr Total Value</p>
+              <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-blue-400">~Y2</p>
+              <p className="text-[10px] text-slate-400">Cash Break-Even</p>
+              <p className="text-[9px] text-slate-500">actual dollars</p>
             </div>
           </div>
         </div>
