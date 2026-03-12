@@ -117,6 +117,102 @@ export default function ERPRoadmapPage() {
         </div>
       )}
 
+      {/* MACHIAS OPERATIONAL FOOTPRINT */}
+      {activeTab === 'footprint' && (
+        <div className="space-y-5">
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900 text-sm mb-2">Why Per-Capita Benchmarking Understates Machias</h3>
+            <p className="text-xs text-slate-600 leading-relaxed mb-3">Standard per-capita benchmarking systematically understates the complexity of municipalities like Machias — small-population county seats that anchor regional public safety, infrastructure, and administrative services for a much larger surrounding area. Machias has a residential population of approximately 2,105 but serves as the economic and service center for Washington County. A service-complexity weighted analysis places Machias at <strong>2.5 to 3.0× the operational intensity</strong> of a typical 2,000-person Maine municipality. The effective service population is <strong>6,000–8,000</strong>.</p>
+            <div className="grid grid-cols-3 gap-3 mb-3">
+              {[
+                { label: 'Residential Population', value: '2,105' },
+                { label: 'Effective Service Population', value: '6,000–8,000' },
+                { label: 'Complexity Multiplier', value: '2.5–3.0×' },
+              ].map((s, i) => (
+                <div key={i} className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-center">
+                  <p className="text-xl font-bold text-slate-900">{s.value}</p>
+                  <p className="text-[10px] text-slate-500">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <div className="bg-slate-900 text-white px-4 py-2 text-[10px] font-semibold uppercase tracking-wider grid grid-cols-4">
+              <span>Service Area</span><span>Scope</span><span>Coverage Pop.</span><span>Complexity</span>
+            </div>
+            {[
+              ['EMS Ambulance', '10-town regional coverage, ~2,000 calls/year, QA/QI structure', '4,500–6,000', 'High'],
+              ['Fire; Primary', 'Machias, Northfield, Whitneyville; full-time engineers + volunteers', '2,440', 'High'],
+              ['Fire; Mutual Aid', 'Marshfield, Machiasport, Jonesboro, East Machias', '3,500 addl.', 'Moderate'],
+              ['Police', 'Full department, 24/7, 3 full-time officers + 12 reserves', '2,000', 'Moderate'],
+              ['Airport', 'FAA compliance, capital grants, engineering oversight, fuel farm operations; inspection currently at reduced part-time hours', 'Regional', 'High'],
+              ['Sewer Enterprise', 'Contracted operations, infrastructure lifecycle management', '2,000', 'Moderate'],
+              ['Transfer Station', 'Host municipality, Roque Bluffs interlocal, significant expansion potential', '2,300 current', 'Moderate–High'],
+              ['General Assistance', 'Currently processed by Town Manager; Title 22 compliance', '2,000', 'Moderate'],
+              ['County Seat Functions', 'High public transaction volume, FOAA requests, public records management', 'Regional', 'Moderate'],
+              ['Telebusiness Center', 'Municipal HQ with VA, DMV, AOS, and private professional tenants', 'Internal', 'Low–Moderate'],
+              ['7 Court Street', 'Proposed enterprise: 3/4 at $1,300/mo, 1/4 at $450–$500/mo. Projected gross: $21,000–$21,600/yr', 'External', 'Moderate'],
+            ].map(([area, scope, pop, complexity], i) => (
+              <div key={i} className={`px-4 py-2.5 grid grid-cols-4 text-xs border-t border-slate-100 ${i % 2 === 0 ? '' : 'bg-slate-50/30'}`}>
+                <span className="font-semibold text-slate-800">{area}</span>
+                <span className="text-slate-600">{scope}</span>
+                <span className="font-mono text-slate-700">{pop}</span>
+                <span className={`font-semibold ${complexity === 'High' ? 'text-red-700' : complexity === 'Moderate–High' ? 'text-amber-700' : 'text-slate-500'}`}>{complexity}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900 text-sm mb-3">Operations Manager Role — Current Status & Impact</h3>
+            <p className="text-xs text-slate-600 mb-3">The Town previously maintained a part-time Operations Manager responsible for general municipal operations oversight, facilities coordination, vendor management, and airport inspection and fuel farm compliance. When the Finance Director was hired, the Operations Manager's hours were significantly reduced as a partial offset to the FD salary cost. This reduction had two consequences that belong in the structural misalignment analysis:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+              <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs">
+                <p className="font-semibold text-amber-800 mb-1">Airport Inspection Gap</p>
+                <p className="text-amber-700">Operations Manager continued airport and fuel farm oversight at $25.37/hr, ~4 hrs/week = $5,277/yr from GF with no defined scope, inspection frequency standard, or FAA assurance documentation protocol. <strong>Proposal: $2,750 stipend from airport budget line</strong> — saves $2,527/yr and creates FAA compliance documentation.</p>
+              </div>
+              <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs">
+                <p className="font-semibold text-amber-800 mb-1">Operations Duties Absorbed by Executives</p>
+                <p className="text-amber-700">Facilities oversight, vendor coordination, capital project logistics, and general operational troubleshooting were informally absorbed by the FD, TM, and department heads — none formally documented or reflected in compensation adjustments.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900 text-sm mb-3">Normalized Performance — Machias vs. Peers</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-900 text-white">
+                    {['Metric','Townsend MT','Heppner OR','Ossipee NH','McCall ID','Ainsworth NE','Machias Current','Machias Proposed'].map((h, i) => (
+                      <th key={i} className="px-3 py-2 text-left font-semibold text-[10px]">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['Admin FTE/1,000 service pop.','0.9','0.7','0.6','0.8','1.1','0.6 ⚠','0.9'],
+                    ['Admin cost/service capita','$312','$287','$198','$276','$341','$186 ⚠','$238'],
+                    ['EMS collection rate','74%','N/A','81%','78%','70%','75%','82%'],
+                    ['Non-tax revenue % operating','18%','12%','22%','31%','9%','11%','24%'],
+                    ['Transfer Station cost recovery','65%','N/A','80%','75%','55%','13% ⚠','58%'],
+                    ['Months to close after FY','3–4','4–5','2–3','2–3','5–6','4–5 ⚠','2–3'],
+                    ['Segregation of duties','Moderate','Moderate','Strong','Strong','Weak','Weak–Mod ⚠','Strong'],
+                  ].map((row, i) => (
+                    <tr key={i} className={`border-b border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
+                      {row.map((cell, j) => (
+                        <td key={j} className={`px-3 py-2 ${j === 5 && cell.includes('⚠') ? 'text-amber-700 font-bold' : j === 6 ? 'text-emerald-700 font-bold' : 'text-slate-700'}`}>{cell}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[10px] text-slate-400 mt-2">Machias currently spends only $186/service-area capita — the lowest among all peers — despite operating the most complex service portfolio relative to residential population. The proposed structure brings Machias to $238/service capita, still below the national peer average of $283.</p>
+          </div>
+        </div>
+      )}
+
       {/* TIMELINE */}
       {activeTab === 'roadmap' && (
         <>
@@ -157,8 +253,10 @@ export default function ERPRoadmapPage() {
       {/* EVALUATOR */}
       {activeTab === 'evaluator' && (
         <>
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
-            <strong>Systems under evaluation:</strong> Sage Intacct · TownCloud · Harris TRIO (upgrade) · Tyler Technologies (Munis / ERP Pro) · Edmunds GovTech · OpenGov · CivicPlus · Infor · Microsoft Dynamics 365 · Black Mountain Software · Caselle · BS&A Software · ClearGov · Paylocity · BambooHR · ADP · Paycor · Paycom · NEOGOV · HiBob · iSolved · SmartFusion
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+            <p><strong>Systems under evaluation:</strong> Sage Intacct · TownCloud · Harris TRIO (upgrade) · Tyler Technologies (Munis / ERP Pro) · Edmunds GovTech · OpenGov · CivicPlus · Infor · Microsoft Dynamics 365 · ClearGov · Paylocity · BambooHR · ADP · Paycor · Paycom · NEOGOV · HiBob · iSolved · SmartFusion</p>
+            <p className="text-red-600"><strong>⚠ Eliminated — Do Not Evaluate:</strong> BS&A Software, Black Mountain Software, and Caselle have been ruled out — they do not operate or have references in Maine.</p>
+            <p className="text-amber-700"><strong>⚠ TownCloud — Caution:</strong> Very new company; product is not fully built out. Promising concept but high implementation risk for a live municipal deployment. Monitor for Y2+ evaluation.</p>
           </div>
           <ERPEvaluator />
         </>
@@ -324,7 +422,7 @@ export default function ERPRoadmapPage() {
             <h3 className="font-bold text-slate-900 text-sm mb-3">Procurement Process & Timeline</h3>
             <div className="space-y-3">
               {[
-                { step: 'Phase 0 — Requirements Gathering', timing: 'Q1-Q2 after SA hire', detail: 'SA conducts business process documentation. FD + SA define functional requirements. Review Maine AOS COA standards. Identify integration points (school, PERS, PFML). Budget Committee preliminary briefing.', deliverable: 'Functional requirements document (10–15 pages)' },
+                { step: 'Phase 0 — Requirements Gathering', timing: 'Q1-Q2 after SA hire', detail: 'SA works closely with FD on business process documentation — SA co-leads, FD guides. Department head involvement is essential at this stage. FD + SA define functional requirements. Review Maine AOS COA standards. Identify integration points (school, PERS, PFML). Budget Committee preliminary briefing. Note: FD has been leading COA gap analysis to this point — SA hire accelerates completion.', deliverable: 'Functional requirements document (10–15 pages) with department head sign-off' },
                 { step: 'Phase 1 — RFI (Request for Information)', timing: 'Q2-Q3', detail: 'Issue broad RFI to all vendors on the evaluation list. Goal: eliminate vendors that can\'t meet minimum requirements (multi-entity, Maine PERS, GASB 34). Not a commitment — information gathering only.', deliverable: 'Shortlist of 4–6 vendors for RFP' },
                 { step: 'Phase 2 — RFP (Request for Proposals)', timing: 'Q3-Q4', detail: 'Issue formal RFP to shortlisted vendors. Include: functional requirements, Maine-specific requirements, demo script, reference check requirements, implementation timeline requirements, pricing format. SA and FD on evaluation committee.', deliverable: 'Scored RFP responses; vendor shortlist of 2–3' },
                 { step: 'Phase 3 — Demos & Reference Checks', timing: 'Q4', detail: 'Scripted demos using Machias-specific scenarios (multi-entity GL, payroll with school import, EMS billing, regional client sub-ledger). Check Maine municipal references — call at least 3 per finalist vendor. Ask specifically about implementation quality and go-live support.', deliverable: 'Evaluation committee scores; recommendation memo' },
