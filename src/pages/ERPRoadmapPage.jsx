@@ -157,8 +157,10 @@ export default function ERPRoadmapPage() {
       {/* EVALUATOR */}
       {activeTab === 'evaluator' && (
         <>
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
-            <strong>Systems under evaluation:</strong> Sage Intacct · TownCloud · Harris TRIO (upgrade) · Tyler Technologies (Munis / ERP Pro) · Edmunds GovTech · OpenGov · CivicPlus · Infor · Microsoft Dynamics 365 · Black Mountain Software · Caselle · BS&A Software · ClearGov · Paylocity · BambooHR · ADP · Paycor · Paycom · NEOGOV · HiBob · iSolved · SmartFusion
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+            <p><strong>Systems under evaluation:</strong> Sage Intacct · TownCloud · Harris TRIO (upgrade) · Tyler Technologies (Munis / ERP Pro) · Edmunds GovTech · OpenGov · CivicPlus · Infor · Microsoft Dynamics 365 · ClearGov · Paylocity · BambooHR · ADP · Paycor · Paycom · NEOGOV · HiBob · iSolved · SmartFusion</p>
+            <p className="text-amber-700"><strong>Ruled out:</strong> BS&A Software, Black Mountain Software, and Caselle do not serve Maine municipalities.</p>
+            <p className="text-amber-700"><strong>TownCloud note:</strong> Very new company; product is not fully built. High implementation risk for a municipality without dedicated IT staff. Monitor for future evaluation.</p>
           </div>
           <ERPEvaluator />
         </>
