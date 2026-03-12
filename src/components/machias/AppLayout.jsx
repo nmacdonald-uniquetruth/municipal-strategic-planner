@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
-  ClipboardList, ChevronLeft, Menu
+  ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare
 } from 'lucide-react';
 
 const NAV = [
@@ -11,8 +11,11 @@ const NAV = [
   { path: '/Positions', label: 'Positions', icon: Users },
   { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
   { path: '/EnterpriseFunds', label: 'Enterprise Funds', icon: Landmark },
-  { path: '/Scenarios', label: 'Scenario Modeler', icon: Target },
+  { path: '/Scenarios', label: 'Scenarios', icon: Target },
   { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
+  { path: '/MathVerify', label: 'Math Verify', icon: Calculator },
+  { path: '/ModelSettings', label: 'Model Settings', icon: Settings },
+  { path: '/AIPlanner', label: 'AI Planner', icon: MessageSquare },
 ];
 
 export default function AppLayout() {
