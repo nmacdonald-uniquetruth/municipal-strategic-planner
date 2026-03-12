@@ -11,12 +11,6 @@ import { Link } from 'react-router-dom';
 import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
 import ExportExecSummary from '../components/machias/ExportExecSummary';
 
-const formatNum = (v) => {
-  if (Math.abs(v) >= 1000000) return (v / 1000000).toFixed(2) + 'M';
-  if (Math.abs(v) >= 1000) return '$' + (v / 1000).toFixed(0) + 'K';
-  return '$' + v.toLocaleString();
-};
-
 export default function Dashboard() {
   const { settings } = useModel();
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
@@ -70,12 +64,12 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-4 flex-wrap justify-end">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">{formatNum(cashOnly5yr)}</p>
+              <p className="text-2xl font-bold text-emerald-400">${cashOnly5yr.toLocaleString()}</p>
               <p className="text-[10px] text-slate-400">5-Yr Cash Net</p>
               <p className="text-[9px] text-slate-500">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-300">{formatNum(cumulative)}</p>
+              <p className="text-2xl font-bold text-slate-300">${cumulative.toLocaleString()}</p>
               <p className="text-[10px] text-slate-400">5-Yr Total Value</p>
               <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
             </div>
@@ -91,7 +85,7 @@ export default function Dashboard() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="relative">
-           <StatCard label="Year 1 Net" value={formatNum(y1Net)} icon={DollarSign} sub="Base case, all 3 positions" />
+           <StatCard label="Year 1 Net" value={`$${y1Net.toLocaleString()}`} icon={DollarSign} sub="Base case, all 3 positions" />
            <div className="absolute top-2 right-2">
              <InfoTooltip title="Year 1 Net Value">
               <p>This is the net of all projected value (structural savings, regional revenue, EMS improvement, capacity) minus the total cost of all new positions and ERP implementation in Year 1.</p>
@@ -100,7 +94,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-           <StatCard label="Year 5 Gross Value" value={formatNum(y5Value)} icon={TrendingUp} sub="Structural + regional" />
+           <StatCard label="Year 5 Gross Value" value={`$${y5Value.toLocaleString()}`} icon={TrendingUp} sub="Structural + regional" />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="Year 5 Gross Value">
               <p>The total projected annual value of the restructuring by Year 5, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
@@ -110,7 +104,7 @@ export default function Dashboard() {
         <div className="relative">
           <StatCard
             label="Y1 GF Levy Impact"
-            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `(${formatNum(Math.abs(data[0]?.gf?.gfNetLevyImpact))}) surplus` : `+${formatNum(data[0]?.gf?.gfNetLevyImpact)}`}
+            value={data[0]?.gf?.gfNetLevyImpact <= 0 ? `($${Math.abs(data[0]?.gf?.gfNetLevyImpact).toLocaleString()}) surplus` : `+$${data[0]?.gf?.gfNetLevyImpact.toLocaleString()}`}
             icon={ShieldCheck}
             sub={data[0]?.gf?.gfNetLevyImpact <= 0 ? 'No tax increase required' : 'Levy pressure — see ProForma'}
           />
@@ -123,7 +117,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : formatNum(data[0]?.gf?.undesignatedDraw)} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
+          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${data[0]?.gf?.undesignatedDraw.toLocaleString()}`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="Undesignated Fund Draw">
               <p>If GF-funded costs exceed GF cash offsets in Year 1, the gap would need to be covered by a draw from the undesignated fund balance (currently ~${settings.gf_undesignated_balance?.toLocaleString()}).</p>

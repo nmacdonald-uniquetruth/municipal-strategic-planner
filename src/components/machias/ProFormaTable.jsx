@@ -1,11 +1,7 @@
 import React from 'react';
 
 export default function ProFormaTable({ data, settings }) {
-  const fmt = (v) => {
-    if (!v) return '—';
-    if (Math.abs(v) >= 1000000) return (v / 1000000).toFixed(2) + 'M';
-    return '$' + v.toLocaleString();
-  };
+  const fmt = (v) => v ? `$${v.toLocaleString()}` : '—';
   const y5Label = settings?.y5_senior_hire === 'controller' ? 'Controller (Y5 ½yr)' : 'Staff Accountant 2 (Y5)';
 
   return (
