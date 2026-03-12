@@ -230,7 +230,7 @@ export default function Narrative() {
             <p>The Town's Finance Department consists of the Finance Director and a Town Clerk. This staffing level is appropriate for a very small municipality with simple, single-fund operations. Machias is neither small nor simple:</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
               <Stat label="Annual Calls" value={s.ems_transports.toLocaleString()} sub="Ambulance Service" color="slate" />
-              <Stat label="Enterprise Funds" value="5" sub="Ambulance, Sewer, TS, Telebus, Court St" color="slate" />
+              <Stat label="Enterprise Funds" value="4" sub="Ambulance, Sewer, Transfer Station, Telebusiness Center" color="slate" />
               <Stat label="Tax Levy" value={fmtK(s.annual_tax_levy)} sub="Annual GF levy" color="slate" />
               <Stat label="Assessed Value" value={`$${(s.total_assessed_value / 1000000).toFixed(0)}M`} sub="Total assessed value" color="slate" />
             </div>
