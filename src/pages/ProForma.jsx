@@ -14,11 +14,24 @@ export default function ProForma() {
 
   return (
     <div className="space-y-8">
-      <SectionHeader
-        title="5-Year Financial Pro Forma"
-        subtitle="Base case — all figures from Machias Restructuring Model v3.1"
-        icon={TrendingUp}
-      />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <SectionHeader
+            title="5-Year Financial Pro Forma"
+            subtitle="Base case — all figures from Machias Restructuring Model v3.1"
+            icon={TrendingUp}
+          />
+          <InfoTooltip title="About the Pro Forma model">
+            <p>This model projects five fiscal years of financial performance for the Machias administrative restructuring. All figures are driven by the parameters in Model Settings — changing any assumption updates every table, chart, and calculation automatically.</p>
+            <p><strong>Value includes:</strong> avoided Comstar fees, EMS collection improvement, regional service contracts, Transfer Station revenue, enterprise overhead, FD/TM capacity recovered, and internal control risk mitigation.</p>
+            <p><strong>Costs include:</strong> all new position fully loaded costs (salary + FICA + PERS + WC + health), ERP implementation, and airport stipend.</p>
+          </InfoTooltip>
+        </div>
+        <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all">
+          <BookOpen className="h-3.5 w-3.5" />
+          Full Narrative
+        </Link>
+      </div>
 
       <ProFormaChart data={data} />
 
