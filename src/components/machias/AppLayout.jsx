@@ -2,21 +2,48 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
-  ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen
+  ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
+  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity
 } from 'lucide-react';
 
-const NAV = [
-  { path: '/Dashboard', label: 'Overview', icon: LayoutDashboard },
-  { path: '/Narrative', label: 'Full Narrative', icon: BookOpen },
-  { path: '/ProForma', label: 'Financial Model', icon: TrendingUp },
-  { path: '/Positions', label: 'Positions', icon: Users },
-  { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
-  { path: '/EnterpriseFunds', label: 'Enterprise Funds', icon: Landmark },
-  { path: '/Scenarios', label: 'Scenarios', icon: Target },
-  { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
-  { path: '/MathVerify', label: 'Math Verify', icon: Calculator },
-  { path: '/ModelSettings', label: 'Model Settings', icon: Settings },
-  { path: '/AIPlanner', label: 'AI Planner', icon: MessageSquare },
+const NAV_GROUPS = [
+  {
+    label: 'Overview',
+    items: [
+      { path: '/Dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { path: '/ProForma', label: 'Financial Model', icon: TrendingUp },
+      { path: '/PerformanceMetrics', label: 'Performance', icon: Activity },
+      { path: '/SensitivityAnalysis', label: 'Sensitivity', icon: BarChart2 },
+      { path: '/Scenarios', label: 'Scenarios', icon: Target },
+    ],
+  },
+  {
+    label: 'Initiatives',
+    items: [
+      { path: '/Positions', label: 'Positions', icon: Users },
+      { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
+      { path: '/RegionalServices', label: 'Regional Services', icon: Target },
+      { path: '/TransferStation', label: 'Transfer Station', icon: Truck },
+      { path: '/EnterpriseFunds', label: 'Enterprise Funds', icon: Landmark },
+    ],
+  },
+  {
+    label: 'Planning',
+    items: [
+      { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
+      { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
+      { path: '/QandA', label: 'Q & A', icon: HelpCircle },
+    ],
+  },
+  {
+    label: 'Reference',
+    items: [
+      { path: '/ReferencesAndResearch', label: 'References', icon: BookMarked },
+      { path: '/MathVerify', label: 'Math Verify', icon: Calculator },
+      { path: '/ModelSettings', label: 'Model Settings', icon: Settings },
+      { path: '/AIPlanner', label: 'AI Planner', icon: MessageSquare },
+    ],
+  },
 ];
 
 export default function AppLayout() {
