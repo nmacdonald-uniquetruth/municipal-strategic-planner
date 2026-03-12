@@ -18,6 +18,7 @@ export default function ERPRoadmapPage() {
 
   const TABS = [
     ['why', 'Why ERP'],
+    ['footprint', 'Machias Footprint'],
     ['roadmap', 'Timeline & Phases'],
     ['evaluator', 'System Evaluator'],
     ['architecture', 'Platform Architecture'],
@@ -99,8 +100,8 @@ export default function ERPRoadmapPage() {
             </div>
             <div className="rounded-xl bg-slate-50 p-4 border border-slate-200">
               <p className="font-semibold text-slate-700 text-xs mb-1">Modern ERP + No New Staff</p>
-              <p className="text-xs text-slate-500">Automates workflows. But the FD still can't implement it without SA capacity. Implementation project will fail without dedicated finance staff. And automation of wrong processes makes bad processes faster.</p>
-              <p className="text-xs text-red-700 font-semibold mt-2">Likely failure mode — not recommended</p>
+              <p className="text-xs text-slate-500">Possible, but at a cost. FD could lead implementation, but it would take significantly longer and delay other strategic priorities. The question is: at what cost to the FD's time, and would implementation quality suffer enough to require additional paid vendor support? The SA would work closely with the FD on implementation — not lead it alone.</p>
+              <p className="text-xs text-amber-700 font-semibold mt-2">Possible — but slower, higher risk, and higher total cost</p>
             </div>
             <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200">
               <p className="font-semibold text-emerald-800 text-xs mb-1">Staff + Modern ERP (This Plan)</p>
