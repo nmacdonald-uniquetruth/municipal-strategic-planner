@@ -6,7 +6,9 @@ import StatCard from '../components/machias/StatCard';
 import SectionHeader from '../components/machias/SectionHeader';
 import ProFormaChart from '../components/machias/ProFormaChart';
 import PaybackChart from '../components/machias/PaybackChart';
-import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck } from 'lucide-react';
+import InfoTooltip from '../components/machias/InfoTooltip';
+import { Link } from 'react-router-dom';
+import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
 
 export default function Dashboard() {
   const { settings } = useModel();
