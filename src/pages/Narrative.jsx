@@ -3,7 +3,8 @@ import { useModel } from '../components/machias/ModelContext';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
 import { BookOpen, DollarSign, Users, Monitor, Landmark, TrendingUp, ShieldCheck, Target, AlertTriangle } from 'lucide-react';
 
-function Section({ icon: Icon, title, children }) {
+function Section({ icon, title, children }) {
+  const Icon = icon;
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2.5 border-b border-slate-200 pb-2">
