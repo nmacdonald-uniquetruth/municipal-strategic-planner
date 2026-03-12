@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
-import { runProForma } from '../components/machias/FinancialModel';
+import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
+import { useModel } from '../components/machias/ModelContext';
 import ProFormaTable from '../components/machias/ProFormaTable';
 import ProFormaChart from '../components/machias/ProFormaChart';
 import SectionHeader from '../components/machias/SectionHeader';
 import { TrendingUp } from 'lucide-react';
 
 export default function ProForma() {
-  const data = useMemo(() => runProForma(), []);
+  const { settings } = useModel();
+  const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
 
   return (
     <div className="space-y-8">

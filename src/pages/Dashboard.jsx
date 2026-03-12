@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { runProForma, ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
+import { ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
+import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
+import { useModel } from '../components/machias/ModelContext';
 import StatCard from '../components/machias/StatCard';
 import SectionHeader from '../components/machias/SectionHeader';
 import ProFormaChart from '../components/machias/ProFormaChart';
@@ -7,7 +9,8 @@ import PaybackChart from '../components/machias/PaybackChart';
 import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck } from 'lucide-react';
 
 export default function Dashboard() {
-  const data = useMemo(() => runProForma(), []);
+  const { settings } = useModel();
+  const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
   const cumulative = data.reduce((s, d) => s + d.net, 0);
   const y1Net = data[0]?.net || 0;
   const y5Value = data[4]?.value.total || 0;
