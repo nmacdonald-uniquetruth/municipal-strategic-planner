@@ -57,15 +57,15 @@ export default function ERPRoadmapPage() {
                 <p><strong>The core problem with legacy Trio:</strong> Trio was designed for simple single-fund municipal operations. Machias has outgrown it. Specific limitations:</p>
                 <ul className="text-xs space-y-1.5 ml-3">
                   {[
-                    'No multi-entity sub-ledger — cannot serve regional clients without it',
+                    'No multi-entity sub-ledger — regional services less efficient without it (not impossible, but slower)',
                     'Limited audit trail — auditors must manually reconstruct transaction history',
-                    'No integrated payroll — payroll processed separately, requiring manual GL reconciliation',
+                    'Rudimentary integrated payroll — automatic GL journal entry exists, but no HRIS or benefit admin',
                     'No citizen payment portal — all payments in-person or by check',
                     'Minimal GASB reporting — CAFR preparation requires extensive manual work',
-                    'No budgeting module — budget preparation in spreadsheets, not integrated',
+                    'Basic budgeting module — limited; budget preparation largely still in spreadsheets',
                     'No document management — vendor invoices stored in filing cabinets',
                     'No employee self-service — leave requests, W-4 changes all manual',
-                    'Poor reporting — custom reports require IT or vendor support',
+                    'Limited reporting flexibility — no flat Excel file export; custom reports require vendor support',
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-1.5 text-xs text-red-700"><span className="text-red-400 mt-0.5">✗</span>{item}</li>
                   ))}
