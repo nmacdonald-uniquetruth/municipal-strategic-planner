@@ -5,6 +5,7 @@ import {
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
   Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity
 } from 'lucide-react';
+import FeedbackDialog from './FeedbackDialog';
 
 const NAV_GROUPS = [
   {
@@ -129,11 +130,19 @@ export default function AppLayout() {
       {/* Main content — Shiretown Cream background */}
       <main className="flex-1 overflow-y-auto" style={{ background: '#F3EAD6' }}>
         {/* Mobile top bar */}
-        <div className="lg:hidden p-3 border-b sticky top-0 z-20 flex items-center gap-3" style={{ background: '#344A60', borderColor: 'rgba(179,198,200,0.2)' }}>
-          <button onClick={() => setMobileOpen(true)} className="p-1.5 rounded" style={{ color: '#E7D0B1' }}>
-            <Menu className="h-5 w-5" />
-          </button>
-          <span className="text-sm font-bold" style={{ color: '#E7D0B1', fontFamily: 'Raleway, sans-serif' }}>Town of Machias</span>
+        <div className="lg:hidden p-3 border-b sticky top-0 z-20 flex items-center gap-3 justify-between" style={{ background: '#344A60', borderColor: 'rgba(179,198,200,0.2)' }}>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setMobileOpen(true)} className="p-1.5 rounded" style={{ color: '#E7D0B1' }}>
+              <Menu className="h-5 w-5" />
+            </button>
+            <span className="text-sm font-bold" style={{ color: '#E7D0B1', fontFamily: 'Raleway, sans-serif' }}>Town of Machias</span>
+          </div>
+          <FeedbackDialog />
+        </div>
+        {/* Desktop header bar */}
+        <div className="hidden lg:flex items-center justify-between p-3 border-b sticky top-0 z-20" style={{ background: '#344A60', borderColor: 'rgba(179,198,200,0.2)' }}>
+          <div />
+          <FeedbackDialog />
         </div>
         <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
           <Outlet />
