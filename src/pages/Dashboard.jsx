@@ -9,6 +9,7 @@ import PaybackChart from '../components/machias/PaybackChart';
 import InfoTooltip from '../components/machias/InfoTooltip';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
+import ExportExecSummary from '../components/machias/ExportExecSummary';
 
 export default function Dashboard() {
   const { settings } = useModel();
@@ -33,10 +34,13 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Administrative Restructuring</h1>
           <p className="text-sm text-slate-500 mt-1">Comprehensive 5-year analysis — admin realignment, ERP modernization & regional service strategy</p>
         </div>
-        <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all flex-shrink-0">
-          <BookOpen className="h-3.5 w-3.5" />
-          Full Narrative
-        </Link>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <ExportExecSummary />
+          <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all">
+            <BookOpen className="h-3.5 w-3.5" />
+            Full Narrative
+          </Link>
+        </div>
       </div>
 
       {/* Key insight banner */}
