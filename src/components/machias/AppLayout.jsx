@@ -34,6 +34,8 @@ const NAV_GROUPS = [
       { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
       { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
       { path: '/QandA', label: 'Q & A', icon: HelpCircle },
+      { path: '/SelectBoardPresentation', label: 'SB Presentation', icon: Megaphone },
+      { path: '/TaxpayerFAQ', label: 'Taxpayer FAQ', icon: FileText },
     ],
   },
   {
