@@ -336,6 +336,8 @@ export default function QandA() {
     <div className="space-y-8">
       <SectionHeader title="Questions & Answers" subtitle="Anticipated questions from Select Board, Budget Committee, Town Meeting, and taxpayers" icon={MessageSquare} />
 
+      <GlossaryPanel />
+
       <div className="flex gap-2 flex-wrap">
         {CATEGORIES.map(cat => (
           <button key={cat} onClick={() => setFilter(cat)}
