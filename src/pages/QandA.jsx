@@ -1,8 +1,72 @@
 import React, { useState } from 'react';
 import SectionHeader from '../components/machias/SectionHeader';
-import { MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, ChevronDown, ChevronUp, BookMarked } from 'lucide-react';
 import { useModel } from '../components/machias/ModelContext';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
+
+const GLOSSARY = [
+  { term: 'AP', def: 'Accounts Payable — money the Town owes to vendors and suppliers' },
+  { term: 'AR', def: 'Accounts Receivable — money owed to the Town (billings, fees, EMS collections)' },
+  { term: 'AOS', def: 'Auditor of State — Maine State Auditor; sets Chart of Accounts standards for municipalities' },
+  { term: 'BLS', def: 'Bureau of Labor Statistics — federal agency; source of occupational wage data' },
+  { term: 'BS', def: 'Billing Specialist — proposed in-house EMS and AR billing position' },
+  { term: 'CAFR', def: 'Comprehensive Annual Financial Report — full audited financial report; now often called ACFR' },
+  { term: 'CDBG', def: 'Community Development Block Grant — federal HUD grant program' },
+  { term: 'COA', def: 'Chart of Accounts — the numbered coding structure for all financial transactions' },
+  { term: 'EMS', def: 'Emergency Medical Services — the Town\'s ambulance operation' },
+  { term: 'ERP', def: 'Enterprise Resource Planning — integrated municipal financial and operational software (e.g., Tyler, Edmunds)' },
+  { term: 'FD', def: 'Finance Director — the Town\'s chief financial officer' },
+  { term: 'FD/TM', def: 'Finance Director / Town Manager — used together when referencing shared administrative capacity' },
+  { term: 'FY', def: 'Fiscal Year — Machias operates July 1 – June 30; FY2027 = July 2026 – June 2027' },
+  { term: 'GA', def: 'General Assistance — state-mandated municipal welfare program; also GA Coordinator position' },
+  { term: 'GASB', def: 'Governmental Accounting Standards Board — sets GAAP standards for state and local governments' },
+  { term: 'GF', def: 'General Fund — the Town\'s primary operating fund, financed by property taxes and other revenues' },
+  { term: 'GL', def: 'General Ledger — the master record of all financial transactions' },
+  { term: 'HRIS', def: 'Human Resources Information System — HR and benefits management software' },
+  { term: 'ICMA', def: 'International City/County Management Association — professional body for local government managers; also administers the 403(b) retirement plan used for some Town positions' },
+  { term: 'MMA', def: 'Maine Municipal Association — state association providing training, legal, and policy resources to municipalities' },
+  { term: 'MEFIRS', def: 'Maine Emergency Medical Services Incident Reporting System — state EMS run-reporting database; EMS billing software must integrate with it' },
+  { term: 'NAEMSE', def: 'National Association of EMS Educators — provides billing and coding training for EMS billing specialists' },
+  { term: 'PERS', def: 'Public Employees Retirement System — Maine PERS; the state retirement plan for municipal employees' },
+  { term: 'PCR', def: 'Patient Care Report — the EMS run record; source document for billing' },
+  { term: 'RC', def: 'Revenue Coordinator — trigger-based hire in Year 3 to manage regional services relationships' },
+  { term: 'RFP', def: 'Request for Proposals — procurement document used to solicit competitive bids for the ERP system' },
+  { term: 'SA', def: 'Staff Accountant — the primary proposed Phase 1 hire; takes over AP, payroll, reconciliation, and grant reporting from the FD' },
+  { term: 'SOC', def: 'Standard Occupational Classification — BLS code system for occupational wage benchmarking' },
+  { term: 'TM', def: 'Town Manager — chief executive officer of the Town of Machias' },
+  { term: 'TS', def: 'Transfer Station — the Town\'s solid waste enterprise fund' },
+  { term: 'TRIO', def: 'The Town\'s current legacy municipal financial software platform' },
+  { term: 'USDA', def: 'U.S. Department of Agriculture — administers Rural Development grants relevant to Washington County municipalities' },
+];
+
+function GlossaryPanel() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white">
+      <button className="w-full flex items-center justify-between px-5 py-4 text-left" onClick={() => setOpen(!open)}>
+        <div className="flex items-center gap-2">
+          <BookMarked className="h-4 w-4 text-slate-500" />
+          <span className="text-sm font-semibold text-slate-900">Acronym Glossary</span>
+          <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{GLOSSARY.length} terms</span>
+        </div>
+        {open ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+      </button>
+      {open && (
+        <div className="border-t border-slate-100 px-5 pb-5 pt-3">
+          <p className="text-xs text-slate-500 mb-3">Acronyms used throughout the plan, listed alphabetically. First use in each major section is spelled out in full.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5">
+            {GLOSSARY.sort((a, b) => a.term.localeCompare(b.term)).map(({ term, def }) => (
+              <div key={term} className="flex gap-2 text-xs">
+                <span className="font-bold text-slate-800 w-16 flex-shrink-0">{term}</span>
+                <span className="text-slate-600">{def}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const fmt = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
 const fmtK = (n) => `$${Math.round(Math.abs(n) / 1000)}K`;
