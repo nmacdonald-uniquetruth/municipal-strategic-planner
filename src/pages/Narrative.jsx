@@ -430,7 +430,7 @@ export default function Narrative() {
               </>
             ) : (
               <p>
-               <strong>Full-time model:</strong> Staff Accountant hired in Year 1 at {fmt(s.sa_base_salary)} base salary. All-in cost (including {healthLabel} health insurance, {pct(s.fica_rate)} FICA, {pct(s.pers_rate)} PERS, {pct(s.wc_rate)} WC): <strong>{fmt(saFL)}</strong>. Year 1 partial-year cost (prorated based on hire timing): <strong>{fmt(d1?.costs?.staffAccountant)}</strong>.
+               <strong>Full-time model:</strong> <Ac id="SA" /> hired in Year 1 at {fmt(s.sa_base_salary)} base salary. All-in cost (including {healthLabel} health insurance, {pct(s.fica_rate)} <Ac id="FICA" />, {pct(s.pers_rate)} <Ac id="PERS" />, {pct(s.wc_rate)} WC): <strong>{fmt(saFL)}</strong>. Year 1 partial-year cost (prorated based on hire timing): <strong>{fmt(d1?.costs?.staffAccountant)}</strong>.
               </p>
             )}
           </SubSection>
