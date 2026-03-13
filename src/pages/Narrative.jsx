@@ -1024,7 +1024,7 @@ export default function Narrative() {
           <div className="space-y-2">
             {[
               { num: 1, action: 'Select Board authorization to recruit Staff Accountant', body: 'Select Board', timing: 'Immediate', dep: 'None — this is the critical path item', status: 'pending' },
-              { num: 2, action: 'Finance Director COA analysis and ERP requirements scoping', body: 'Finance Director', timing: 'Q1 after SA hire', dep: 'Staff Accountant hired', status: 'pending' },
+              { num: 2, action: 'Finance Director Chart of Accounts (COA) analysis and ERP requirements scoping', body: 'Finance Director', timing: 'Q1 after SA hire', dep: 'Staff Accountant (SA) hired', status: 'pending' },
               { num: 3, action: 'Draft interlocal agreements (Roque Bluffs, Machiasport)', body: 'Town Manager', timing: 'Month 1–3', dep: 'Select Board approval of regional services program', status: 'pending' },
               { num: 4, action: 'Comstar contract transition planning', body: 'Finance Director', timing: 'Month 1–6', dep: 'Billing Specialist position authorized', status: 'pending' },
               { num: 5, action: 'ERP budget approval (Town Meeting)', body: 'Town Meeting', timing: 'Annual Town Meeting', dep: 'Vendor selected; COA analysis complete', status: 'pending' },
