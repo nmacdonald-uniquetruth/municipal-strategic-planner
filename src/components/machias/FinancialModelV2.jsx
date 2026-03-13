@@ -59,7 +59,21 @@ export function runProFormaFromSettings(settings) {
     const ctrlCost = yr >= 5 ? (useController ? Math.round(ctrlFL * 0.5) : esc(saFL)) : 0;
     const airportStipend = 2750;
     const implCost = yr === 1 ? s.erp_y1_cost || 0 : s.erp_ongoing_cost || 0;
-    const totalCosts = saCost + bsCost + gaCost + rcCost + ctrlCost + airportStipend + implCost;
+
+    // Onboarding ramp: in Year 1, less-experienced hires require FD supervision time.
+    // Each hire's ramp period (in months) × FD supervision % × FD loaded cost = additional Y1 overhead.
+    // This models the real cost of hiring a less experienced candidate.
+    const fdLoadedForRamp = s.fd_loaded_cost || s.fd_base_salary || 68000;
+    const fdSupervisionPct = s.fd_supervision_pct ?? 0.15;
+    const saRampOverhead = yr === 1
+      ? Math.round(((s.sa_ramp_months ?? 3) / 12) * fdSupervisionPct * fdLoadedForRamp) : 0;
+    const bsRampOverhead = yr === 1
+      ? Math.round(((s.bs_ramp_months ?? 2) / 12) * fdSupervisionPct * fdLoadedForRamp) : 0;
+    const gaRampOverhead = yr === 1
+      ? Math.round(((s.ga_ramp_months ?? 1) / 12) * fdSupervisionPct * fdLoadedForRamp) : 0;
+    const totalRampOverhead = saRampOverhead + bsRampOverhead + gaRampOverhead;
+
+    const totalCosts = saCost + bsCost + gaCost + rcCost + ctrlCost + airportStipend + implCost + totalRampOverhead;
 
     // Enterprise overhead
     const entFunds = [s.ambulance_transfer, s.sewer_transfer, s.ts_transfer, s.telebusiness_transfer, s.court_st_transfer];
