@@ -251,7 +251,7 @@ export default function Narrative() {
             The Town of Machias (pop. ~2,100) is the county seat of Washington County and the principal service hub for a region of approximately 30,000 residents. Despite this regional significance, the Town's administrative structure has not evolved to match the complexity and volume of its operational responsibilities.
           </p>
           <p>
-            The Finance Director ({fmt(s.fd_loaded_cost)}/yr fully loaded) and Town Manager ({fmt(s.tm_loaded_cost)}/yr fully loaded) collectively spend an estimated <strong>45–60% of FD time and 18–22% of TM time</strong> on transactional financial work: accounts payable, payroll processing, EMS billing oversight, informal accounting support to neighboring towns, and grant administration. This is executive compensation applied to sub-professional tasks.
+            The <Ac id="FD" /> ({fmt(s.fd_loaded_cost)}/yr fully loaded) and <Ac id="TM" /> ({fmt(s.tm_loaded_cost)}/yr fully loaded) collectively spend an estimated <strong>45–60% of FD time and 18–22% of TM time</strong> on transactional financial work: <Ac id="AP" /> processing, payroll processing, <Ac id="EMS" /> billing oversight, informal accounting support to neighboring towns, and grant administration. This is executive compensation applied to sub-professional tasks.
           </p>
           <p>
             Simultaneously, the Town outsources EMS billing to Comstar at <strong>{pct(s.comstar_fee_rate)} of gross collections</strong> — approximately {fmt(d1?.value?.comstarAvoided)}/yr in fees on {s.ems_transports.toLocaleString()} annual transports — a function that an in-house Billing Specialist could perform at a fraction of that cost while improving collection rates.
