@@ -851,7 +851,7 @@ export default function Narrative() {
         {/* 10 — GF Levy Impact */}
         <Section id="gf" icon={ShieldCheck} title="10. General Fund Fiscal Impact — Levy Neutrality Analysis">
           <p>
-            The central fiscal policy guardrail of this plan: <strong>the restructuring must not require a property tax increase.</strong> The following analysis separates GF-funded costs from GF cash offsets to determine the net levy impact.
+            The central fiscal policy guardrail of this plan: <strong>the restructuring must not require a property tax increase.</strong> The following analysis separates <Ac id="GF" />-funded costs from GF cash offsets to determine the net levy impact.
           </p>
 
           <SubSection title="What Is and Is NOT in the GF Calculation">
