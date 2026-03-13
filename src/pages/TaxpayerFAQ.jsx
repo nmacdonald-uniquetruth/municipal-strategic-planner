@@ -141,7 +141,7 @@ export default function TaxpayerFAQ() {
           q="What's Comstar and why are we paying them so much?"
           a={<>
             <p>Comstar is a private company that bills insurance companies and patients on behalf of Machias's ambulance service. They charge {pct(s.comstar_fee_rate)} of everything they collect — which works out to about {fmt(d1?.value?.comstarAvoided)} per year based on the Town's current ambulance call volume of {s.ems_transports.toLocaleString()} calls.</p>
-            <p>The Town is proposing to bring this billing in-house by hiring a Billing Specialist. That position costs {fmt(bsFL)}/year in total — less than what we currently pay Comstar. The ambulance fund transfer to the Town's general administration budget increases to cover this position, but the net effect is a significant savings for the ambulance fund.</p>
+            <p>The Town is proposing to bring this billing in-house by hiring a Billing Specialist. That position costs {fmt(bsFL)}/year in total (including all benefits). The Comstar fee avoided ({fmt(d1?.value?.comstarAvoided)}/yr) covers a significant portion of that cost, and improved collection rates — from better denial management and direct follow-up — cover the remainder. Together they more than pay for the position.</p>
             <p>The Billing Specialist will also handle other Town billing — airport tie-downs, fire department billing, rental properties, and other accounts receivable — making the position even more valuable.</p>
           </>}
         />
@@ -172,7 +172,7 @@ export default function TaxpayerFAQ() {
           a={<>
             <p>The plan is designed with conservative assumptions and multiple layers of protection:</p>
             <ul className="list-disc pl-4 space-y-1 text-sm">
-              <li><strong>The ambulance billing savings are largely guaranteed.</strong> Even if in-house billing doesn't improve collection rates at all, we still save the Comstar fee — which is more than the Billing Specialist's cost.</li>
+              <li><strong>The ambulance billing savings are substantial even in a worst case.</strong> The Comstar fee avoided ({fmt(d1?.value?.comstarAvoided)}/yr) plus the collection improvement from better denial management combine to cover the Billing Specialist's all-in cost ({fmt(bsFL)}/yr). The position does not need to hit its full collection rate target to justify itself.</li>
               <li><strong>New positions are phased, not all at once.</strong> The Revenue Coordinator and Year 5 senior hire only happen when the revenue is already in hand to pay for them.</li>
               <li><strong>The regional service contracts are supplemental, not structural.</strong> If no neighboring town signs a contract, the plan still works financially — the contracts are upside, not the foundation.</li>
               <li><strong>The Town has reserves.</strong> With {fmt(s.gf_undesignated_balance)} in undesignated General Fund balance, the Town has a financial cushion if Year 1 results come in below projections.</li>
