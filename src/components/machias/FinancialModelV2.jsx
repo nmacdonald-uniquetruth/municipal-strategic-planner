@@ -115,12 +115,19 @@ export function runProFormaFromSettings(settings) {
     //   - Regional services contracts (new GF revenue)
     //   - Enterprise overhead transfers (pre-existing, but sustains cost coverage)
     // Non-cash / capacity items excluded from GF calc (FD/TM capacity, controlRisk)
+    // In the part-time Y1 model, stipend savings and airport savings are already funding the
+    // saCost (via reallocation) — they cannot also appear as GF cash offsets or they double-count.
+    // In Y2+ (or full-time Y1 model), stipend elimination is a genuine GF expenditure reduction.
+    const stipendOffset = (usePartTimeY1 && yr === 1) ? 0 : stipendSavings;
+    const airportOffset = (usePartTimeY1 && yr === 1) ? 0 : airportSavings;
+
     const gfCashOffsets = Math.round(
-      comstarAvoided + collectionImprovement + stipendSavings + airportSavings +
+      comstarAvoided + collectionImprovement + stipendOffset + airportOffset +
       regionalServices + emsExternal + entTotal
     );
     // GF-funded costs only: SA + GA + airportStipend + ERP (BS funded by Ambulance Fund)
-    const gfFundedCosts = saCost + gaCost + rcCost + ctrlCost + airportStipend + implCost;
+    // In part-time Y1: saCost already funded by reallocation, so exclude from GF levy costs
+    const gfFundedCosts = (usePartTimeY1 && yr === 1 ? 0 : saCost) + gaCost + rcCost + ctrlCost + airportStipend + implCost;
     // Net GF levy impact: negative = reduced levy pressure / savings; positive = requires levy increase
     const gfNetLevyImpact = Math.round(gfFundedCosts - gfCashOffsets);
     // Undesignated fund draw needed (only if GF impact is still positive after cash offsets)
