@@ -234,6 +234,22 @@ export default function QandA() {
       </>),
     },
     {
+      cat: 'Risks',
+      q: 'What if the Town Clerk or Deputy Town Clerk leaves when stipends are removed?',
+      tags: ['Risk', 'Staffing', 'Retention'],
+      a: (<>
+        <p>This is a real and specific retention risk that must be planned for proactively. The Town Clerk and Deputy Town Clerk currently receive stipends totaling approximately {fmt(settings.stipend_elimination)} that are proposed for elimination as part of the restructuring. Removing that compensation without a replacement value proposition creates meaningful turnover risk — both positions carry institutional knowledge that is difficult and expensive to replace.</p>
+        <p><strong>Likely response scenarios:</strong></p>
+        <ul className="list-disc pl-4 space-y-1 text-xs">
+          <li><strong>Retention if workload decreases:</strong> If the Staff Accountant absorbs meaningful clerical financial tasks from the Town Clerk (AP support, payroll entry, grant tracking), the net effect may be a reduced workload that partially offsets the stipend loss — but this must be communicated clearly and collaboratively, not assumed.</li>
+          <li><strong>Partial replacement:</strong> The Select Board could offer a modest base salary adjustment ($3,000–$6,000/yr) to retain either or both positions, which would still be a net savings vs. the full stipend cost and would preserve institutional knowledge.</li>
+          <li><strong>Departure and replacement cost:</strong> Replacing an experienced Town Clerk or Deputy in Washington County carries a realistic recruitment cost (advertising, screening, onboarding) of $8,000–$15,000 plus 3–6 months of reduced productivity during transition — which could exceed the annual stipend value. This risk should factor into the Board's timing and communication strategy around stipend elimination.</li>
+        </ul>
+        <p><strong>Recommended mitigation:</strong> Before any Board vote on stipend elimination, the Town Manager should hold individual conversations with the Clerk and Deputy to gauge their response, understand what matters to them, and identify whether a partial offset (title change, step increase, or formal role expansion with additional duties) would achieve retention. Stipend elimination should not be announced publicly before those conversations occur.</p>
+        <p className="text-xs text-slate-500">→ If either position is at high departure risk, the part-time Y1 model becomes even more important — the SA absorbs workload before stipends are removed, reducing the net impact on the Clerk and Deputy.</p>
+      </>),
+    },
+    {
       cat: 'Political',
       q: 'How do you present this to skeptical taxpayers?',
       tags: ['Political', 'Communication'],
