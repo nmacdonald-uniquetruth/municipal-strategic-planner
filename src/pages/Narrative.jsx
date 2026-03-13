@@ -646,7 +646,7 @@ export default function Narrative() {
 
           <SubSection title="Why ERP Modernization Is a Prerequisite — Not an Add-On">
             <p>
-              The administrative restructuring and ERP implementation are <strong>interdependent</strong>. While ERP implementation is technically feasible without additional staff, the timeline extends significantly without adequate finance capacity. The Staff Accountant enables faster execution of COA rebuild, data migration, and parallel operation. Conversely, the Staff Accountant's long-term effectiveness is significantly enhanced by modern ERP tools that provide reporting and automation capabilities that legacy software cannot support.
+              The administrative restructuring and <Ac id="ERP" /> implementation are <strong>interdependent</strong>. While ERP implementation is technically feasible without additional staff, the timeline extends significantly without adequate finance capacity. The <Ac id="SA" /> enables faster execution of <Ac id="COA" /> rebuild, data migration, and parallel operation. Conversely, the Staff Accountant's long-term effectiveness is significantly enhanced by modern ERP tools that provide reporting and automation capabilities that legacy software cannot support.
             </p>
             <Callout color="amber" label="Implementation Timing">
               Phase 0 of ERP implementation (COA gap analysis, requirements definition) can begin after the Staff Accountant is hired, accelerating the overall project timeline. Implementation without this staffing capacity is possible but would extend the deployment schedule by several months.
