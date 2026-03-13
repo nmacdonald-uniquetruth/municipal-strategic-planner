@@ -512,7 +512,7 @@ export default function Narrative() {
               <Callout color="emerald" label="Proposed In-House">
                 <p>Y1 collection rate: {pct(s.inhouse_y1_rate)} (ramp period)</p>
                 <p>Y2+ collection rate: {pct(s.inhouse_steady_rate)} (steady state)</p>
-                <p>Full denial management, appeal tracking, and PCR integration</p>
+                <p>Full denial management, appeal tracking, and <Ac id="PCR" /> integration</p>
                 <p>External billing service potential for neighboring Ambulance Services</p>
                 <p>Annual cost: Billing Specialist fully loaded ({fmt(bsFL)}) — Ambulance Fund</p>
               </Callout>
