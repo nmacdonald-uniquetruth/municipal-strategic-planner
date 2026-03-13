@@ -29,6 +29,7 @@ import CommunicationStrategy from './pages/CommunicationStrategy';
 import PerformanceMetrics from './pages/PerformanceMetrics';
 import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
+import RegionalFeasibility from './pages/RegionalFeasibility';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -75,6 +76,7 @@ const AuthenticatedApp = () => {
           <Route path="/PerformanceMetrics" element={<PerformanceMetrics />} />
           <Route path="/SelectBoardPresentation" element={<SelectBoardPresentation />} />
           <Route path="/TaxpayerFAQ" element={<TaxpayerFAQ />} />
+          <Route path="/RegionalFeasibility" element={<RegionalFeasibility />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
