@@ -827,7 +827,7 @@ export default function Narrative() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
               {[
                 { item: 'Audit adjustment costs', detail: 'Time and fees associated with correcting entries flagged in annual audit' },
-                { item: 'Grant disallowance risk', detail: 'Federal/state grants can be disallowed for financial management deficiencies — a single CDBG disallowance could exceed this estimate' },
+                { item: 'Grant disallowance risk', detail: 'Federal/state grants can be disallowed for financial management deficiencies — a single Community Development Block Grant (CDBG) disallowance could exceed this estimate' },
                 { item: 'Payroll error exposure', detail: 'Overpayments, missed withholdings, benefit calculation errors without second-reviewer' },
                 { item: 'Missed revenue', detail: 'Accounts Receivable (AR) aging without dedicated Accounts Payable (AP)/AR staff; unpursued billings' },
               ].map((r, i) => (
