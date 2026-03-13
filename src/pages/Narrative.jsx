@@ -364,7 +364,7 @@ export default function Narrative() {
 
           <SubSection title="The Comstar Fee Problem">
             <p>
-              Machias contracts with Comstar for EMS billing at a confirmed rate of <strong>{pct(s.comstar_fee_rate)} of gross collections</strong>. At {s.ems_transports.toLocaleString()} annual calls and {fmt(s.avg_revenue_per_transport)} average revenue per call:
+              Machias contracts with Comstar for <Ac id="EMS" /> billing at a confirmed rate of <strong>{pct(s.comstar_fee_rate)} of gross collections</strong>. At {s.ems_transports.toLocaleString()} annual calls and {fmt(s.avg_revenue_per_transport)} average revenue per call:
             </p>
             <DataTable
               headers={['Metric', 'Value', 'Notes']}
