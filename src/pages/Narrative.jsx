@@ -688,7 +688,7 @@ export default function Narrative() {
           </SubSection>
 
           <SubSection title="Platform Evaluation Criteria">
-            <p>The RFP process will evaluate platforms against the following criteria, weighted for small Maine municipal context:</p>
+            <p>The <Ac id="RFP" /> process will evaluate platforms against the following criteria, weighted for small Maine municipal context:</p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
               {[
                 'Maine municipal references (critical)',
