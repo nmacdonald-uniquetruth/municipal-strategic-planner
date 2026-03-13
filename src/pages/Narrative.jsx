@@ -564,6 +564,7 @@ export default function Narrative() {
         <Section id="regional" icon={Target} title="5. Regional Financial Services Program">
           <p>
             Machias currently provides informal, uncompensated financial support to several neighboring municipalities — reviewing budgets, answering accounting questions, assisting with grants. The Regional Financial Services Program formalizes these relationships into <strong>paid interlocal service agreements</strong> under Maine's interlocal cooperation statute (30-A M.R.S.A. § 2201).
+            <span className="block mt-2 text-[11px] text-slate-500 italic">Key roles in this section: <Ac id="FD" /> (Finance Director), <Ac id="RC" /> (Revenue Coordinator), <Ac id="EMS" /> (Emergency Medical Services).</span>
           </p>
 
           <SubSection title="The Regional Demand">
