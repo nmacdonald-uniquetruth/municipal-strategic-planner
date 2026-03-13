@@ -333,7 +333,7 @@ export default function Narrative() {
 
           <SubSection title="Executive Compensation on Transactional Work">
             <p>
-              The Finance Director's fully loaded compensation is <strong>{fmt(s.fd_loaded_cost)}/year</strong>. An analysis of FD time allocation reveals that a significant portion is spent on tasks properly performed by a Staff Accountant or Billing Specialist:
+              The <Ac id="FD" />'s fully loaded compensation is <strong>{fmt(s.fd_loaded_cost)}/year</strong>. An analysis of FD time allocation reveals that a significant portion is spent on tasks properly performed by a <Ac id="SA" /> or <Ac id="BS" />:
             </p>
             <DataTable
               headers={['FD Task Category', 'Est. % of Time', 'Annual Value at FD Rate', 'Appropriate Level']}
