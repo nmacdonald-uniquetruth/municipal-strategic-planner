@@ -424,7 +424,7 @@ export default function Narrative() {
             {usePartTime ? (
               <>
                 <p>
-                  <strong>Part-time model:</strong> Rather than hiring a full-time Staff Accountant immediately, Year 1 deploys a part-time individual funded through the existing GA stipend ({fmt(s.ga_stipend)}) plus {fmt(s.clerk_stipend_realloc)} in reallocated clerk stipends. This person absorbs GA coordinator duties and provides accounting support while the Town establishes processes, completes a COA analysis, and prepares for a full-time hire in Year 2.
+                  <strong>Part-time model:</strong> Rather than hiring a full-time <Ac id="SA" /> immediately, Year 1 deploys a part-time individual funded through the existing <Ac id="GA" /> stipend ({fmt(s.ga_stipend)}) plus {fmt(s.clerk_stipend_realloc)} in reallocated clerk stipends. This person absorbs GA coordinator duties and provides accounting support while the Town establishes processes, completes a <Ac id="COA" /> analysis, and prepares for a full-time hire in Year 2.
                 </p>
                 <p>Total Y1 accounting role cost: <strong>{fmt(s.ga_stipend + s.clerk_stipend_realloc)}</strong> — funded entirely through reallocation of existing budget lines, not new appropriations. Full-time SA is hired in Year 2 at {fmt(s.sa_base_salary)} base / {fmt(saFL)} fully loaded.</p>
               </>
