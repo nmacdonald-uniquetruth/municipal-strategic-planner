@@ -36,6 +36,8 @@ export default function QandA() {
   const data = runProFormaFromSettings(settings);
   const d1 = data[0];
   const [filter, setFilter] = useState('all');
+  const healthAnnual = settings.health_tier === 'individual' ? settings.health_individual_annual : settings.health_family_annual;
+  const bsFL = Math.round(settings.bs_base_salary * (1 + settings.fica_rate + settings.pers_rate + settings.wc_rate) + healthAnnual);
 
   const CATEGORIES = ['all', 'Financial', 'Staffing', 'EMS Billing', 'Regional Services', 'ERP', 'Risks', 'Process', 'Political'];
 
