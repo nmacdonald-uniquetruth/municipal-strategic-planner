@@ -795,7 +795,7 @@ export default function Narrative() {
         {/* 9 — Capacity Value */}
         <Section id="capacity" icon={BarChart2} title="9. Capacity Value — The Non-Cash Value Category">
           <p>
-            Category 3 value — FD/TM capacity recovery and internal control risk mitigation — is real but not cash. It represents time redirected from transactional tasks to strategic work. The model uses conservative hourly valuation based on fully loaded compensation rates.
+            Category 3 value — <Ac id="FD" />/<Ac id="TM" /> capacity recovery and internal control risk mitigation — is real but not cash. It represents time redirected from transactional tasks to strategic work. The model uses conservative hourly valuation based on fully loaded compensation rates.
           </p>
 
           <SubSection title="Finance Director Capacity Recovery">
