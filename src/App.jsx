@@ -27,6 +27,8 @@ import ReferencesAndResearch from './pages/ReferencesAndResearch';
 import QandA from './pages/QandA';
 import CommunicationStrategy from './pages/CommunicationStrategy';
 import PerformanceMetrics from './pages/PerformanceMetrics';
+import SelectBoardPresentation from './pages/SelectBoardPresentation';
+import TaxpayerFAQ from './pages/TaxpayerFAQ';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -71,6 +73,8 @@ const AuthenticatedApp = () => {
           <Route path="/QandA" element={<QandA />} />
           <Route path="/CommunicationStrategy" element={<CommunicationStrategy />} />
           <Route path="/PerformanceMetrics" element={<PerformanceMetrics />} />
+          <Route path="/SelectBoardPresentation" element={<SelectBoardPresentation />} />
+          <Route path="/TaxpayerFAQ" element={<TaxpayerFAQ />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
