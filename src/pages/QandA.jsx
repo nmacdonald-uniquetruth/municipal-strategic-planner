@@ -127,8 +127,9 @@ export default function QandA() {
       tags: ['EMS', 'Risk'],
       a: (<>
         <p>The model uses {(settings.inhouse_steady_rate * 100).toFixed(0)}% steady-state. Even at flat Comstar rates ({(settings.comstar_collection_rate * 100).toFixed(1)}%), the Billing Specialist position is justified purely by the avoided Comstar fee ({fmt(d1.value.comstarAvoided)}/yr). The collection improvement is upside, not downside protection.</p>
-        <p>Sensitivity: if in-house rate is only 87% (worse than Comstar's 87.4% but below Comstar's rate), the BS still pays for itself by Year 2 through fee avoidance alone.</p>
-        <p>Best practice: structure a 90-day performance review for the Billing Specialist with explicit collection rate targets. If rates lag, add denial management training through NAEMSE or a short consulting engagement before the Comstar contract fully terminates.</p>
+        <p>Sensitivity: if in-house rate is only 87%, the BS still pays for itself by Year 2 through fee avoidance alone.</p>
+        <p>It's also important to note that the Billing Specialist's value extends well beyond EMS. This position will also handle: airport tie-down and hangar ground lease billing, fire department billing, rental property billing (e.g., Town-owned properties), and any other accounts receivable outside of tax billing and counter transactions at the Town Office or Transfer Station. That breadth of responsibility makes the position's value significantly higher than the EMS line alone.</p>
+        <p>Best practice: structure a 90-day performance review with explicit collection rate targets. If rates lag, add denial management training through NAEMSE or a short consulting engagement before the Comstar contract fully terminates. Also ensure that billing software selection includes evaluation of insurance connectivity and MEFIRS integration before committing.</p>
       </>),
     },
     {
@@ -168,16 +169,17 @@ export default function QandA() {
     },
     {
       cat: 'ERP',
-      q: 'Why can\'t ERP implementation happen immediately?',
+      q: 'Can ERP implementation begin without a Staff Accountant?',
       tags: ['ERP', 'Sequencing'],
       a: (<>
-        <p>Three reasons ERP cannot begin before the Staff Accountant is hired:</p>
+        <p>Yes — ERP can move forward without a Staff Accountant, but there will be a delay in operational task completion. Here's why the SA accelerates the timeline:</p>
         <ol className="list-decimal pl-4 space-y-1 text-xs">
-          <li><strong>COA gap analysis</strong> — the Chart of Accounts must be rebuilt to Maine AOS standards before any data migration. This requires an accountant, not a vendor implementation team.</li>
-          <li><strong>Requirements definition</strong> — the SA will be the primary ERP user. They must participate in the RFP and selection process to ensure the system meets operational needs.</li>
-          <li><strong>Implementation management</strong> — small municipalities that attempt ERP without dedicated finance staff consistently fail or significantly over-run budgets. The SA manages the implementation project day-to-day.</li>
+          <li><strong>COA gap analysis</strong> — the Chart of Accounts needs to be rebuilt to Maine AOS standards before data migration. This requires further accounting work before the vendor implementation team begins.</li>
+          <li><strong>Requirements definition</strong> — the SA will be the primary ERP user and should participate in the RFP and selection process to ensure the system meets day-to-day operational needs.</li>
+          <li><strong>Implementation management</strong> — the SA manages the implementation project day-to-day, reducing the burden on the Finance Director.</li>
         </ol>
-        <p>The {settings.erp_y1_cost - settings.erp_designated_fund_offset > 0 ? `net ${fmt(settings.erp_y1_cost - settings.erp_designated_fund_offset)} GF cost` : 'ERP implementation'} is also appropriate to phase after levy neutrality is established in Year 1.</p>
+        <p>In the interim, the Town may need to purchase the Accounts Receivable module from TRIO to get the books accurate — estimated $3,000–$5,000. Also note: a review of EMS billing software for insurance connections and MEFIRS integration is needed before committing to any in-house billing platform.</p>
+        <p>The {settings.erp_y1_cost - settings.erp_designated_fund_offset > 0 ? `net ${fmt(settings.erp_y1_cost - settings.erp_designated_fund_offset)} GF cost` : 'ERP implementation cost'} is also appropriate to phase after levy neutrality is established in Year 1.</p>
       </>),
     },
     {
@@ -185,15 +187,14 @@ export default function QandA() {
       q: 'Should Machias use an integrated suite or best-of-breed point solutions?',
       tags: ['ERP', 'Technology'],
       a: (<>
-        <p>For a municipality of Machias's size and capacity, <strong>integrated suite is strongly preferred</strong>. Reasons:</p>
+        <p>A single integrated solution is best <em>if</em> it is a fully functional system that delivers the needed capabilities. One vendor, one training environment, one support relationship, and automated GL posting between modules all reduce administrative burden significantly.</p>
+        <p>However, if the integrated suite doesn't deliver the functionality needed — particularly around EMS billing connections to insurance companies, MEFIRS integration, or multi-entity reporting — then a best-of-breed point solution approach is the better path forward for those specific functions.</p>
         <ul className="list-disc pl-4 space-y-1 text-xs">
-          <li>Single vendor accountability — no "it's the other system's fault" in support calls</li>
-          <li>One training environment for the SA and Billing Specialist</li>
-          <li>GL posting automation between payroll, AR, and the general ledger</li>
-          <li>Simpler implementation project management</li>
-          <li>Annual contract negotiation with one vendor</li>
+          <li>Evaluate integrated suites first: Tyler, Edmunds, OpenGov, Black Mountain</li>
+          <li>Score against the specific criteria that matter for Machias (see ERP Evaluation criteria)</li>
+          <li>If gaps exist in critical areas, identify best-of-breed point solutions for those gaps</li>
+          <li>Do not sacrifice a must-have for the sake of keeping everything under one vendor</li>
         </ul>
-        <p>Best-of-breed makes sense for large municipalities with dedicated IT staff. Machias does not have that capacity. An integrated suite from Tyler, Edmunds, OpenGov, or Black Mountain is the right architecture for this implementation.</p>
       </>),
     },
     {
@@ -203,11 +204,11 @@ export default function QandA() {
       a: (<>
         <p>The biggest risk is failing to hire a qualified Staff Accountant in a reasonable timeframe. Every other initiative depends on this position:</p>
         <ul className="list-disc pl-4 space-y-1 text-xs">
-          <li>ERP: cannot proceed without SA</li>
-          <li>Regional services: cannot be managed at scale without SA</li>
-          <li>Comstar transition: BS needs SA for accounting support</li>
-          <li>Transfer Station renegotiation: requires cost accounting SA can provide</li>
-          <li>GA Coordinator: only makes sense after SA has freed FD/TM time</li>
+          <li>ERP: can move forward, but there will be a delay in operational task completion</li>
+          <li>Regional services: can begin but will take longer to scale without SA support</li>
+          <li>Comstar transition: BS benefits from SA for accounting support and second-review</li>
+          <li>Transfer Station: cost accounting work is more difficult without SA capacity</li>
+          <li>GA Coordinator: relatively independent — primarily relieves TM time directly, regardless of SA hire</li>
         </ul>
         <p>Mitigation options: (1) use the part-time Y1 model as a bridge; (2) engage a temporary staffing agency for a contract accountant while the permanent search continues; (3) consider a remote part-time arrangement with a Maine CPA firm for the first 6 months.</p>
       </>),
