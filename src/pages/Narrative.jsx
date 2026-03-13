@@ -968,7 +968,7 @@ export default function Narrative() {
               {
                 risk: 'Staff Accountant hiring fails or takes longer than modeled',
                 likelihood: 'Medium', impact: 'High',
-                mitigation: `Washington County labor market is thin for finance professionals. Mitigation: begin recruitment immediately upon Select Board authorization; consider a regional search firm; the part-time Y1 model (toggle in Model Settings) provides a fallback that uses existing stipend budget while the search continues.`,
+                mitigation: `Washington County labor market is thin for finance professionals. Mitigation: begin recruitment immediately upon Select Board authorization; consider a regional search firm; the part-time Year 1 model (toggle in Model Settings) provides a fallback that uses existing stipend budget while the search continues.`,
                 color: 'amber'
               },
               {
