@@ -95,6 +95,46 @@ const fmtK = (n) => {
   return `$${Math.round(val / 1000)}K`;
 };
 
+// ─── Acronym definitions ──────────────────────────────────────────────────────
+// Each section gets its own Set so acronyms are re-defined at the start of every major section.
+const ACRONYM_MAP = {
+  FD:      'Finance Director',
+  TM:      'Town Manager',
+  SA:      'Staff Accountant',
+  BS:      'Billing Specialist',
+  GA:      'General Assistance',
+  RC:      'Revenue Coordinator',
+  GF:      'General Fund',
+  EMS:     'Emergency Medical Services',
+  ERP:     'Enterprise Resource Planning',
+  COA:     'Chart of Accounts',
+  PERS:    'Public Employees Retirement System',
+  FICA:    'Federal Insurance Contributions Act',
+  GASB:    'Governmental Accounting Standards Board',
+  HRIS:    'Human Resources Information System',
+  RFP:     'Request for Proposals',
+  CAFR:    'Comprehensive Annual Financial Report',
+  PCR:     'Patient Care Report',
+  CDBG:    'Community Development Block Grant',
+  USDA:    'U.S. Department of Agriculture',
+  MEFIRS:  'Maine EMS Incident Reporting System',
+  MMA:     'Maine Municipal Association',
+  NAEMSE:  'National Association of EMS Educators',
+  TS:      'Transfer Station',
+  AP:      'Accounts Payable',
+  AR:      'Accounts Receivable',
+};
+
+// Wrap an acronym: shows "Full Term (ABBR)" first use per section, just "ABBR" after.
+// Pass a mutable Set `seen` that is unique per section.
+function A({ id, seen }) {
+  const full = ACRONYM_MAP[id];
+  if (!full) return <span className="font-medium">{id}</span>;
+  if (seen.has(id)) return <span className="font-medium">{id}</span>;
+  seen.add(id);
+  return <span className="font-medium" title={full}>{full} <span className="text-slate-500">({id})</span></span>;
+}
+
 // ─── Table of Contents sidebar ───────────────────────────────────────────────
 
 const SECTIONS = [
