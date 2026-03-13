@@ -411,8 +411,8 @@ export default function Narrative() {
             <DataTable
               headers={['Benefit', 'Rate / Amount', 'Applies To']}
               rows={[
-                ['FICA (Social Security + Medicare)', pct(s.fica_rate), 'All non-stipend positions'],
-                ['Maine PERS (retirement)', pct(s.pers_rate), 'All non-stipend positions'],
+                ['Federal Insurance Contributions Act (FICA) — Social Security + Medicare', pct(s.fica_rate), 'All non-stipend positions'],
+                ['Maine Public Employees Retirement System (PERS)', pct(s.pers_rate), 'All non-stipend positions'],
                 ["Workers' Compensation", pct(s.wc_rate), 'All non-stipend positions'],
                 [`Health Insurance (${healthLabel} tier)`, `${fmt(healthAnnual)}/yr`, 'All full-time positions'],
                 ['Total benefit load on salary', pct(s.fica_rate + s.pers_rate + s.wc_rate), '+ health separately'],
