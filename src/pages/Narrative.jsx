@@ -265,7 +265,7 @@ export default function Narrative() {
               The Town already <em>spends</em> more than $229,000/yr in structural inefficiency. This plan redirects that expenditure into right-sized dedicated roles — the cost is already in the budget.
             </Callout>
             <Callout color="blue" label="Levy Neutrality">
-              The restructuring is designed to be levy-neutral from Year 1. New non-tax revenue and avoided costs exceed all GF-funded position costs, requiring no property tax increase.
+              The restructuring is designed to be levy-neutral from Year 1. New non-tax revenue and avoided costs exceed all <Ac id="GF" />-funded position costs, requiring no property tax increase.
             </Callout>
             <Callout color="amber" label="5-Year Outlook">
               Over five years: {fmtK(cashOnly5yr)} in actual cash net (conservative), {fmtK(cumulative)} in total value including capacity. Cash break-even projected Year 2.
