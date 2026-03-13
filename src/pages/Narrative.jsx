@@ -351,7 +351,7 @@ export default function Narrative() {
 
           <SubSection title="Town Manager Time Allocation">
             <p>
-              The TM's fully loaded cost is <strong>{fmt(s.tm_loaded_cost)}/year</strong>. Approximately 18–22% of TM time is consumed by financial administration oversight — supervising the FD on routine tasks, reviewing payroll, managing finance-adjacent decisions that should be delegated.
+              The <Ac id="TM" />'s fully loaded cost is <strong>{fmt(s.tm_loaded_cost)}/year</strong>. Approximately 18–22% of TM time is consumed by financial administration oversight — supervising the FD on routine tasks, reviewing payroll, managing finance-adjacent decisions that should be delegated.
             </p>
             <DataTable
               headers={['Year', 'TM Finance Oversight %', 'Annual Value at TM Rate', 'Post-Restructuring Target']}
