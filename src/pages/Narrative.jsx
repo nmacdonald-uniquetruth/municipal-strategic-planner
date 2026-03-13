@@ -254,7 +254,7 @@ export default function Narrative() {
             The <Ac id="FD" /> ({fmt(s.fd_loaded_cost)}/yr fully loaded) and <Ac id="TM" /> ({fmt(s.tm_loaded_cost)}/yr fully loaded) collectively spend an estimated <strong>45–60% of FD time and 18–22% of TM time</strong> on transactional financial work: <Ac id="AP" /> processing, payroll processing, <Ac id="EMS" /> billing oversight, informal accounting support to neighboring towns, and grant administration. This is executive compensation applied to sub-professional tasks.
           </p>
           <p>
-            Simultaneously, the Town outsources EMS billing to Comstar at <strong>{pct(s.comstar_fee_rate)} of gross collections</strong> — approximately {fmt(d1?.value?.comstarAvoided)}/yr in fees on {s.ems_transports.toLocaleString()} annual transports — a function that an in-house Billing Specialist could perform at a fraction of that cost while improving collection rates.
+            Simultaneously, the Town outsources <Ac id="EMS" /> billing to Comstar at <strong>{pct(s.comstar_fee_rate)} of gross collections</strong> — approximately {fmt(d1?.value?.comstarAvoided)}/yr in fees on {s.ems_transports.toLocaleString()} annual transports — a function that an in-house <Ac id="BS" /> could perform at a fraction of that cost while improving collection rates.
           </p>
           <p>
             This plan proposes three simultaneous initiatives: (1) <strong>Administrative restructuring</strong> — three new dedicated positions; (2) <strong>ERP modernization</strong> — replacing legacy Trio software with a modern fund-accounting platform; (3) <strong>Regional services expansion</strong> — formalizing existing informal support into paid interlocal agreements with neighboring municipalities.
