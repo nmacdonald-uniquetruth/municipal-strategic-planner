@@ -497,7 +497,7 @@ export default function Narrative() {
         {/* 4 — EMS Billing */}
         <Section id="ems" icon={DollarSign} title="4. EMS Billing Transition — Comstar to In-House">
           <p>
-            The Machias Ambulance Service generated approximately <strong>{fmt(s.ems_transports * s.avg_revenue_per_transport)}</strong> in gross billing in the most recent year on {s.ems_transports.toLocaleString()} calls. Comstar currently collects {pct(s.comstar_collection_rate)} of that gross and charges {pct(s.comstar_fee_rate)} of gross collections — roughly <strong>{fmt(d1?.value?.comstarAvoided)}</strong> in fees in Year 1.
+            The Machias <Ac id="EMS" /> (Ambulance Service) generated approximately <strong>{fmt(s.ems_transports * s.avg_revenue_per_transport)}</strong> in gross billing in the most recent year on {s.ems_transports.toLocaleString()} calls. Comstar currently collects {pct(s.comstar_collection_rate)} of that gross and charges {pct(s.comstar_fee_rate)} of gross collections — roughly <strong>{fmt(d1?.value?.comstarAvoided)}</strong> in fees in Year 1.
           </p>
 
           <SubSection title="The Case for In-House Billing">
