@@ -24,6 +24,7 @@ const NAV_GROUPS = [
       { path: '/Positions', label: 'Positions', icon: Users },
       { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
       { path: '/RegionalServices', label: 'Regional Services', icon: Target },
+      { path: '/RegionalFeasibility', label: 'Regional Feasibility', icon: Scale },
       { path: '/TransferStation', label: 'Transfer Station', icon: Truck },
       { path: '/EnterpriseFunds', label: 'Enterprise Funds', icon: Landmark },
     ],
