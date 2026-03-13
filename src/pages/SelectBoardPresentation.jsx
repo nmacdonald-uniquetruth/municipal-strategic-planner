@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useModel } from '../components/machias/ModelContext';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
-import { ChevronLeft, ChevronRight, Printer, Download, BookOpen, Users, DollarSign, TrendingUp, ShieldCheck, CheckCircle2, AlertTriangle, Target } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Printer, Download, BookOpen, Users, DollarSign, TrendingUp, ShieldCheck, CheckCircle2, AlertTriangle, Target, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const fmt  = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
