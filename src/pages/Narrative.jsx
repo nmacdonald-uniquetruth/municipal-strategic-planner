@@ -321,7 +321,7 @@ export default function Narrative() {
                 ['Y5 projected Comstar fee', fmt(d5?.value?.comstarAvoided), 'Compounds with growth'],
               ]}
             />
-            <p className="mt-2">A Billing Specialist at {fmt(s.bs_base_salary)} base ({fmt(bsFL)} fully loaded) costs less than the Comstar fee in Year 1. The position pays for itself entirely within the Ambulance Fund before counting any collection rate improvement.</p>
+            <p className="mt-2">A Billing Specialist at {fmt(s.bs_base_salary)} base ({fmt(bsFL)} all-in cost including all benefits) costs less than the Comstar fee in Year 1. The position pays for itself before counting any collection rate improvement.</p>
           </SubSection>
 
           <SubSection title="Informal Stipend Arrangements">
@@ -373,7 +373,7 @@ export default function Narrative() {
               </>
             ) : (
               <p>
-                <strong>Full-time model:</strong> Staff Accountant hired in Year 1 at {fmt(s.sa_base_salary)} base salary. Fully loaded cost: <strong>{fmt(saFL)}</strong> ({healthLabel} health + {pct(s.fica_rate)} FICA + {pct(s.pers_rate)} PERS + {pct(s.wc_rate)} WC). Year 1 partial-year cost (prorated based on hire timing): <strong>{fmt(d1?.costs?.staffAccountant)}</strong>.
+               <strong>Full-time model:</strong> Staff Accountant hired in Year 1 at {fmt(s.sa_base_salary)} base salary. All-in cost (including {healthLabel} health insurance, {pct(s.fica_rate)} FICA, {pct(s.pers_rate)} PERS, {pct(s.wc_rate)} WC): <strong>{fmt(saFL)}</strong>. Year 1 partial-year cost (prorated based on hire timing): <strong>{fmt(d1?.costs?.staffAccountant)}</strong>.
               </p>
             )}
           </SubSection>
@@ -391,12 +391,12 @@ export default function Narrative() {
             />
           </SubSection>
 
-          <SubSection title="Why Each Position Is Needed">
+          <SubSection title="Why Each Position Is Needed — Efficiency Gained">
             <div className="space-y-3">
               {[
                 {
                   title: 'Staff Accountant', icon: '📊',
-                  body: `The primary fix for the structural inefficiency problem. Takes over AP, payroll, bank reconciliation, grant financial reporting, and audit prep from the FD. Restores separation of duties. Enables the FD to focus on financial strategy, budget development, and capital planning. Without this hire, neither ERP implementation nor regional services expansion is administratively feasible.`
+                  body: `The primary fix for the structural inefficiency problem. Takes over AP, payroll, bank reconciliation, grant financial reporting, and audit prep from the FD. Restores separation of duties. Enables the FD to focus on financial strategy, budget development, and capital planning. ERP implementation and regional services expansion can proceed without this hire, but will take longer and carry greater operational risk.`
                 },
                 {
                   title: 'Billing Specialist', icon: '🚑',
@@ -404,7 +404,7 @@ export default function Narrative() {
                 },
                 {
                   title: 'GA Coordinator', icon: '📋',
-                  body: `Manages grant applications, compliance reporting, and federal/state program administration. Currently distributed across the FD and TM, creating conflicts with financial oversight responsibilities and grant compliance risk. The ${fmt(s.ga_stipend)} stipend is modest relative to the grant dollars at stake — a single successful CDBG or USDA grant can return 50–100x the coordinator's annual cost.`
+                  body: `Manages grant applications, compliance reporting, and federal/state program administration. Currently distributed across the FD and TM, creating conflicts with financial oversight responsibilities and grant compliance risk. This role is relatively independent from the other hires — its primary value is directly relieving the Town Manager's time, which is currently consumed by grant tracking and program compliance. The ${fmt(s.ga_stipend)} stipend is modest relative to the grant dollars at stake — a single successful CDBG or USDA grant can return 50–100x the coordinator's annual cost.`
                 },
                 {
                   title: 'Revenue Coordinator (Trigger Y3)', icon: '🤝',
@@ -511,7 +511,8 @@ export default function Narrative() {
 
           <SubSection title="The Regional Demand">
             <p>Washington County towns face a shared challenge: they are too small to afford a full-time Finance Director, but their financial complexity (enterprise funds, federal grants, state programs) requires professional financial oversight. Machias, as the county seat with existing finance capacity, is the natural regional provider.</p>
-            <p>Confirmed interest from Roque Bluffs and Machiasport. Prospective clients include Marshfield, Whitneyville, and Northfield. Each contract provides basic financial services: monthly reconciliation, budget preparation support, grant financial reporting, and audit preparation.</p>
+            <p>Neighboring towns want to pay Machias for financial services. This plan positions Machias as the county seat of financial administration — a role that generates revenue and strengthens regional relationships. All municipalities are facing stronger scrutiny regarding finances due to underskilled individuals being in roles managing public money. This trend is visible across Washington County, Penobscot, Farmington, and Waldo County — creating both urgency and opportunity for a well-staffed regional hub.</p>
+            <p>Active conversations are already happening about Roque Bluffs using Machias finance services and Transfer Station access beginning in FY2027. Confirmed interest also from Machiasport. Prospective clients include Marshfield, Whitneyville, and Northfield. Each contract provides basic financial services: monthly reconciliation, budget preparation support, grant financial reporting, and audit preparation. These relationships would be managed by the Finance Director.</p>
           </SubSection>
 
           <SubSection title="Contract Projections by Municipality">
@@ -554,10 +555,10 @@ export default function Narrative() {
         {/* 6 — Transfer Station */}
         <Section id="ts" icon={Truck} title="6. Transfer Station Revenue Strategy">
           <p>
-            The Machias Transfer Station enterprise fund carries a significant deficit balance of approximately <strong>($296,245)</strong> — the most financially stressed of the Town's enterprise funds. The deficit has accumulated over several years as member town contributions have not kept pace with operational costs.
+            The Machias Transfer Station enterprise fund carries a significant deficit balance of approximately <strong>($296,245)</strong> — the most financially stressed of the Town's enterprise funds. The deficit has accumulated over several years as operational costs have outpaced revenue.
           </p>
           <p>
-            The restructuring creates the administrative capacity to renegotiate member town agreements, implement proper cost allocation, and expand the regional member base. This is not a new revenue stream — it is recovery of costs that should already be covered by member towns.
+            There are currently no formal member towns, but Roque Bluffs has expressed strong interest in joining beginning in summer of CY2026 or the start of FY2027. The restructuring creates the administrative capacity to finalize that agreement, implement proper cost allocation, and expand participation from additional towns. This is not purely a new revenue stream — it is cost sharing that reflects the regional reality of how the facility is used.
           </p>
 
           <SubSection title="Transfer Station Revenue Projections">
@@ -582,7 +583,7 @@ export default function Narrative() {
         {/* 7 — ERP */}
         <Section id="erp" icon={Monitor} title="7. ERP Modernization — Replacing Legacy Trio">
           <p>
-            The Town currently operates on <strong>Trio</strong>, a legacy municipal financial software platform. Trio limitations include: limited fund accounting flexibility, poor multi-entity consolidation, minimal audit trail capability, no integrated payroll/HRIS, no citizen-facing portal, and limited reporting tools. These limitations directly impede financial management quality and increase the cost and time required for each annual audit.
+            The Town currently operates on <strong>Trio</strong>, a legacy municipal financial software platform. Trio's current limitations relevant to growth include: limited multi-entity sub-ledger capability (serving regional clients will take longer to scale without it), payroll is integrated for Town employees but not for the school district — requiring significant manual effort to consolidate reports for quarterly submissions, a basic budgeting module exists but is not fully integrated with the general ledger, and limited reporting and audit trail tools. These constraints increase the time required for each annual audit and slow the path to regional service expansion. The Town may also need to purchase the Accounts Receivable module from TRIO in the interim to get the books accurate — estimated cost $3,000–$5,000. Additionally, a review of EMS billing software for insurance company connections and integration to MEFIRS (Maine EMS run reporting) is needed before committing to an in-house billing platform.
           </p>
 
           <SubSection title="Why ERP Modernization Is a Prerequisite — Not an Add-On">
@@ -654,7 +655,7 @@ export default function Narrative() {
         {/* 8 — Enterprise Funds */}
         <Section id="enterprise" icon={Landmark} title="8. Enterprise Fund Health & Overhead Recovery">
           <p>
-            The Town operates five enterprise funds. Each appropriately transfers administrative overhead to the General Fund — recognizing that GF staff provide finance, HR, and management services to enterprise operations. These transfers are a legitimate cost recovery mechanism, not a subsidy.
+            The Town operates four enterprise funds. Each appropriately transfers administrative overhead to the General Fund — recognizing that GF staff provide finance, HR, and management services to enterprise operations. These transfers are a legitimate cost recovery mechanism, not a subsidy.
           </p>
 
           <SubSection title="Enterprise Fund Status">
@@ -684,7 +685,7 @@ export default function Narrative() {
                 {
                   fund: 'Telebusiness Center', status: 'MARGINAL', statusColor: 'amber',
                   balance: '$14,268', transfer: fmt(s.telebusiness_transfer), loanPayoff: '—', netBalance: '$14,268',
-                  action: 'Monitor closely. Evaluate enterprise exit strategy — does the Town have a compelling reason to remain in the telebusiness center business? TM capacity recovered by restructuring enables this analysis.',
+                  action: 'Monitor closely. Evaluate whether the enterprise account scope should be broadened from being tied specifically to 17 Stackpole Road to covering any Town-owned property rental — which would require legal review (est. $2,500–$5,000). TM capacity recovered by restructuring enables this analysis.',
                   icon: '⚡'
                 },
                 {
@@ -991,7 +992,7 @@ export default function Narrative() {
           </div>
 
           <Callout color="slate" label="The Critical Path">
-            Every other initiative depends on the Staff Accountant hire. ERP cannot be implemented, regional services cannot be managed at scale, EMS billing cannot transition in-house, and Transfer Station renegotiations cannot be supported without this position. The Select Board's authorization to recruit is the single most important near-term decision.
+            The Staff Accountant hire accelerates every other initiative. Without it: ERP can move forward but will experience delays in operational task completion; regional services can begin but will take longer to scale; EMS billing transition is feasible but adds workload pressure on the FD. The Select Board's authorization to recruit is the most important near-term decision to accelerate the full plan.
           </Callout>
         </Section>
 
