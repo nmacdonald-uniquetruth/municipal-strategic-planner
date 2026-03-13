@@ -986,7 +986,7 @@ export default function Narrative() {
               {
                 risk: 'ERP implementation cost overrun',
                 likelihood: 'Medium', impact: 'Medium',
-                mitigation: `${fmt(s.erp_y1_cost)} budget is based on comparable small Maine municipal implementations. Designated fund offset (${fmt(s.erp_designated_fund_offset)}) provides cushion. Mitigation: fixed-price contract structure, phased go-live, no-cost parallel period requirement in RFP.`,
+                mitigation: `${fmt(s.erp_y1_cost)} budget is based on comparable small Maine municipal implementations. Designated fund offset (${fmt(s.erp_designated_fund_offset)}) provides cushion. Mitigation: fixed-price contract structure, phased go-live, no-cost parallel period requirement in Request for Proposals (RFP).`,
                 color: 'amber'
               },
               {
