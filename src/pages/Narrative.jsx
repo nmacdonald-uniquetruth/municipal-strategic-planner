@@ -803,7 +803,7 @@ export default function Narrative() {
               headers={['Year', 'FD Capacity Freed', '% of FD Time', 'Value at FD Rate', 'What This Time Enables']}
               rows={[
                 ['FY2027', fmt(d1.value.fdCapacity), '45%', fmt(d1.value.fdCapacity), 'COA analysis, ERP requirements, audit prep quality'],
-                ['FY2028', fmt(d2.value.fdCapacity), '55%', fmt(d2.value.fdCapacity), 'ERP implementation oversight, CAFR improvement'],
+                ['FY2028', fmt(d2.value.fdCapacity), '55%', fmt(d2.value.fdCapacity), 'ERP implementation oversight, Comprehensive Annual Financial Report (CAFR) improvement'],
                 ['FY2029+', fmt(data[2].value.fdCapacity), '60%', fmt(data[2].value.fdCapacity), 'Capital planning, grant strategy, rate studies'],
               ]}
             />
