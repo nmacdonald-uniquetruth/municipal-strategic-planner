@@ -10,17 +10,34 @@ import {
 
 // ─── Primitive layout components ─────────────────────────────────────────────
 
+// Each Section gets a fresh acronym-seen Set so first uses are re-defined per section.
+const AcronymContext = React.createContext(null);
+
 function Section({ icon, title, children, id }) {
   const Icon = icon;
+  // Create a new seen set for each section render
+  const seen = React.useMemo(() => new Set(), [id]);
   return (
-    <div id={id} className="space-y-4 scroll-mt-8">
-      <div className="flex items-center gap-2.5 border-b-2 border-slate-900 pb-2">
-        {Icon && <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-900 flex-shrink-0"><Icon className="h-3.5 w-3.5 text-white" /></div>}
-        <h2 className="text-base font-bold text-slate-900 tracking-tight">{title}</h2>
+    <AcronymContext.Provider value={seen}>
+      <div id={id} className="space-y-4 scroll-mt-8">
+        <div className="flex items-center gap-2.5 border-b-2 border-slate-900 pb-2">
+          {Icon && <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-900 flex-shrink-0"><Icon className="h-3.5 w-3.5 text-white" /></div>}
+          <h2 className="text-base font-bold text-slate-900 tracking-tight">{title}</h2>
+        </div>
+        <div className="text-sm text-slate-700 leading-relaxed space-y-3">{children}</div>
       </div>
-      <div className="text-sm text-slate-700 leading-relaxed space-y-3">{children}</div>
-    </div>
+    </AcronymContext.Provider>
   );
+}
+
+// Inline acronym component — consumes context from nearest Section
+function Ac({ id }) {
+  const seen = React.useContext(AcronymContext);
+  const full = ACRONYM_MAP[id];
+  if (!full) return <span className="font-medium">{id}</span>;
+  if (!seen || seen.has(id)) return <span className="font-medium">{id}</span>;
+  seen.add(id);
+  return <><span className="font-medium">{full}</span> <span className="text-slate-500 text-[11px]">({id})</span></>;
 }
 
 function SubSection({ title, children }) {
