@@ -162,6 +162,10 @@ export function runProFormaFromSettings(settings) {
         controller: ctrlCost,  // may be SA2 depending on y5_senior_hire setting
         airportStipend,
         implementation: implCost,
+        rampOverhead: totalRampOverhead,
+        saRampOverhead,
+        bsRampOverhead,
+        gaRampOverhead,
         total: totalCosts,
       },
       value: {
