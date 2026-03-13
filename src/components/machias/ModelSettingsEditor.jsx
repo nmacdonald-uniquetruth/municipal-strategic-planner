@@ -74,6 +74,21 @@ export default function ModelSettingsEditor() {
         />
       </div>
 
+      <Section title="Employee Onboarding Ramp — Productivity Timeline">
+        <div className="col-span-2 md:col-span-3">
+          <p className="text-[10px] text-slate-500 leading-relaxed mb-3">
+            Models how long each hire takes to reach full productivity. A less experienced hire may take 3–6 months to be fully independent. During the ramp period, the Finance Director spends additional supervision time — modeled as a percentage of FD cost added back as a hidden overhead cost in Year 1. Extend the ramp to see the financial impact of hiring a less experienced candidate.
+          </p>
+        </div>
+        <Field label="SA Ramp Period (months)" value={local.sa_ramp_months ?? 3} onChange={set('sa_ramp_months')} />
+        <Field label="BS Ramp Period (months)" value={local.bs_ramp_months ?? 2} onChange={set('bs_ramp_months')} />
+        <Field label="GA Ramp Period (months)" value={local.ga_ramp_months ?? 1} onChange={set('ga_ramp_months')} />
+        <Field label="FD Supervision Overhead (%)" value={local.fd_supervision_pct ?? 0.15} onChange={set('fd_supervision_pct')} suffix="%" />
+        <div className="col-span-2 md:col-span-3 text-[10px] text-slate-400 bg-slate-50 rounded-lg px-3 py-2">
+          <strong>How it works:</strong> During the ramp period, the model adds (ramp months ÷ 12) × FD supervision % × FD loaded cost as an additional Year 1 overhead charge per hire. A 6-month SA ramp at 15% FD supervision adds approximately ${Math.round(((local.sa_ramp_months ?? 3) / 12) * (local.fd_supervision_pct ?? 0.15) * (local.fd_base_salary ?? 68000)).toLocaleString()} in Year 1 FD time cost.
+        </div>
+      </Section>
+
       <Section title="Personnel — Salary & Benefits Rates">
         <Field label="Staff Accountant Base" value={local.sa_base_salary} onChange={set('sa_base_salary')} prefix="$" />
         <Field label="Billing Specialist Base" value={local.bs_base_salary} onChange={set('bs_base_salary')} prefix="$" />
