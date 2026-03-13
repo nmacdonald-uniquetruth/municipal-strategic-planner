@@ -257,7 +257,7 @@ export default function Narrative() {
             Simultaneously, the Town outsources <Ac id="EMS" /> billing to Comstar at <strong>{pct(s.comstar_fee_rate)} of gross collections</strong> — approximately {fmt(d1?.value?.comstarAvoided)}/yr in fees on {s.ems_transports.toLocaleString()} annual transports — a function that an in-house <Ac id="BS" /> could perform at a fraction of that cost while improving collection rates.
           </p>
           <p>
-            This plan proposes three simultaneous initiatives: (1) <strong>Administrative restructuring</strong> — three new dedicated positions; (2) <strong>ERP modernization</strong> — replacing legacy Trio software with a modern fund-accounting platform; (3) <strong>Regional services expansion</strong> — formalizing existing informal support into paid interlocal agreements with neighboring municipalities.
+            This plan proposes three simultaneous initiatives: (1) <strong>Administrative restructuring</strong> — three new dedicated positions; (2) <strong><Ac id="ERP" /> modernization</strong> — replacing legacy Trio software with a modern fund-accounting platform; (3) <strong>Regional services expansion</strong> — formalizing existing informal support into paid interlocal agreements with neighboring municipalities.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
