@@ -11,8 +11,9 @@ const NAV_GROUPS = [
   {
     label: 'Overview',
     items: [
-      { path: '/Dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { path: '/ProForma', label: 'Financial Model', icon: TrendingUp },
+      { path: '/ExecutiveDashboard', label: 'Executive Summary', icon: LayoutDashboard },
+      { path: '/Dashboard', label: 'Financial Model', icon: TrendingUp },
+
       { path: '/PerformanceMetrics', label: 'Performance', icon: Activity },
       { path: '/SensitivityAnalysis', label: 'Sensitivity', icon: BarChart2 },
       { path: '/Scenarios', label: 'Scenarios', icon: Target },

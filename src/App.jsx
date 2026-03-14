@@ -44,6 +44,7 @@ import TaxImpact from './pages/TaxImpact';
 import RegionalServiceRevenue from './pages/RegionalServiceRevenue';
 import DepartmentRestructuring from './pages/DepartmentRestructuring';
 import ImplementationRoadmap from './pages/ImplementationRoadmap';
+import ExecutiveDashboard from './pages/ExecutiveDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -68,8 +69,9 @@ const AuthenticatedApp = () => {
     <ModelProvider>
       <Layout>
       <Routes>
-        <Route path="/" element={<Navigate to="/Dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/ExecutiveDashboard" replace />} />
         <Route element={<AppLayout />}>
+          <Route path="/ExecutiveDashboard" element={<ExecutiveDashboard />} />
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/ProForma" element={<ProForma />} />
           <Route path="/Positions" element={<Positions />} />
