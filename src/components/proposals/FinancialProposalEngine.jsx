@@ -141,9 +141,16 @@ function getDepartmentMetadata(department) {
       baselineStaffing: [
         { role: 'Police Chief', base_salary: 62000, status: 'host' },
         { role: 'Police Officer', base_salary: 48000, status: 'staffing' },
+        { role: 'Police Administrative Coordinator', base_salary: 42000, status: 'support', description: 'Records management, case file organization, evidence tracking, compliance reporting, scheduling support, community coordination' },
       ],
-      regionalRationale: 'Coordinated patrol coverage, shared specialized services, joint training programs',
-      keyOutcomes: ['24/7 patrol coverage', 'Specialized service access', 'Reduced per-capita cost', 'Unified dispatch'],
+      regionalRationale: 'Coordinated patrol coverage, shared specialized services, joint training programs, reduced administrative burden on leadership',
+      keyOutcomes: ['24/7 patrol coverage', 'Specialized service access', 'Reduced per-capita cost', 'Unified dispatch', 'Enhanced leadership capacity', 'Streamlined operations'],
+      strategicImpact: {
+        leadershipCapacity: 'Frees Police Chief to focus on supervision, strategic planning, and regional expansion',
+        operationalEfficiency: 'Centralizes records, scheduling, and compliance functions',
+        regionalExpansion: 'Enables service expansion to neighboring towns through improved operational systems',
+        costBenefit: 'Administrative position reduces excessive hours and improves retention of sworn officers',
+      },
     },
     fire: {
       label: 'Fire Department',
@@ -353,8 +360,8 @@ function buildCostStructure(department, basestaffingCost, settings) {
       insurance: 25000,
     },
     police: {
-      staffing: 110000,
-      benefits: 48000,
+      staffing: 152000,
+      benefits: 62000,
       equipment: 12000,
       vehicles: 55000,
       technology: 10000,
