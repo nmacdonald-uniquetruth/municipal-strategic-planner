@@ -39,6 +39,7 @@ const NAV_GROUPS = [
     items: [
       { path: '/Proposals', label: 'Generate Proposals', icon: FileText },
       { path: '/ProposalComparison', label: 'Compare Proposals', icon: BarChart2 },
+      { path: '/RiskAdjustedPlanning', label: 'Risk Assessment', icon: AlertTriangle },
       { path: '/TaxImpact', label: 'Tax Impact', icon: Scale },
       { path: '/ProposalEvaluations', label: 'Evaluations', icon: Zap },
       { path: '/DepartmentProposals', label: 'Dept Proposals', icon: FileText },
