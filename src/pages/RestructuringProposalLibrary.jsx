@@ -25,6 +25,11 @@ export default function RestructuringProposalLibrary() {
     queryFn: () => base44.entities.RestructuringProposal.list()
   });
 
+  const { data: evaluations = [] } = useQuery({
+    queryKey: ['proposalEvaluations'],
+    queryFn: () => base44.entities.ProposalEvaluation.list()
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.RestructuringProposal.create(data),
     onSuccess: () => {
