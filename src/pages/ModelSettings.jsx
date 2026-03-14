@@ -1,8 +1,9 @@
 import React from 'react';
 import ModelSettingsEditor from '../components/machias/ModelSettingsEditor';
 import PositionEditor from '../components/machias/PositionEditor';
+import PoliceAdminConfig from '../components/machias/PoliceAdminConfig';
 import SectionHeader from '../components/machias/SectionHeader';
-import { Settings, Users } from 'lucide-react';
+import { Settings, Users, Shield } from 'lucide-react';
 
 export default function ModelSettings() {
   return (
@@ -20,6 +21,13 @@ export default function ModelSettings() {
         icon={Users}
       />
       <PositionEditor />
+
+      <SectionHeader
+        title="Police Department Configuration"
+        subtitle="Configure administrative support roles and evaluate operational impacts"
+        icon={Shield}
+      />
+      <PoliceAdminConfig />
     </div>
   );
 }
