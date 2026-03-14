@@ -31,6 +31,14 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
   const map = useMap();
   const labelsRef = useRef(null);
 
+  // Track zoom level for scale-dependent label visibility
+  useEffect(() => {
+    if (!map) return;
+    const handleZoom = () => setZoom(map.getZoom());
+    map.on('zoom', handleZoom);
+    return () => map.off('zoom', handleZoom);
+  }, [map]);
+
   useEffect(() => {
     if (!geojson || !geojson.features || !map) return;
 
@@ -40,6 +48,10 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
     } else {
       labelsRef.current = window.L.featureGroup().addTo(map);
     }
+
+    // Scale-dependent visibility: show all labels at zoom 9+
+    // At lower zoom levels, labels remain visible but may overlap
+    if (zoom < 9) return;
 
     // Create label for each feature
     geojson.features.forEach(feature => {
@@ -73,7 +85,7 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
         window.L.marker(centroid, { icon: label, interactive: false }).addTo(labelsRef.current);
       }
     });
-  }, [geojson, map, hoveredTown, selectedTown]);
+  }, [geojson, map, hoveredTown, selectedTown, zoom]);
 
   return null;
 }
