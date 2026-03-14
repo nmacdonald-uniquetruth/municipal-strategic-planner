@@ -56,6 +56,7 @@ import MathVerify from './pages/MathVerify';
 import Milestones from './pages/Milestones';
 import ModelSettings from './pages/ModelSettings';
 import Narrative from './pages/Narrative';
+import OrgStructure from './pages/OrgStructure';
 import PerformanceMetrics from './pages/PerformanceMetrics';
 import Positions from './pages/Positions';
 import ProForma from './pages/ProForma';
@@ -68,7 +69,7 @@ import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import SensitivityAnalysis from './pages/SensitivityAnalysis';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import TransferStation from './pages/TransferStation';
-import OrgStructure from './pages/OrgStructure';
+import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
 import __Layout from './Layout.jsx';
 
 
@@ -82,6 +83,7 @@ export const PAGES = {
     "Milestones": Milestones,
     "ModelSettings": ModelSettings,
     "Narrative": Narrative,
+    "OrgStructure": OrgStructure,
     "PerformanceMetrics": PerformanceMetrics,
     "Positions": Positions,
     "ProForma": ProForma,
@@ -94,7 +96,7 @@ export const PAGES = {
     "SensitivityAnalysis": SensitivityAnalysis,
     "TaxpayerFAQ": TaxpayerFAQ,
     "TransferStation": TransferStation,
-    "OrgStructure": OrgStructure,
+    "EfficiencyAnalyzer": EfficiencyAnalyzer,
 }
 
 export const pagesConfig = {
