@@ -51,6 +51,7 @@ import RiskAdjustedPlanning from './pages/RiskAdjustedPlanning';
 import BoardMemoGenerator from './pages/BoardMemoGenerator';
 import CapitalProjects from './pages/CapitalProjects';
 import ServiceTerritoryAnalysis from './pages/ServiceTerritoryAnalysis';
+import LeadershipCapacityModeling from './pages/LeadershipCapacityModeling';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
