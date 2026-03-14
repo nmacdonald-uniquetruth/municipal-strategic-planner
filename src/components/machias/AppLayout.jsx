@@ -47,6 +47,7 @@ const NAV_GROUPS = [
       { path: '/ReferencesAndResearch', label: 'References', icon: BookMarked },
       { path: '/MathVerify', label: 'Math Verify', icon: Calculator },
       { path: '/ModelSettings', label: 'Model Settings', icon: Settings },
+      { path: '/RegionalParticipationSettings', label: 'Participation', icon: Settings },
       { path: '/AIPlanner', label: 'AI Planner', icon: MessageSquare },
     ],
   },
