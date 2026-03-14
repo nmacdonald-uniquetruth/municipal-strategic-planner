@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useModel } from '../components/machias/ModelContext';
 import { Network } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
-import LucidChartStyleCanvas from '../components/orgchart/LucidChartStyleCanvas';
+import ProfessionalOrgChart from '../components/orgchart/ProfessionalOrgChart';
 import OrgDetailPanel from '../components/orgchart/OrgDetailPanel';
 import { getAllPositions, buildOrgTree } from '../components/orgchart/OrgChartData';
 
@@ -99,7 +99,7 @@ export default function OrgChart() {
         {/* Chart area */}
         <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden relative">
           {positions.length > 0 && tree.length > 0 ? (
-            <LucidChartStyleCanvas
+            <ProfessionalOrgChart
               roots={tree}
               selectedId={selectedNode?.id}
               onSelect={handleSelect}
