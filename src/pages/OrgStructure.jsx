@@ -119,23 +119,17 @@ export default function OrgStructure() {
     if (viewMode === 'full') {
       // Include all nodes
     } else if (currentBranch) {
-      // Include only the branch nodes + the root
-      filtered = filtered.filter(n => n.branch === currentBranch || n.branch === 'root');
+      // Exclude the 'root' node so branch top-level nodes become true tree roots
+      filtered = filtered.filter(n => n.branch === currentBranch);
     }
 
     return buildTree(filtered);
   }, [nodes, viewMode, filterType, settings]);
 
-  // Filter roots by view
+  // For branch views the tree IS the display roots (root node excluded above)
   const displayRoots = useMemo(() => {
-    if (viewMode === 'full') return tree;
-    const currentBranch = VIEW_MODES.find(v => v.id === viewMode)?.branch;
-    // For municipal: top-level is Select Board; for school: School Committee
-    return tree.filter(r => {
-      if (r.branch === 'root') return false; // root is handled specially in OrgTree full mode
-      return r.branch === currentBranch || (!r.parent_id && r.branch === currentBranch);
-    });
-  }, [tree, viewMode]);
+    return tree;
+  }, [tree]);
 
   // Stats
   const stats = useMemo(() => {
