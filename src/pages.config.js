@@ -72,6 +72,7 @@ import SensitivityAnalysis from './pages/SensitivityAnalysis';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import TransferStation from './pages/TransferStation';
 import ERPRoadmap from './pages/ERPRoadmap';
+import ERPRoadmapPage from './pages/ERPRoadmapPage';
 import __Layout from './Layout.jsx';
 
 
@@ -101,6 +102,7 @@ export const PAGES = {
     "TaxpayerFAQ": TaxpayerFAQ,
     "TransferStation": TransferStation,
     "ERPRoadmap": ERPRoadmap,
+    "ERPRoadmapPage": ERPRoadmapPage,
 }
 
 export const pagesConfig = {
