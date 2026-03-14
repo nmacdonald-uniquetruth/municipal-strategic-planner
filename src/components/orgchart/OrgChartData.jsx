@@ -104,39 +104,41 @@ export function getDynamicPositions(settings) {
   const positions = [];
   const fs = settings.FINANCE_DEPARTMENT_STRUCTURE;
 
+  const pt = { nodeType: 'position' };
+
   // Controller
   if (fs === 'Controller + Staff Accountant' ||
       fs === 'Controller + Two Staff Accountants' ||
       fs === 'Controller + Staff Accountant + Part-Time Staff Accountant') {
-    positions.push({ id: 'controller', title: 'Controller', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+    positions.push({ ...pt, id: 'controller', title: 'Controller', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   }
 
   // Staff Accountant (all options have at least one)
-  positions.push({ id: 'staff_accountant', title: 'Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+  positions.push({ ...pt, id: 'staff_accountant', title: 'Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
 
   // Second Staff Accountant
   if (fs === 'Controller + Two Staff Accountants' || fs === 'Two Staff Accountants') {
-    positions.push({ id: 'staff_accountant_2', title: 'Second Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+    positions.push({ ...pt, id: 'staff_accountant_2', title: 'Second Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   }
 
   // Part-Time Staff Accountant
   if (fs === 'Staff Accountant + Part-Time Staff Accountant' ||
       fs === 'Controller + Staff Accountant + Part-Time Staff Accountant') {
-    positions.push({ id: 'staff_accountant_pt', title: 'Part-Time Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: false, employee: null });
+    positions.push({ ...pt, id: 'staff_accountant_pt', title: 'Part-Time Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: false, employee: null });
   }
 
   // Billing structure
   const bs = settings.UTILITY_BILLING_STRUCTURE;
-  positions.push({ id: 'billing_specialist', title: 'Billing Specialist', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+  positions.push({ ...pt, id: 'billing_specialist', title: 'Billing Specialist', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   if (bs === 'Two Billing Specialists') {
-    positions.push({ id: 'billing_specialist_2', title: 'Second Billing Specialist', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+    positions.push({ ...pt, id: 'billing_specialist_2', title: 'Second Billing Specialist', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   } else if (bs === 'Billing Specialist + Revenue Coordinator') {
-    positions.push({ id: 'revenue_coordinator', title: 'Revenue Coordinator', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+    positions.push({ ...pt, id: 'revenue_coordinator', title: 'Revenue Coordinator', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   }
 
   // GA Coordinator
   const gaReportsTo = settings.GA_REPORTING_STRUCTURE === 'Finance Director' ? 'finance_director' : 'town_manager';
-  positions.push({ id: 'ga_coordinator', title: 'General Assistance Coordinator', dept: 'Finance', reportsTo: gaReportsTo, status: 'vacant', fullTime: false, employee: null });
+  positions.push({ ...pt, id: 'ga_coordinator', title: 'General Assistance Coordinator', dept: 'Finance', reportsTo: gaReportsTo, status: 'vacant', fullTime: false, employee: null });
 
   return positions;
 }
