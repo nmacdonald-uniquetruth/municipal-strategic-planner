@@ -21,6 +21,7 @@ const NAV_GROUPS = [
   {
     label: 'Initiatives',
     items: [
+      { path: '/DepartmentRestructuring', label: 'Dept Restructuring', icon: BarChart2 },
       { path: '/OrgChart', label: 'Org Chart', icon: Network },
       { path: '/RegionalMap', label: 'Regional Map', icon: MapPin },
       { path: '/Positions', label: 'Positions', icon: Users },
