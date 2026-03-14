@@ -236,6 +236,8 @@ export default function RegionalMap() {
   const [comparisonMode, setComparisonMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState([]);
   const [labelMode, setLabelMode] = useState('map');
+  const [showRelationshipPanel, setShowRelationshipPanel] = useState(false);
+  const [selectedRelationshipTypes, setSelectedRelationshipTypes] = useState([]);
   const [layers, setLayers] = useState([
     { id: 'boundaries', label: 'Municipal Boundaries', color: '#1a3a5c', visible: true, available: true },
     { id: 'roads', label: 'Roads', color: '#7a5c1a', visible: false, available: false },
@@ -273,6 +275,24 @@ export default function RegionalMap() {
   const toggleLayer = useCallback((id) => {
     setLayers(prev => prev.map(l => l.id === id ? { ...l, visible: !l.visible } : l));
   }, []);
+
+  // Fetch relationships
+  const { data: allRelationships = [] } = useQuery({
+    queryKey: ['regional_relationships'],
+    queryFn: () => base44.entities.RegionalRelationship.list(),
+  });
+
+  // Get towns highlighted by selected relationship types
+  const highlightedTowns = useMemo(() => {
+    if (selectedRelationshipTypes.length === 0) return [];
+    return [
+      ...new Set(
+        allRelationships
+          .filter(r => selectedRelationshipTypes.includes(r.relationship_type))
+          .map(r => r.municipality)
+      ),
+    ];
+  }, [allRelationships, selectedRelationshipTypes]);
 
   const boundariesVisible = layers.find(l => l.id === 'boundaries')?.visible;
   const showMapLabels = labelMode === 'map';
