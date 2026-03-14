@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle, TrendingUp, TrendingDown } from 'lucide-react';
-import { formatCurrency, formatMillRate, formatPercentage, classifyImpactType } from '@/lib/taxImpactCalculator';
+import { formatCurrency, formatMillRate, formatPercentage, classifyImpactType } from '../utils/taxImpactCalculator';
 
 export default function TaxImpactBreakdown({ impact, showDetails = true }) {
   if (!impact) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { compareTaxImpacts, formatCurrency, formatMillRate } from '@/lib/taxImpactCalculator';
+import { compareTaxImpacts, formatCurrency, formatMillRate } from '../utils/taxImpactCalculator';
 import TaxImpactBreakdown from './TaxImpactBreakdown';
 
 export default function TaxImpactComparison({ currentData, proposedData, modelSettings }) {
