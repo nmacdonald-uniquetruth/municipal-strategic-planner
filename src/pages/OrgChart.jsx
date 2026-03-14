@@ -315,7 +315,7 @@ export default function OrgChart() {
         )}
 
         {/* Center — chart */}
-        <div className="flex-1 min-w-0 min-h-0 rounded-xl border border-slate-200 bg-white overflow-hidden">
+        <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white overflow-hidden" style={{ minHeight: '500px' }}>
           {view === 'tree' && (
             <ChartPane
               scenario={localScenario}
