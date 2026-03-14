@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { ModelProvider } from './ModelContext';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
