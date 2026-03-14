@@ -71,6 +71,7 @@ import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import TransferStation from './pages/TransferStation';
 import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
 import FinancialSimulator from './pages/FinancialSimulator';
+import GovernanceTwin from './pages/GovernanceTwin';
 import __Layout from './Layout.jsx';
 
 
@@ -99,6 +100,7 @@ export const PAGES = {
     "TransferStation": TransferStation,
     "EfficiencyAnalyzer": EfficiencyAnalyzer,
     "FinancialSimulator": FinancialSimulator,
+    "GovernanceTwin": GovernanceTwin,
 }
 
 export const pagesConfig = {
