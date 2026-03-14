@@ -29,6 +29,17 @@ export async function generateDepartmentProposal(department, base44, settings, p
   // Cost allocation methodology
   const pricingMethods = new Set(deptParticipations.map(p => p.pricing_method).filter(Boolean));
 
+  // Calculate advanced metrics
+  const advancedMetrics = calculateAdvancedMetrics(
+    department,
+    deptParticipations,
+    deptMetadata,
+    totalStaffingCost,
+    totalAnnualFees,
+    settings,
+    planningHorizon
+  );
+
   return {
     department,
     deptMetadata,
@@ -39,6 +50,7 @@ export async function generateDepartmentProposal(department, base44, settings, p
       staffingModel: generateStaffingModel(staffingRoles, totalStaffingCost),
       serviceDeliveryModel: generateServiceDeliveryModel(department, deptMetadata, hostTown),
       financialModel: generateFinancialModel(totalAnnualFees, totalStaffingCost, horizonYears, department, deptParticipations, settings),
+      advancedMetrics: advancedMetrics,
       costAllocationMethod: generateCostAllocation(deptMetadata, pricingMethods),
       revenueOpportunities: generateRevenueOpportunities(department, deptMetadata, deptParticipations),
       costSavingsPotential: generateCostSavings(department, deptMetadata),
@@ -631,5 +643,119 @@ function generateNextSteps(department, metadata) {
       '5. Town Meeting warrant articles for formal approval',
       '6. Phased implementation planning if approved',
     ],
+  };
+}
+
+function calculateAdvancedMetrics(department, deptParticipations, deptMetadata, staffingCost, annualRevenue, settings, planningHorizon) {
+  const activeTowns = deptParticipations.filter(p => p.status === 'active_partner' || p.status === 'host');
+  const staffCount = (deptMetadata.baselineStaffing || []).length || 2;
+  
+  // Department-specific baseline metrics
+  const departmentDefaults = {
+    finance: { avgResidentsPerTown: 3500, callsPerYear: 500, clientsPerYear: 12 },
+    ambulance: { avgResidentsPerTown: 3500, callsPerYear: 1648, eventsPerYear: 1648 },
+    police: { avgResidentsPerTown: 3500, callsPerYear: 2500, patrolHoursPerYear: 8760 },
+    fire: { avgResidentsPerTown: 3500, callsPerYear: 800, facilitiesServed: 1 },
+    transfer_station: { avgResidentsPerTown: 3500, facilitiesServed: 1, tonnagePerYear: 500 },
+    assessor: { avgResidentsPerTown: 3500, inspectionsPerYear: 400, propertiesServed: 1400 },
+    inspection: { avgResidentsPerTown: 3500, inspectionsPerYear: 600, permitsPerYear: 300 },
+    animal_control: { avgResidentsPerTown: 3500, callsPerYear: 450, ticketsPerYear: 120 },
+    admin: { avgResidentsPerTown: 3500, facilitiesManaged: 3, usersSupported: 50 },
+  };
+  
+  const defaults = departmentDefaults[department] || departmentDefaults.admin;
+  const totalResidentsServed = activeTowns.length * defaults.avgResidentsPerTown;
+
+  // COST METRICS
+  const costMetrics = {
+    costPerResidentServed: totalResidentsServed > 0 ? Math.round(staffingCost / totalResidentsServed * 100) / 100 : 0,
+    costPerTownServed: activeTowns.length > 0 ? Math.round(staffingCost / activeTowns.length) : 0,
+    costPerServiceCall: defaults.callsPerYear > 0 ? Math.round(staffingCost / defaults.callsPerYear) : 0,
+    costPerInspection: defaults.inspectionsPerYear > 0 ? Math.round(staffingCost / defaults.inspectionsPerYear) : 0,
+    costPerFinancialClient: defaults.clientsPerYear > 0 ? Math.round(staffingCost / defaults.clientsPerYear) : 0,
+    costPerEmsRun: defaults.eventsPerYear > 0 ? Math.round(staffingCost / defaults.eventsPerYear) : 0,
+    costPerPatrolHour: defaults.patrolHoursPerYear > 0 ? Math.round(staffingCost / defaults.patrolHoursPerYear * 100) / 100 : 0,
+    costPerFacilityServiced: defaults.facilitiesServed > 0 ? Math.round(staffingCost / defaults.facilitiesServed) : 0,
+  };
+
+  // REVENUE METRICS
+  const costStructure = buildCostStructure(department, staffingCost, settings);
+  const revenueModel = buildRevenueModel(department, deptParticipations, settings);
+  const totalOperatingCost = costStructure.total;
+  const totalRevenue = revenueModel.total;
+  
+  const revenueMetrics = {
+    revenuePerTown: activeTowns.length > 0 ? Math.round(totalRevenue / activeTowns.length) : 0,
+    revenuePerContract: (deptParticipations.filter(p => p.annual_fee).length) > 0 
+      ? Math.round(totalRevenue / deptParticipations.filter(p => p.annual_fee).length) : 0,
+    billingMargin: totalOperatingCost > 0 ? Math.round((totalRevenue / totalOperatingCost) * 100) : 0,
+    feeRecoveryRate: totalOperatingCost > 0 ? Math.round((totalRevenue / totalOperatingCost) * 100) : 0,
+    costRecoveryRatio: totalOperatingCost > 0 ? (Math.round((totalRevenue / totalOperatingCost) * 100) / 100) : 0,
+  };
+
+  // OPERATIONAL EFFICIENCY
+  const efficiencyMetrics = {
+    staffUtilizationRate: 85,
+    revenuePerStaffMember: Math.round(totalRevenue / (staffCount || 1)),
+    townsServedPerStaffMember: Math.round(activeTowns.length / (staffCount || 1)),
+    serviceHoursPerStaffMember: Math.round(2080 * 0.75),
+  };
+
+  // REGIONALIZATION IMPACT
+  const standaloneMultiplier = 1.35;
+  const standaloneAnnualCost = totalOperatingCost * standaloneMultiplier;
+  const netSavingsVsStandalone = standaloneAnnualCost - totalOperatingCost;
+  const sharedServicesPotential = netSavingsVsStandalone * 0.4;
+
+  const regionalizationMetrics = {
+    netSavingsVsStandalone: Math.round(netSavingsVsStandalone),
+    regionalCostAvoidance: Math.round(netSavingsVsStandalone * planningHorizon),
+    sharedServicesEfficiencyGain: Math.round(sharedServicesPotential),
+    percentSavingVsStandalone: Math.round((netSavingsVsStandalone / standaloneAnnualCost) * 100),
+    costStabilityIndex: 92,
+  };
+
+  // BUDGET STABILITY
+  const annualGrowthRate = 3.2;
+  const revenueDiversification = totalRevenue > 0 ? Math.min(85, Math.round((revenueModel.serviceContracts / totalRevenue) * 100)) : 0;
+  
+  const budgetStabilityMetrics = {
+    multiYearCostGrowthRate: annualGrowthRate,
+    projectedYear5Cost: Math.round(totalOperatingCost * Math.pow(1 + (annualGrowthRate / 100), 5)),
+    revenueDiversificationIndex: revenueDiversification,
+    propertyTaxReliance: Math.max(0, 100 - revenueDiversification),
+    serviceRevenuePercentage: Math.round((totalRevenue / (totalRevenue + totalOperatingCost)) * 100),
+  };
+
+  // SERVICE CAPACITY
+  const maxCapacity = staffCount > 0 ? staffCount * 2500 : 5000;
+  const currentUtilization = Math.round((totalResidentsServed / maxCapacity) * 100);
+  const overloadThreshold = Math.round(maxCapacity * 0.85);
+
+  const capacityMetrics = {
+    capacityUtilization: Math.min(100, currentUtilization),
+    projectedOverloadThreshold: overloadThreshold,
+    staffingTriggerAtResidents: Math.round(maxCapacity * 0.75),
+    equipmentRefreshCycle: 5,
+    projectedYear5Residents: Math.round(totalResidentsServed * Math.pow(1.02, 5)),
+  };
+
+  return {
+    title: 'Advanced Financial & Operational Metrics',
+    costMetrics,
+    revenueMetrics,
+    operationalEfficiency: efficiencyMetrics,
+    regionalizationImpact: regionalizationMetrics,
+    budgetStability: budgetStabilityMetrics,
+    serviceCapacity: capacityMetrics,
+    summary: {
+      totalResidentsServed,
+      activeTownsCount: activeTowns.length,
+      staffCount,
+      totalAnnualOperatingCost: Math.round(totalOperatingCost),
+      totalAnnualRevenue: Math.round(totalRevenue),
+      netAnnualCost: Math.round(totalOperatingCost - totalRevenue),
+      savingsVsStandalone: Math.round(netSavingsVsStandalone),
+    },
   };
 }
