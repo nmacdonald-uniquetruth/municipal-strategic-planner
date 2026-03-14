@@ -1,95 +1,48 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Network, Settings2, ChevronDown } from 'lucide-react';
+import { Network, ChevronDown } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
 import OrgTreeCanvas from '../components/orgchart/OrgTreeCanvas';
 import {
-  getAllPositions, buildOrgTree,
-  DEFAULT_ORG_SETTINGS, FINANCE_STRUCTURES, BILLING_STRUCTURES, GA_STRUCTURES,
-  DEPT_COLORS,
+  getAllPositions, buildOrgTree, DEPT_COLORS,
 } from '../components/orgchart/OrgChartData';
-
-// ─── Settings panel ───────────────────────────────────────────────────────────
-function SettingsPanel({ settings, onChange }) {
-  const sel = (key, label, options) => (
-    <div key={key} className="space-y-1.5">
-      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-        {label}
-      </label>
-      <select
-        value={settings[key]}
-        onChange={e => onChange({ ...settings, [key]: e.target.value })}
-        className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
-      >
-        {options.map(o => <option key={o} value={o}>{o}</option>)}
-      </select>
-    </div>
-  );
-
-  const tog = (key, label) => (
-    <label key={key} className="flex items-center gap-2.5 cursor-pointer py-1">
-      <input type="checkbox" checked={settings[key]}
-        onChange={e => onChange({ ...settings, [key]: e.target.checked })}
-        className="rounded w-3.5 h-3.5 accent-slate-700" />
-      <span className="text-xs text-slate-700">{label}</span>
-    </label>
-  );
-
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-      <div className="px-5 py-3.5 flex items-center gap-2" style={{ background: '#344A60' }}>
-        <Settings2 className="h-4 w-4 text-slate-300" />
-        <span className="text-sm font-bold text-white">Chart Settings</span>
-      </div>
-      <div className="p-5 space-y-4">
-        {sel('FINANCE_DEPARTMENT_STRUCTURE', 'Finance Structure', FINANCE_STRUCTURES)}
-        {sel('UTILITY_BILLING_STRUCTURE', 'Billing Structure', BILLING_STRUCTURES)}
-        {sel('GA_REPORTING_STRUCTURE', 'GA Reporting', GA_STRUCTURES)}
-        <div className="border-t border-slate-100 pt-4 space-y-1">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Display</p>
-          {tog('SHOW_VACANT_POSITIONS', 'Show Vacant Positions')}
-          {tog('SHOW_PART_TIME_POSITIONS', 'Show Part-Time Positions')}
-        </div>
-      </div>
-    </div>
-  );
-}
+import OrgChartSettings from '../components/orgchart/OrgChartSettings';
 
 // ─── Legend ───────────────────────────────────────────────────────────────────
 function Legend() {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Legend</p>
-      <div className="space-y-2">
-        {[
-          { color: '#22c55e', label: 'Filled position' },
-          { color: '#f59e0b', label: 'Vacant position' },
-        ].map(({ color, label }) => (
-          <div key={label} className="flex items-center gap-2.5 text-xs text-slate-600">
-            <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
-            {label}
-          </div>
-        ))}
-      </div>
-      <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
-        Drag to pan · scroll to zoom<br />
-        Click +/− to collapse branches
+    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm flex items-center gap-5 flex-wrap">
+      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Legend</p>
+      {[
+        { color: '#22c55e', label: 'Filled position' },
+        { color: '#f59e0b', label: 'Vacant position' },
+        { color: '#344A60', label: 'Structural / Governance node' },
+      ].map(({ color, label }) => (
+        <div key={label} className="flex items-center gap-1.5 text-xs text-slate-600">
+          <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
+          {label}
+        </div>
+      ))}
+      <p className="text-[10px] text-slate-400 ml-auto">
+        Drag to pan · Scroll to zoom · Click node for details
       </p>
     </div>
   );
 }
 
-// ─── Stats bar + view toggle ──────────────────────────────────────────────────
-function HeaderControls({ positions, view, onViewChange }) {
-  const filled = positions.filter(p => p.status === 'filled').length;
-  const vacant = positions.filter(p => p.status === 'vacant').length;
+// ─── Stats bar ────────────────────────────────────────────────────────────────
+function StatsBar({ positions, view, onViewChange }) {
+  // Only count actual position nodes for stats
+  const positionNodes = positions.filter(p => p.nodeType === 'position');
+  const filled = positionNodes.filter(p => p.status === 'filled').length;
+  const vacant = positionNodes.filter(p => p.status === 'vacant').length;
 
   return (
     <div className="flex items-center gap-3 flex-wrap">
       <div className="flex gap-2">
         {[
-          { label: 'Positions', value: positions.length, cls: 'text-slate-900' },
-          { label: 'Filled',    value: filled,            cls: 'text-emerald-700' },
-          { label: 'Vacant',    value: vacant,            cls: 'text-amber-600' },
+          { label: 'Positions', value: positionNodes.length, cls: 'text-slate-900' },
+          { label: 'Filled',    value: filled,                cls: 'text-emerald-700' },
+          { label: 'Vacant',    value: vacant,                cls: 'text-amber-600' },
         ].map(s => (
           <div key={s.label} className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center min-w-16 shadow-sm">
             <p className={`text-lg font-bold leading-none ${s.cls}`}>{s.value}</p>
@@ -114,12 +67,16 @@ function HeaderControls({ positions, view, onViewChange }) {
 // ─── Dept list view ───────────────────────────────────────────────────────────
 function DeptListView({ positions, selectedId, onSelect }) {
   const [open, setOpen] = useState({});
+
+  // Only show position nodes in dept view, grouped by dept
   const byDept = useMemo(() => {
     const d = {};
-    positions.forEach(p => {
-      if (!d[p.dept]) d[p.dept] = [];
-      d[p.dept].push(p);
-    });
+    positions
+      .filter(p => p.nodeType === 'position')
+      .forEach(p => {
+        if (!d[p.dept]) d[p.dept] = [];
+        d[p.dept].push(p);
+      });
     return d;
   }, [positions]);
 
@@ -169,14 +126,15 @@ function DetailPanel({ node, allPositions, onClose }) {
         <div className="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
           <Network className="h-6 w-6 text-slate-300" />
         </div>
-        <p className="text-sm font-semibold text-slate-500">Select a position</p>
+        <p className="text-sm font-semibold text-slate-500">Select a node</p>
         <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-          Click any node in the chart to view role details, reporting lines, and status.
+          Click any node in the chart to view details, reporting lines, and status.
         </p>
       </div>
     );
   }
 
+  const isStructural = node.nodeType === 'structural';
   const color = DEPT_COLORS[node.dept] || '#344A60';
   const supervisor = allPositions.find(p => p.id === node.reportsTo);
   const reports = allPositions.filter(p => p.reportsTo === node.id);
@@ -191,34 +149,51 @@ function DetailPanel({ node, allPositions, onClose }) {
         </button>
         <p className="text-sm font-bold pr-8 leading-snug">{node.title}</p>
         <p className="text-[11px] opacity-75 mt-0.5">{node.dept}</p>
-        <div className="mt-2.5 flex gap-1.5 flex-wrap">
-          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-            node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'
-          }`}>
-            {node.status === 'filled' ? 'Filled' : 'Vacant'}
-          </span>
-          {!node.fullTime && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Part-Time</span>
-          )}
-          {node.isUnion && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>
-          )}
-          {node.contracted && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Contracted</span>
-          )}
-        </div>
+
+        {isStructural ? (
+          <div className="mt-2.5">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">
+              Governance Body
+            </span>
+          </div>
+        ) : (
+          <div className="mt-2.5 flex gap-1.5 flex-wrap">
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+              node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'
+            }`}>
+              {node.status === 'filled' ? 'Filled' : 'Vacant'}
+            </span>
+            {!node.fullTime && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Part-Time</span>
+            )}
+            {node.isUnion && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>
+            )}
+            {node.contracted && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Contracted</span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Employee */}
-      <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex-shrink-0">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
-        {node.employee
-          ? <p className="text-sm font-semibold text-slate-900">{node.employee}</p>
-          : <p className="text-sm italic text-amber-600">Position Vacant</p>}
-      </div>
+      {/* Employee — only for position nodes */}
+      {!isStructural && (
+        <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex-shrink-0">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
+          {node.employee
+            ? <p className="text-sm font-semibold text-slate-900">{node.employee}</p>
+            : <p className="text-sm italic text-amber-600">Position Vacant</p>}
+        </div>
+      )}
 
       {/* Details */}
       <div className="px-5 py-4 space-y-3 text-xs flex-1 overflow-y-auto">
+        {isStructural && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Node Type</p>
+            <p className="text-slate-700">Governance / Structural Body — no vacancy or employment status applies.</p>
+          </div>
+        )}
         {supervisor && (
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Reports To</p>
@@ -233,7 +208,10 @@ function DetailPanel({ node, allPositions, onClose }) {
             <div className="space-y-1.5">
               {reports.map(r => (
                 <div key={r.id} className="flex items-center gap-2">
-                  <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                  <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
+                    r.nodeType === 'structural' ? 'bg-slate-400' :
+                    r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'
+                  }`} />
                   <span className="text-slate-700 leading-snug">{r.title}</span>
                 </div>
               ))}
@@ -247,47 +225,54 @@ function DetailPanel({ node, allPositions, onClose }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function OrgChart() {
-  const [orgSettings, setOrgSettings] = useState(DEFAULT_ORG_SETTINGS);
+  const [orgSettings, setOrgSettings] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [view, setView] = useState('tree');
 
-  const positions = useMemo(() => getAllPositions(orgSettings), [orgSettings]);
+  // Load settings from OrgChartSettings component via callback
+  const handleSettingsLoad = useCallback((s) => setOrgSettings(s), []);
+
+  const positions = useMemo(() => {
+    if (!orgSettings) return [];
+    return getAllPositions(orgSettings);
+  }, [orgSettings]);
+
   const tree = useMemo(() => buildOrgTree(positions), [positions]);
 
   const handleSelect = useCallback((node) => {
     setSelectedNode(prev => !node || prev?.id === node.id ? null : node);
   }, []);
 
-  // Canvas height: responsive, clamped
   const canvasStyle = {
-    height: 'clamp(520px, calc(100vh - 280px), 820px)',
+    height: 'clamp(520px, calc(100vh - 260px), 860px)',
   };
 
   return (
-    <div className="space-y-5 max-w-[1520px] mx-auto">
+    <div className="space-y-4 max-w-[1600px] mx-auto">
       {/* Header */}
-      <div className="space-y-4">
-        <SectionHeader
-          title="Municipal Organizational Chart"
-          subtitle="Settings-driven — changes below update the chart instantly"
-          icon={Network}
-        />
-        <HeaderControls positions={positions} view={view} onViewChange={setView} />
-      </div>
+      <SectionHeader
+        title="Municipal Organizational Chart"
+        subtitle="Town of Machias — organizational structure and reporting hierarchy"
+        icon={Network}
+      />
 
-      {/* 3-column body */}
-      <div className="flex gap-5 items-start">
+      {/* Settings loader (hidden — just reads settings and calls back) */}
+      <OrgChartSettings onLoad={handleSettingsLoad} />
 
-        {/* Left sidebar */}
-        <div className="flex-shrink-0 space-y-4" style={{ width: '300px' }}>
-          <SettingsPanel settings={orgSettings} onChange={setOrgSettings} />
-          <Legend />
-        </div>
+      {/* Stats + view toggle */}
+      <StatsBar positions={positions} view={view} onViewChange={setView} />
 
-        {/* Center — chart canvas */}
-        <div className="flex-1 min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
-          style={{ ...canvasStyle, position: 'relative', minWidth: '500px' }}>
-          {view === 'tree' && (
+      {/* Legend */}
+      <Legend />
+
+      {/* Main chart area + detail panel */}
+      <div className="flex gap-4 items-start">
+        {/* Chart canvas */}
+        <div
+          className="flex-1 min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+          style={{ ...canvasStyle, position: 'relative', minWidth: '500px' }}
+        >
+          {view === 'tree' && positions.length > 0 && (
             <OrgTreeCanvas
               roots={tree}
               selectedId={selectedNode?.id}
@@ -299,9 +284,14 @@ export default function OrgChart() {
               <DeptListView positions={positions} selectedId={selectedNode?.id} onSelect={handleSelect} />
             </div>
           )}
+          {positions.length === 0 && (
+            <div className="flex items-center justify-center h-full text-slate-400 text-sm">
+              Loading chart…
+            </div>
+          )}
         </div>
 
-        {/* Right — detail panel */}
+        {/* Detail panel */}
         <div className="flex-shrink-0" style={{ width: '300px', ...canvasStyle }}>
           <DetailPanel node={selectedNode} allPositions={positions} onClose={() => setSelectedNode(null)} />
         </div>
