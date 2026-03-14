@@ -22,6 +22,7 @@ const NAV_GROUPS = [
     label: 'Initiatives',
     items: [
       { path: '/OrgStructure', label: 'Org Structure', icon: Network },
+      { path: '/EfficiencyAnalyzer', label: 'Efficiency Analyzer', icon: Activity },
       { path: '/Positions', label: 'Positions', icon: Users },
       { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
       { path: '/RegionalServices', label: 'Regional Services', icon: Target },
