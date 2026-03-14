@@ -148,15 +148,20 @@ export function getAllPositions(settings) {
   const dynamic = getDynamicPositions(settings);
   let all = [...STATIC_POSITIONS, ...dynamic];
 
-  // Never filter structural nodes — they must always appear
-  // Filter vacant positions (only applies to position nodes)
+  // CRITICAL: Structural nodes NEVER show vacancy and are never filtered
+  // Structural nodes = Residents, Town Meeting, Select Board, School Committee, etc.
+  // These have nodeType='structural' and status='structural'
+  
+  // Filter vacant positions (ONLY applies to position nodes, never structural)
   if (!settings.SHOW_VACANT_POSITIONS) {
     all = all.filter(p => p.nodeType === 'structural' || p.status !== 'vacant');
   }
-  // Filter part-time positions (only applies to position nodes)
+  
+  // Filter part-time positions (ONLY applies to position nodes, never structural)
   if (!settings.SHOW_PART_TIME_POSITIONS) {
     all = all.filter(p => p.nodeType === 'structural' || p.fullTime !== false);
   }
+  
   return all;
 }
 
@@ -189,6 +194,8 @@ export const DEFAULT_ORG_SETTINGS = {
   SHOW_VACANT_POSITIONS: true,
   SHOW_PART_TIME_POSITIONS: true,
   DEFAULT_ORG_CHART_VIEW: 'tree',
+  ORG_CHART_AUTO_FIT: true,
+  ORG_CHART_SHOW_EMPLOYEE_NAMES: true,
 };
 
 export const FINANCE_STRUCTURES = [
