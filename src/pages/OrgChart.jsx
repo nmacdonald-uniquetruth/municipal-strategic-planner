@@ -221,7 +221,7 @@ export default function OrgChart() {
   }
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 80px)' }}>
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 100px)', minHeight: '600px' }}>
       {/* ── Header ── */}
       <div className="flex-shrink-0 space-y-3 pb-3">
         <SectionHeader
