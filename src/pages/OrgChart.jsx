@@ -142,8 +142,8 @@ export default function OrgChart() {
     setLoading(true);
     await seedIfEmpty();
     const [pos, emp, scen] = await Promise.all([
-      base44.entities.OrgPosition.list('sort_order'),
-      base44.entities.OrgEmployee.list(),
+      base44.entities.OrgPosition.list('sort_order', 200),
+      base44.entities.OrgEmployee.list('created_date', 200),
       base44.entities.OrgScenario.list(),
     ]);
     setPositions(pos || []);
