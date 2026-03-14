@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { X, Edit2, Trash2, Link2 } from 'lucide-react';
+import ProposalWorkflowStatus from './ProposalWorkflowStatus';
+import ProposalWorkflowActions from './ProposalWorkflowActions';
 
 const CATEGORY_ICONS = {
   staffing: '👥',
