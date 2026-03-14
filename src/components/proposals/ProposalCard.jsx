@@ -178,11 +178,26 @@ export default function ProposalCard({ proposal, onSelect, isSelected, showCheck
           <span className="text-xs text-gray-600">
             Status: <span className="font-semibold text-gray-900">{proposal.status.replace(/_/g, ' ')}</span>
           </span>
-          <span className="text-xs text-gray-500">
-            {proposal.implementationTimeline && `Timeline: ${proposal.implementationTimeline}`}
-          </span>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPublicSummary(true);
+            }}
+            className="gap-1 h-6 px-2 text-xs"
+          >
+            <Eye className="w-3 h-3" /> Public Summary
+          </Button>
         </div>
       </CardContent>
+
+      {showPublicSummary && (
+        <PublicProposalSummary
+          proposal={proposal}
+          onClose={() => setShowPublicSummary(false)}
+        />
+      )}
     </Card>
   );
 }
