@@ -380,7 +380,24 @@ export default function RegionalMap() {
           {/* Overlay controls */}
           <LayerControls layers={layers} onToggle={toggleLayer} />
           <BasemapSelector current={basemap} onChange={setBasemap} />
-          {!loading && !error && geojson && <MapLegend basemap={basemap} />}
+          {/* Label toggle */}
+          <div className="absolute top-3 right-3 z-[1000] bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden">
+            <button onClick={() => setShowLabels(!showLabels)}
+              className={`px-3 py-2 text-xs font-bold transition-all ${
+                showLabels
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-white text-slate-600 border-b border-slate-200'
+              }`}>
+              {showLabels ? '✓ Labels' : 'Legend'}
+            </button>
+            {!showLabels && (
+              <button onClick={() => setShowLabels(true)}
+                className="w-full px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+                Show Labels
+              </button>
+            )}
+          </div>
+          {!loading && !error && geojson && !showLabels && <MapLegend basemap={basemap} />}
         </div>
 
         {/* Right panel */}
