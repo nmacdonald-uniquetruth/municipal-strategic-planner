@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useModel } from '../components/machias/ModelContext';
 import { Network, ChevronDown, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
-import OrgHierarchicalCanvas from '../components/orgchart/OrgHierarchicalCanvas';
+import OrgCompactCanvas from '../components/orgchart/OrgCompactCanvas';
 import OrgDetailPanel from '../components/orgchart/OrgDetailPanel';
 import { getAllPositions, buildOrgTree } from '../components/orgchart/OrgChartData';
 
 export default function OrgChart() {
   const { settings } = useModel();
   const [selectedNode, setSelectedNode] = useState(null);
-  const [view, setView] = useState(settings?.DEFAULT_ORG_CHART_VIEW || 'tree');
+  const [showGovernance, setShowGovernance] = useState(false);
 
   // Generate positions from current settings
   const positions = useMemo(() => {
@@ -58,15 +58,40 @@ export default function OrgChart() {
         ))}
       </div>
 
+      {/* View toggle */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setShowGovernance(false)}
+          className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+            !showGovernance
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Operational Structure
+        </button>
+        <button
+          onClick={() => setShowGovernance(true)}
+          className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+            showGovernance
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Governance Structure
+        </button>
+      </div>
+
       {/* Main layout */}
       <div className="flex gap-4 flex-1 min-h-0">
         {/* Chart area */}
         <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden relative">
           {positions.length > 0 && tree.length > 0 ? (
-            <OrgHierarchicalCanvas
+            <OrgCompactCanvas
               roots={tree}
               selectedId={selectedNode?.id}
               onSelect={handleSelect}
+              showGovernance={showGovernance}
             />
           ) : (
             <div className="flex items-center justify-center h-full text-slate-400 text-sm">
