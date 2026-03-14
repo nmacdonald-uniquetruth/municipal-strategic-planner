@@ -22,7 +22,7 @@ export default function DepartmentProposals() {
 
   // Generate proposal when department, settings, or planning horizon changes
   useEffect(() => {
-    if (regionalpParticicipations.length === 0) return;
+    if (regionalParticipations.length === 0) return;
 
     const generateProposal = async () => {
       setGenerating(true);
