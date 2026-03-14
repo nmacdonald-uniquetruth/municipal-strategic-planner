@@ -62,31 +62,46 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
       const town = feature?.properties?.TOWN;
       if (!town || !feature.geometry) return;
 
-      // Calculate centroid
-      let centroid = null;
+      let labelPos = null;
+      let fontSize = 11;
+
       if (feature.geometry.type === 'Polygon') {
-        const coords = feature.geometry.coordinates[0];
-        let sumLat = 0, sumLng = 0;
-        coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
-        centroid = [sumLat / coords.length, sumLng / coords.length];
+        const ring = feature.geometry.coordinates[0];
+        
+        // Find optimal label position (pole of inaccessibility)
+        labelPos = findLabelCenter(ring);
+        
+        // Estimate font size based on polygon area
+        fontSize = estimateFontSize(ring);
+        
+        // Fallback to centroid if calculation fails
+        if (!labelPos) {
+          let sumLat = 0, sumLng = 0;
+          ring.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
+          labelPos = [sumLat / ring.length, sumLng / ring.length];
+        }
       }
 
-      if (centroid) {
+      if (labelPos) {
         // Determine CSS class based on interaction state
         let labelClass = 'map-label';
         if (selectedTown?.town_name === town) {
           labelClass = 'map-label map-label--selected';
         }
 
-        // Create label using CSS classes for consistent styling
+        // Create label with scale-aware sizing
+        const html = `<div class="${labelClass}" style="font-size: ${fontSize}px">${town}</div>`;
         const label = window.L.divIcon({
-          html: `<div class="${labelClass}">${town}</div>`,
+          html,
           iconSize: null,
           iconAnchor: null,
           popupAnchor: null,
           className: 'map-label-icon',
         });
-        window.L.marker(centroid, { icon: label, interactive: false }).addTo(labelsRef.current);
+        
+        // Convert to Leaflet LatLng format [lat, lng]
+        const marker = window.L.marker([labelPos[1], labelPos[0]], { icon: label, interactive: false });
+        marker.addTo(labelsRef.current);
       }
     });
   }, [geojson, map, hoveredTown, selectedTown, zoom]);
