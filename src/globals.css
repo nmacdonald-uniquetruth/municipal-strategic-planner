@@ -3,52 +3,66 @@
 
 .map-label {
   font-family: 'Raleway', Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1f2937;
   text-align: center;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
-  letter-spacing: 0.3px;
-  /* High-contrast halo using multi-layer text-shadow for accessibility across all basemaps */
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  /* Professional multi-layer text halo for maximum readability and contrast */
   text-shadow:
-    0 0 2px rgba(255,255,255,0.95),
-    0 0 4px rgba(255,255,255,0.9),
-    -0.5px -0.5px 1px rgba(255,255,255,0.85),
-    0.5px -0.5px 1px rgba(255,255,255,0.85),
-    -0.5px 0.5px 1px rgba(255,255,255,0.85),
-    0.5px 0.5px 1px rgba(255,255,255,0.85),
-    -1px -1px 2px rgba(255,255,255,0.8),
-    1px -1px 2px rgba(255,255,255,0.8),
-    -1px 1px 2px rgba(255,255,255,0.8),
-    1px 1px 2px rgba(255,255,255,0.8);
+    /* Core white halo — thick, opaque base for visibility on dark polygons */
+    0 0 1px rgba(255,255,255,0.95),
+    0 0 2px rgba(255,255,255,0.92),
+    0 0 3px rgba(255,255,255,0.88),
+    /* Directional softening for edge contrast */
+    -0.5px -0.5px 1.5px rgba(255,255,255,0.9),
+    0.5px -0.5px 1.5px rgba(255,255,255,0.9),
+    -0.5px 0.5px 1.5px rgba(255,255,255,0.9),
+    0.5px 0.5px 1.5px rgba(255,255,255,0.9),
+    /* Extended outer halo for depth and polish */
+    -1px -1px 2px rgba(255,255,255,0.85),
+    1px -1px 2px rgba(255,255,255,0.85),
+    -1px 1px 2px rgba(255,255,255,0.85),
+    1px 1px 2px rgba(255,255,255,0.85),
+    /* Final subtle dark outline for crisp definition */
+    -0.5px -0.5px 0px rgba(31,41,55,0.2);
+  transition: all 0.15s ease-out;
 }
 
 .map-label:hover {
   font-weight: 800;
-  color: #111827;
+  color: #0f172a;
   text-shadow:
-    0 0 3px rgba(255,255,255,0.98),
-    0 0 6px rgba(255,255,255,0.95),
-    -1px -1px 2px rgba(255,255,255,0.9),
-    1px -1px 2px rgba(255,255,255,0.9),
-    -1px 1px 2px rgba(255,255,255,0.9),
-    1px 1px 2px rgba(255,255,255,0.9),
-    -1.5px -1.5px 3px rgba(255,255,255,0.85),
-    1.5px -1.5px 3px rgba(255,255,255,0.85),
-    -1.5px 1.5px 3px rgba(255,255,255,0.85),
-    1.5px 1.5px 3px rgba(255,255,255,0.85);
+    0 0 1px rgba(255,255,255,0.98),
+    0 0 3px rgba(255,255,255,0.96),
+    0 0 5px rgba(255,255,255,0.92),
+    -1px -1px 2px rgba(255,255,255,0.94),
+    1px -1px 2px rgba(255,255,255,0.94),
+    -1px 1px 2px rgba(255,255,255,0.94),
+    1px 1px 2px rgba(255,255,255,0.94),
+    -1.5px -1.5px 3px rgba(255,255,255,0.88),
+    1.5px -1.5px 3px rgba(255,255,255,0.88),
+    -1.5px 1.5px 3px rgba(255,255,255,0.88),
+    1.5px 1.5px 3px rgba(255,255,255,0.88);
 }
 
 .map-label--selected {
   font-weight: 900;
   color: #344A60;
   text-shadow:
-    0 0 4px rgba(255,255,255,0.99),
-    0 0 8px rgba(255,255,255,0.97),
-    -2px -2px 3px rgba(255,255,255,0.92),
-    2px -2px 3px rgba(255,255,255,0.92),
-    -2px 2px 3px rgba(255,255,255,0.92),
-    2px 2px 3px rgba(255,255,255,0.92);
+    0 0 2px rgba(255,255,255,0.99),
+    0 0 4px rgba(255,255,255,0.98),
+    0 0 6px rgba(255,255,255,0.96),
+    -1.5px -1.5px 2.5px rgba(255,255,255,0.94),
+    1.5px -1.5px 2.5px rgba(255,255,255,0.94),
+    -1.5px 1.5px 2.5px rgba(255,255,255,0.94),
+    1.5px 1.5px 2.5px rgba(255,255,255,0.94),
+    -2px -2px 4px rgba(255,255,255,0.9),
+    2px -2px 4px rgba(255,255,255,0.9),
+    -2px 2px 4px rgba(255,255,255,0.9),
+    2px 2px 4px rgba(255,255,255,0.9);
 }
