@@ -66,6 +66,7 @@ const ModelContext = createContext(null);
 export function ModelProvider({ children }) {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [settingsId, setSettingsId] = useState(null);
+  const [planningHorizon, setPlanningHorizon] = useState(5); // 5 or 10 years
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -132,7 +133,7 @@ export function ModelProvider({ children }) {
   };
 
   return (
-    <ModelContext.Provider value={{ settings: computedSettings, updateSettings, loading, milestoneDates, addMonths, startDate }}>
+    <ModelContext.Provider value={{ settings: computedSettings, updateSettings, planningHorizon, setPlanningHorizon, loading, milestoneDates, addMonths, startDate }}>
       {children}
     </ModelContext.Provider>
   );
