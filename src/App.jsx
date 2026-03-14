@@ -9,6 +9,7 @@ import { ModelProvider } from './components/machias/ModelContext.jsx';
 
 import AppLayout from './components/machias/AppLayout';
 import Layout from './Layout';
+import { DepartmentProvider } from './components/strategic/DepartmentContext';
 import Dashboard from './pages/Dashboard';
 import ProForma from './pages/ProForma';
 import Positions from './pages/Positions';
@@ -97,9 +98,11 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <AuthenticatedApp />
-        </Router>
+        <DepartmentProvider>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+        </DepartmentProvider>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
