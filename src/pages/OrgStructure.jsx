@@ -50,6 +50,22 @@ export default function OrgStructure() {
     if (data.length === 0) {
       await seedData();
     } else {
+      // Live-patch: if SA/BS/RC/GA/Controller are still parented to finance_hr dept
+      // (old seed), update them to point to finance_dir in the DB once.
+      const financeDir = data.find(n => n.name && n.name.includes('Finance Director'));
+      if (financeDir) {
+        const needsPatch = data.filter(n =>
+          ['Staff Accountant','Billing Specialist','Revenue Coordinator','GA Coordinator','Controller'].includes(n.name) &&
+          n.parent_id !== financeDir.id
+        );
+        if (needsPatch.length > 0) {
+          await Promise.all(needsPatch.map(n => base44.entities.OrgNode.update(n.id, { parent_id: financeDir.id })));
+          const refreshed = await base44.entities.OrgNode.list('sort_order', 500);
+          setNodes(refreshed);
+          setLoading(false);
+          return;
+        }
+      }
       setNodes(data);
     }
     setLoading(false);
