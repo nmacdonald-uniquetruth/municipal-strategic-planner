@@ -1,0 +1,402 @@
+// Dynamic Financial Proposal Engine
+// Generates structured proposals for each department using live financial model data
+
+export async function generateDepartmentProposal(department, base44, settings, planningHorizon, regionalParticipations) {
+  // Filter participations for this department
+  const deptParticipations = regionalParticipations.filter(p => p.department === department);
+  const participatingTowns = deptParticipations.filter(p => p.status !== 'not_participating').map(p => p.municipality);
+  const activeTowns = deptParticipations.filter(p => p.status === 'active_partner' || p.status === 'host').map(p => p.municipality);
+  const hostTown = deptParticipations.find(p => p.host_town);
+
+  // Department metadata
+  const deptMetadata = getDepartmentMetadata(department);
+
+  // Calculate financial metrics
+  const totalAnnualFees = deptParticipations
+    .filter(p => p.annual_fee)
+    .reduce((sum, p) => sum + p.annual_fee, 0);
+
+  const projectedAnnualRevenue = totalAnnualFees * planningHorizon;
+  const horizonYears = planningHorizon;
+
+  // Staffing model - derive from PositionConfig or FinancialServicesStaffing
+  const staffingRoles = deptMetadata.baselineStaffing || [];
+  const totalStaffingCost = staffingRoles.reduce((sum, role) => {
+    const annual = (role.base_salary || 0) + ((role.base_salary || 0) * 0.35); // Add ~35% for benefits
+    return sum + annual;
+  }, 0);
+
+  // Cost allocation methodology
+  const pricingMethods = new Set(deptParticipations.map(p => p.pricing_method).filter(Boolean));
+
+  return {
+    department,
+    deptMetadata,
+    sections: {
+      executiveSummary: generateExecutiveSummary(department, deptMetadata, activeTowns.length, totalAnnualFees),
+      serviceDescription: generateServiceDescription(department, deptMetadata),
+      participatingTowns: generateParticipatingTowns(participatingTowns, activeT owns, hostTown),
+      staffingModel: generateStaffingModel(staffingRoles, totalStaffingCost),
+      serviceDeliveryModel: generateServiceDeliveryModel(department, deptMetadata, hostTown),
+      financialModel: generateFinancialModel(totalAnnualFees, totalStaffingCost, horizonYears),
+      costAllocationMethod: generateCostAllocation(deptMetadata, pricingMethods),
+      revenueOpportunities: generateRevenueOpportunities(department, deptMetadata, deptParticipations),
+      costSavingsPotential: generateCostSavings(department, deptMetadata),
+      riskFactors: generateRiskFactors(department, deptMetadata),
+      implementationTimeline: generateImplementationTimeline(department, deptMetadata),
+      governanceModel: generateGovernanceModel(department, deptMetadata),
+      contractStructure: generateContractStructure(department, deptMetadata),
+      nextSteps: generateNextSteps(department, deptMetadata),
+    },
+    metadata: {
+      generatedDate: new Date().toISOString(),
+      planningHorizon,
+      participatingTownsCount: participatingTowns.length,
+      activeTownsCount: activeTowns.length,
+      totalProjectedRevenue: projectedAnnualRevenue,
+      annualRevenue: totalAnnualFees,
+      staffingCost: totalStaffingCost,
+    },
+  };
+}
+
+function getDepartmentMetadata(department) {
+  const metadata = {
+    admin: {
+      label: 'Administration',
+      serviceArea: 'Municipal administration, personnel, IT, facilities',
+      baselineStaffing: [
+        { role: 'Administrative Director', base_salary: 68000, status: 'host' },
+        { role: 'Administrative Assistant', base_salary: 39000, status: 'host' },
+      ],
+      regionalRationale: 'Consolidate administrative overhead, reduce redundant management layers, share IT infrastructure',
+      keyOutcomes: ['Reduced administrative overhead', 'Standardized policies and procedures', 'Enhanced data security', 'Improved records management'],
+    },
+    finance: {
+      label: 'Financial Services',
+      serviceArea: 'Accounting, billing, revenue collection, financial reporting',
+      baselineStaffing: [
+        { role: 'Finance Director', base_salary: 68000, status: 'host' },
+        { role: 'Staff Accountant', base_salary: 65000, status: 'host' },
+        { role: 'Billing Specialist', base_salary: 55000, status: 'host' },
+      ],
+      regionalRationale: 'Centralize accounting, eliminate Comstar outsourcing fees, improve collection rates, ensure GASB compliance',
+      keyOutcomes: ['Comstar fees avoided', 'Improved collection rates', 'Faster billing cycle', 'Better financial reporting'],
+    },
+    transfer_station: {
+      label: 'Transfer Station',
+      serviceArea: 'Solid waste transfer, recycling operations, hazardous waste',
+      baselineStaffing: [
+        { role: 'Transfer Station Manager', base_salary: 48000, status: 'host' },
+        { role: 'Operations Technician', base_salary: 42000, status: 'host' },
+      ],
+      regionalRationale: 'Negotiate better waste tipping fees, expand member base, leverage economies of scale',
+      keyOutcomes: ['Lower per-ton disposal costs', 'Expanded service area', 'Increased revenue per user', 'Environmental standards'],
+    },
+    assessor: {
+      label: 'Tax Assessor',
+      serviceArea: 'Property assessment, valuation, tax mapping, exemption administration',
+      baselineStaffing: [
+        { role: 'Assessor', base_salary: 52000, status: 'host' },
+        { role: 'Assessment Technician', base_salary: 38000, status: 'support' },
+      ],
+      regionalRationale: 'Standardize assessment practices, improve tax collection compliance, reduce professional assessment costs',
+      keyOutcomes: ['Consistent valuation methodology', 'Improved equalization rates', 'Reduced assessment litigation'],
+    },
+    animal_control: {
+      label: 'Animal Control Officer',
+      serviceArea: 'Animal welfare, nuisance complaints, enforcement, shelter operations',
+      baselineStaffing: [
+        { role: 'Animal Control Officer', base_salary: 42000, status: 'shared' },
+      ],
+      regionalRationale: 'Share ACO capacity across towns, provide 24/7 coverage, reduce response times',
+      keyOutcomes: ['Better animal welfare', 'Faster response times', 'Lower per-town ACO cost', 'Legal compliance'],
+    },
+    ambulance: {
+      label: 'Ambulance / EMS',
+      serviceArea: 'Emergency medical services, patient transport, first responder coordination',
+      baselineStaffing: [
+        { role: 'EMS Director', base_salary: 55000, status: 'host' },
+        { role: 'Paramedic (Full-time)', base_salary: 52000, status: 'staffing' },
+        { role: 'EMT-Basic', base_salary: 38000, status: 'staffing' },
+      ],
+      regionalRationale: 'Improve response capability, reduce reliance on mutual aid, increase external billing revenue',
+      keyOutcomes: ['Improved response times', 'Better clinical outcomes', 'Expanded external billing', 'Shared equipment costs'],
+    },
+    police: {
+      label: 'Police Department',
+      serviceArea: 'Law enforcement, public safety, emergency response',
+      baselineStaffing: [
+        { role: 'Police Chief', base_salary: 62000, status: 'host' },
+        { role: 'Police Officer', base_salary: 48000, status: 'staffing' },
+      ],
+      regionalRationale: 'Coordinated patrol coverage, shared specialized services, joint training programs',
+      keyOutcomes: ['24/7 patrol coverage', 'Specialized service access', 'Reduced per-capita cost', 'Unified dispatch'],
+    },
+    fire: {
+      label: 'Fire Department',
+      serviceArea: 'Fire suppression, emergency response, fire prevention, public education',
+      baselineStaffing: [
+        { role: 'Fire Chief', base_salary: 60000, status: 'host' },
+        { role: 'Firefighter', base_salary: 45000, status: 'staffing' },
+      ],
+      regionalRationale: 'Joint training academy, shared equipment/apparatus, coordinated response protocols',
+      keyOutcomes: ['Better response capability', 'Shared training costs', 'Equipment redundancy', 'Standardized procedures'],
+    },
+    inspection: {
+      label: 'Regional Inspection Services',
+      serviceArea: 'Code enforcement, building inspection, plumbing, electrical, health inspections',
+      baselineStaffing: [
+        { role: 'Local Plumbing Inspector', base_salary: 45000, status: 'shared' },
+        { role: 'Building Inspector', base_salary: 50000, status: 'shared' },
+      ],
+      regionalRationale: 'Reduce code enforcement backlog, provide consistent standards, improve permitting timelines',
+      keyOutcomes: ['Faster permitting', 'Consistent code enforcement', 'Lower certification costs', 'Better compliance'],
+    },
+  };
+
+  return metadata[department] || { label: department, serviceArea: '', baselineStaffing: [] };
+}
+
+function generateExecutiveSummary(department, metadata, activeTowns, totalAnnualFees) {
+  const label = metadata.label;
+  return {
+    title: `${label} Regional Service Proposal`,
+    overview: `This proposal outlines a regional ${label} delivery model for Machias Bay municipalities. The service consolidates operations across ${activeTowns} towns, leveraging economies of scale to reduce per-capita costs while improving service quality and consistency.`,
+    keyMetrics: [
+      `Participating Towns: ${activeTowns}`,
+      `Projected Annual Revenue: $${totalAnnualFees.toLocaleString()}`,
+      `Service Area: ${metadata.serviceArea}`,
+      `Regional Rationale: ${metadata.regionalRationale}`,
+    ],
+  };
+}
+
+function generateServiceDescription(department, metadata) {
+  return {
+    title: 'Service Description',
+    overview: metadata.serviceArea,
+    scope: metadata.keyOutcomes || [],
+    standards: [
+      'Maine state regulations and municipal codes',
+      'Industry best practices and professional standards',
+      'Consistent service levels across all participating towns',
+    ],
+  };
+}
+
+function generateParticipatingTowns(allTowns, activeTowns, hostTown) {
+  return {
+    title: 'Participating Towns',
+    host: hostTown?.municipality || 'TBD',
+    participating: allTowns.length,
+    active: activeTowns.length,
+    towns: allTowns.map(t => ({
+      name: t,
+      status: activeTowns.includes(t) ? 'Active' : 'Prospect',
+    })),
+  };
+}
+
+function generateStaffingModel(roles, totalCost) {
+  const benefitsMultiplier = 1.35; // ~35% for benefits, taxes, overhead
+  return {
+    title: 'Staffing Model',
+    description: 'Regional service delivery requires dedicated, professional staffing',
+    positions: roles.map(r => ({
+      title: r.role,
+      baseSalary: r.base_salary,
+      fullyLoaded: Math.round(r.base_salary * benefitsMultiplier),
+      status: r.status,
+    })),
+    totalAnnualCost: Math.round(totalCost),
+  };
+}
+
+function generateServiceDeliveryModel(department, metadata, hostTown) {
+  return {
+    title: 'Service Delivery Model',
+    host: hostTown?.municipality || 'Machias',
+    structure: `Hub-and-spoke model with ${hostTown?.municipality || 'Machias'} as the service hub. Regional staff operate under centralized management with satellite offices in participating towns as needed.`,
+    coverage: '24/7 for emergency services; regular business hours for administrative and technical services.',
+    accountability: 'Monthly performance reporting to regional board; annual service level agreements with each town.',
+  };
+}
+
+function generateFinancialModel(annualRevenue, staffingCost, horizonYears) {
+  const netCashflow = annualRevenue - staffingCost;
+  const horizonTotal = netCashflow * horizonYears;
+  return {
+    title: 'Financial Model',
+    annualRevenue: annualRevenue,
+    annualOperatingCost: staffingCost,
+    annualNetCashflow: netCashflow,
+    projectedPeriod: `${horizonYears}-year horizon`,
+    horizonTotalValue: horizonTotal,
+    breakEven: netCashflow > 0 ? `Year 1` : `To be determined based on ramp-up',
+  };
+}
+
+function generateCostAllocation(metadata, pricingMethods) {
+  const methodLabel = Array.from(pricingMethods).join(', ') || 'Per capita / weighted per capita';
+  return {
+    title: 'Cost Allocation Method',
+    primary: methodLabel,
+    description: 'Transparent, formula-driven allocation ensures equity across participating towns.',
+    methodology: [
+      'Annual costs divided by sum of allocation units (population, households, services, or incidents)',
+      'Each town allocated share = (its units / total units) × total service cost',
+      'Annual true-up ensures no town overpays or underpays',
+    ],
+  };
+}
+
+function generateRevenueOpportunities(department, metadata, deptParticipations) {
+  const baseOpportunities = {
+    finance: [
+      'Comstar billing fee elimination (current 5.22% of gross EMS collections)',
+      'Improved collection rates through professional in-house billing',
+      'External EMS billing to non-covered patients and inter-facility transfers',
+      'Regional grant funding for financial system modernization',
+    ],
+    ambulance: [
+      'External EMS billing revenue (non-covered transports, inter-facility)',
+      'Mutual aid reimbursement agreements with neighboring regions',
+      'Grant funding for EMS training and equipment',
+      'Standby and special event billing',
+    ],
+    transfer_station: [
+      'Tipping fee revenue from member towns',
+      'Recycled materials revenue (metals, cardboard)',
+      'Hazardous waste event fees',
+      'Expanded service area (non-member town contracts)',
+    ],
+  };
+
+  return {
+    title: 'Revenue Opportunities',
+    opportunities: baseOpportunities[department] || [
+      'Regional contract expansion',
+      'Grant funding',
+      'Efficiency-driven fee reductions',
+    ],
+  };
+}
+
+function generateCostSavings(department, metadata) {
+  const baseSavings = {
+    finance: [
+      'Eliminate Comstar fee ($45K–$65K annually)',
+      'Reduce accounting services outsourcing',
+      'Standardize financial systems across region',
+    ],
+    admin: [
+      'Consolidate IT infrastructure and support',
+      'Reduce duplicate HR/payroll processing',
+      'Standardize insurance and vendor contracts',
+    ],
+    ambulance: [
+      'Consolidated EMS training and certification',
+      'Shared equipment purchasing and maintenance',
+      'Coordinated staffing reduces overtime',
+    ],
+    transfer_station: [
+      'Negotiate better waste tipping rates',
+      'Shared equipment and repairs',
+      'Coordinated procurement',
+    ],
+  };
+
+  return {
+    title: 'Cost Savings Potential',
+    savingsCategory: baseSavings[department] || ['Operational efficiency', 'Reduced overhead', 'Shared services'],
+  };
+}
+
+function generateRiskFactors(department, metadata) {
+  return {
+    title: 'Risk Factors & Mitigation',
+    risks: [
+      {
+        risk: 'Staffing recruitment and retention in rural setting',
+        mitigation: 'Competitive salary, benefits, and professional development opportunities',
+      },
+      {
+        risk: 'Governance coordination across multiple town boards',
+        mitigation: 'Formal interlocal agreement with clear decision-making authority',
+      },
+      {
+        risk: 'Service continuity during transitions or personnel changes',
+        mitigation: 'Documented procedures, cross-training, and redundancy planning',
+      },
+      {
+        risk: 'Potential service quality variation across towns',
+        mitigation: 'Unified service standards and performance metrics',
+      },
+    ],
+  };
+}
+
+function generateImplementationTimeline(department, metadata) {
+  return {
+    title: 'Implementation Timeline',
+    phases: [
+      {
+        phase: 'Phase 1: Planning & Negotiation',
+        duration: '3–6 months',
+        tasks: ['Interlocal agreement negotiation', 'Budget forecasting', 'Stakeholder engagement'],
+      },
+      {
+        phase: 'Phase 2: Staffing & Infrastructure',
+        duration: '3–4 months',
+        tasks: ['Position recruitment', 'Systems setup', 'Equipment procurement'],
+      },
+      {
+        phase: 'Phase 3: Launch & Stabilization',
+        duration: '6–12 months',
+        tasks: ['Service launch', 'Process refinement', 'Performance monitoring'],
+      },
+    ],
+  };
+}
+
+function generateGovernanceModel(department, metadata) {
+  return {
+    title: 'Governance Model',
+    structure: 'Regional Board of Selectpersons or designated representatives from each participating town',
+    responsibilities: [
+      'Approve annual budget and service levels',
+      'Monitor performance metrics',
+      'Resolve disputes and exceptions',
+      'Authorize major policy changes',
+    ],
+    staffing: `${metadata.label} leadership reports to Regional Board; operational decisions delegated to professional staff within policy guidelines.`,
+  };
+}
+
+function generateContractStructure(department, metadata) {
+  return {
+    title: 'Contract Structure',
+    agreement: 'Interlocal Agreement per Maine Revised Statutes § 3961 (Regional School Unit model or municipal cooperation)',
+    terms: [
+      'Initial term: 3–5 years with annual renewal option',
+      'Exit clause: 12 months notice with wound-down costs',
+      'True-up provision: Annual reconciliation of actual vs. budgeted costs',
+      'Service level agreement: Specific performance metrics and response times',
+    ],
+  };
+}
+
+function generateNextSteps(department, metadata) {
+  return {
+    title: 'Recommended Next Steps',
+    steps: [
+      '1. Formal presentation to Select Board(s) and Budget Committee(s)',
+      '2. Stakeholder engagement: town managers, department heads, employees',
+      '3. Detailed financial modeling with participating towns',
+      '4. Draft interlocal agreement (legal review)',
+      '5. Town Meeting warrant articles for formal approval',
+      '6. Phased implementation planning if approved',
+    ],
+  };
+}
