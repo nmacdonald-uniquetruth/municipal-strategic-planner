@@ -241,21 +241,21 @@ export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
 
   return (
     <div ref={containerRef} style={{ position: 'absolute', inset: 0 }}>
-      {/* Controls */}
-      <div className="absolute top-3 right-3 z-10 flex flex-col gap-1" data-ctrl="1">
+      {/* Zoom controls — top-right inset */}
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-1.5 rounded-xl bg-white border border-slate-200 shadow-md p-1.5" data-ctrl="1">
         {[
-          { l: '+', a: () => setScale(s => Math.min(2.5, s * 1.2)) },
-          { l: '−', a: () => setScale(s => Math.max(0.15, s / 1.2)) },
-          { l: '⊡', a: fitView },
-        ].map(({ l, a }) => (
-          <button key={l} data-ctrl="1" onClick={a}
-            className="h-8 w-8 rounded-lg bg-white border border-slate-200 shadow text-sm font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center">
+          { l: '+', title: 'Zoom in',   a: () => setScale(s => Math.min(2.5, s * 1.2)) },
+          { l: '−', title: 'Zoom out',  a: () => setScale(s => Math.max(0.15, s / 1.2)) },
+          { l: '⊡', title: 'Fit view', a: fitView },
+        ].map(({ l, title, a }) => (
+          <button key={l} data-ctrl="1" onClick={a} title={title}
+            className="h-8 w-8 rounded-lg bg-white border border-slate-100 shadow-sm text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 flex items-center justify-center transition-all">
             {l}
           </button>
         ))}
-      </div>
-      <div className="absolute bottom-3 right-3 z-10 text-[10px] text-slate-400 bg-white/80 px-2 py-1 rounded">
-        {Math.round(scale * 100)}%
+        <div className="text-center text-[9px] text-slate-400 pt-0.5 font-mono">
+          {Math.round(scale * 100)}%
+        </div>
       </div>
 
       <svg ref={svgRef} width="100%" height="100%"
