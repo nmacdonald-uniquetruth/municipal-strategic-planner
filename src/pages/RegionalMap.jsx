@@ -27,7 +27,7 @@ const BASEMAPS = {
 };
 
 // ─── Component to add town labels on map ─────────────────────────────────────
-function TownLabels({ geojson }) {
+function TownLabels({ geojson, hoveredTown, selectedTown }) {
   const map = useMap();
   const labelsRef = useRef(null);
 
@@ -56,28 +56,19 @@ function TownLabels({ geojson }) {
       }
 
       if (centroid) {
-        // Create a permanent label using HTML with branding
+        // Determine CSS class based on interaction state
+        let labelClass = 'map-label';
+        if (selectedTown?.town_name === town) {
+          labelClass = 'map-label map-label--selected';
+        }
+
+        // Create label using CSS classes for consistent styling
         const label = window.L.divIcon({
-          html: `<div style="
-            font-family: 'Raleway', Arial, Helvetica, sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: #344A60;
-            text-shadow: 
-              0 0 4px rgba(255,255,255,0.9),
-              0 0 6px rgba(255,255,255,0.8),
-              -1.5px -1.5px 3px rgba(255,255,255,0.85),
-              1.5px -1.5px 3px rgba(255,255,255,0.85),
-              -1.5px 1.5px 3px rgba(255,255,255,0.85),
-              1.5px 1.5px 3px rgba(255,255,255,0.85);
-            text-align: center;
-            white-space: nowrap;
-            pointer-events: none;
-            letter-spacing: 0.3px;
-          ">${town}</div>`,
+          html: `<div class="${labelClass}">${town}</div>`,
           iconSize: null,
           iconAnchor: null,
           popupAnchor: null,
+          className: 'map-label-icon',
         });
         window.L.marker(centroid, { icon: label, interactive: false }).addTo(labelsRef.current);
       }
