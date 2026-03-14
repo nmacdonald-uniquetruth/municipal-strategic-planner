@@ -9,6 +9,7 @@ import TownInfoPanel from '../components/map/TownInfoPanel';
 import ComparisonView from '../components/map/ComparisonView';
 import RelationshipPlanningPanel from '../components/regionalmap/RelationshipPlanningPanel';
 import { TOWN_PROFILES, TOWN_FILL_COLORS, ARCGIS_URL } from '../components/map/TownProfiles';
+import { findLabelCenter, estimateFontSize, isTooCloseToBoundary, getLabelAnchor } from '../components/map/LabelPlacementEngine';
 
 // ─── Basemap options ───────────────────────────────────────────────────────────
 const BASEMAPS = {
