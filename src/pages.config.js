@@ -50,7 +50,6 @@
 import AIPlanner from './pages/AIPlanner';
 import CommunicationStrategy from './pages/CommunicationStrategy';
 import Dashboard from './pages/Dashboard';
-import ERPRoadmapPage from './pages/ERPRoadmapPage';
 import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
 import EnterpriseFunds from './pages/EnterpriseFunds';
 import FinancialSimulator from './pages/FinancialSimulator';
@@ -80,7 +79,6 @@ export const PAGES = {
     "AIPlanner": AIPlanner,
     "CommunicationStrategy": CommunicationStrategy,
     "Dashboard": Dashboard,
-    "ERPRoadmapPage": ERPRoadmapPage,
     "EfficiencyAnalyzer": EfficiencyAnalyzer,
     "EnterpriseFunds": EnterpriseFunds,
     "FinancialSimulator": FinancialSimulator,
