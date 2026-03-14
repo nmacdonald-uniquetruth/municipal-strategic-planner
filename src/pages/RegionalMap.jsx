@@ -229,6 +229,8 @@ export default function RegionalMap() {
   const [selectedTown, setSelectedTown] = useState(null);
   const [hoveredTown, setHoveredTown] = useState(null);
   const [basemap, setBasemap] = useState('light');
+  const [comparisonMode, setComparisonMode] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState([]);
   const [layers, setLayers] = useState([
     { id: 'boundaries', label: 'Municipal Boundaries', color: '#1a3a5c', visible: true, available: true },
     { id: 'roads', label: 'Roads', color: '#7a5c1a', visible: false, available: false },
