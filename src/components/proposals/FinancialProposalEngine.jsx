@@ -18,7 +18,6 @@ export async function generateDepartmentProposal(department, base44, settings, p
 
   const projectedAnnualRevenue = totalAnnualFees * planningHorizon;
   const horizonYears = planningHorizon;
-  const activeTowns = deptParticipations.filter(p => p.status === 'active_partner' || p.status === 'host').map(p => p.municipality);
 
   // Staffing model - derive from PositionConfig or FinancialServicesStaffing
   const staffingRoles = deptMetadata.baselineStaffing || [];
@@ -234,7 +233,7 @@ function generateFinancialModel(annualRevenue, staffingCost, horizonYears) {
     annualNetCashflow: netCashflow,
     projectedPeriod: `${horizonYears}-year horizon`,
     horizonTotalValue: horizonTotal,
-    breakEven: netCashflow > 0 ? `Year 1` : `To be determined based on ramp-up',
+    breakEven: netCashflow > 0 ? 'Year 1' : 'To be determined based on ramp-up',
   };
 }
 
@@ -371,7 +370,7 @@ function generateGovernanceModel(department, metadata) {
       'Resolve disputes and exceptions',
       'Authorize major policy changes',
     ],
-    staffing: `${metadata.label} leadership reports to Regional Board; operational decisions delegated to professional staff within policy guidelines.`,
+    staffing: metadata.label + ' leadership reports to Regional Board; operational decisions delegated to professional staff within policy guidelines.',
   };
 }
 
