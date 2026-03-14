@@ -146,15 +146,16 @@ export function getDynamicPositions(settings) {
 // ─── Build a flat list of all positions given settings ────────────────────────
 export function getAllPositions(settings) {
   const dynamic = getDynamicPositions(settings);
-  const all = [...STATIC_POSITIONS, ...dynamic];
+  let all = [...STATIC_POSITIONS, ...dynamic];
 
-  // Filter part-time if hidden
-  if (!settings.SHOW_PART_TIME_POSITIONS) {
-    return all.filter(p => p.fullTime !== false || p.status === 'filled');
-  }
-  // Filter vacant if hidden
+  // Never filter structural nodes — they must always appear
+  // Filter vacant positions (only applies to position nodes)
   if (!settings.SHOW_VACANT_POSITIONS) {
-    return all.filter(p => p.status !== 'vacant');
+    all = all.filter(p => p.nodeType === 'structural' || p.status !== 'vacant');
+  }
+  // Filter part-time positions (only applies to position nodes)
+  if (!settings.SHOW_PART_TIME_POSITIONS) {
+    all = all.filter(p => p.nodeType === 'structural' || p.fullTime !== false);
   }
   return all;
 }
