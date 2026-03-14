@@ -48,9 +48,14 @@ export default function ModelSettingsEditor() {
   const [local, setLocal] = useState(settings);
   const set = (k) => (v) => setLocal(s => ({ ...s, [k]: v }));
 
+  const [orgLocal, setOrgLocal] = useState(readOrgChartSettings);
+  const setOrg = (k) => (v) => setOrgLocal(s => ({ ...s, [k]: v }));
+  const setOrgBool = (k) => (e) => setOrgLocal(s => ({ ...s, [k]: e.target.checked }));
+
   const save = async () => {
     await updateSettings(local);
-    toast({ title: 'Settings saved', description: 'All figures updated. Dates will ripple to milestones.' });
+    saveOrgChartSettings(orgLocal);
+    toast({ title: 'Settings saved', description: 'All figures updated. Org chart settings applied.' });
   };
 
   return (
