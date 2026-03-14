@@ -1,210 +1,275 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
-import { Network } from 'lucide-react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { Network, Settings2, ChevronDown } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
-import OrgSVGCanvas from '../components/orgchart/OrgSVGCanvas';
-import OrgDetailPanel from '../components/orgchart/OrgDetailPanel';
-import OrgBudgetSummary from '../components/orgchart/OrgBudgetSummary';
-import OrgDeptView from '../components/orgchart/OrgDeptView';
-import { SEED_POSITIONS, SEED_EMPLOYEES, getVisiblePositions, buildTree } from '../components/orgchart/OrgData';
-import { useModel } from '../components/machias/ModelContext';
+import OrgTreeCanvas from '../components/orgchart/OrgTreeCanvas';
+import {
+  getAllPositions, buildOrgTree,
+  DEFAULT_ORG_SETTINGS, FINANCE_STRUCTURES, BILLING_STRUCTURES, GA_STRUCTURES,
+  DEPT_COLORS,
+} from '../components/orgchart/OrgChartData';
 
-// ─── Seed data if empty ───────────────────────────────────────────────────────
-async function seedIfEmpty() {
-  const [pos, emp] = await Promise.all([
-    base44.entities.OrgPosition.list(),
-    base44.entities.OrgEmployee.list(),
-  ]);
-  const ops = [];
-  if (!pos || pos.length === 0) ops.push(base44.entities.OrgPosition.bulkCreate(SEED_POSITIONS));
-  if (!emp || emp.length === 0) ops.push(base44.entities.OrgEmployee.bulkCreate(SEED_EMPLOYEES));
-  if (ops.length > 0) await Promise.all(ops);
+// ─── Settings panel ───────────────────────────────────────────────────────────
+function SettingsPanel({ settings, onChange }) {
+  const sel = (key, options) => (
+    <div key={key} className="space-y-1">
+      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+        {key.replace(/_/g, ' ')}
+      </label>
+      <select
+        value={settings[key]}
+        onChange={e => onChange({ ...settings, [key]: e.target.value })}
+        className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400"
+      >
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+
+  const tog = (key, label) => (
+    <label key={key} className="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" checked={settings[key]}
+        onChange={e => onChange({ ...settings, [key]: e.target.checked })}
+        className="rounded" />
+      <span className="text-xs text-slate-700">{label}</span>
+    </label>
+  );
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <div className="bg-slate-900 px-4 py-3 flex items-center gap-2">
+        <Settings2 className="h-4 w-4 text-slate-300" />
+        <span className="text-sm font-bold text-white">Chart Settings</span>
+      </div>
+      <div className="p-4 space-y-4">
+        {sel('FINANCE_DEPARTMENT_STRUCTURE', FINANCE_STRUCTURES)}
+        {sel('UTILITY_BILLING_STRUCTURE', BILLING_STRUCTURES)}
+        {sel('GA_REPORTING_STRUCTURE', GA_STRUCTURES)}
+        <div className="space-y-2 border-t border-slate-100 pt-3">
+          {tog('SHOW_VACANT_POSITIONS', 'Show Vacant Positions')}
+          {tog('SHOW_PART_TIME_POSITIONS', 'Show Part-Time Positions')}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-// ─── Map ModelSettings → scenario config for getVisiblePositions ──────────────
-function buildScenarioFromSettings(settings) {
-  // y1_staffing_model: 'fulltime_sa' → two_sa, 'parttime_stipend' → sa_ptsa
-  // y5_senior_hire: 'controller' → controller_sa, 'staff_accountant' → two_sa
-  let finance_structure = 'two_sa';
-  if (settings.y5_senior_hire === 'controller') {
-    finance_structure = 'controller_sa';
-  } else if (settings.y1_staffing_model === 'parttime_stipend') {
-    finance_structure = 'sa_ptsa';
-  }
+// ─── Node detail panel ────────────────────────────────────────────────────────
+function DetailPanel({ node, allPositions, onClose }) {
+  if (!node) return null;
+  const color = DEPT_COLORS[node.dept] || '#344A60';
+  const supervisor = allPositions.find(p => p.id === node.reportsTo);
+  const reports = allPositions.filter(p => p.reportsTo === node.id);
 
-  return {
-    name: 'Current Model Settings',
-    finance_structure,
-    billing_structure: 'bs_rc', // show all billing/revenue positions
-    ga_reporting: 'finance_director',
-    show_vacant: true,
-    show_part_time: true,
-    enable_regional: true,
-    color: '#344A60',
-  };
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <div className="px-4 py-4 text-white relative" style={{ background: color }}>
+        <button onClick={onClose}
+          className="absolute top-3 right-3 text-white/70 hover:text-white text-lg leading-none">×</button>
+        <p className="text-sm font-bold pr-6">{node.title}</p>
+        <p className="text-[11px] opacity-80 mt-0.5">{node.dept}</p>
+        <div className="mt-2 flex gap-1.5 flex-wrap">
+          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'}`}>
+            {node.status}
+          </span>
+          {!node.fullTime && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20">Part-Time</span>}
+          {node.isUnion && <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>}
+          {node.contracted && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20">Contracted</span>}
+        </div>
+      </div>
+
+      <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
+        {node.employee
+          ? <p className="text-sm font-semibold text-slate-900">{node.employee}</p>
+          : <p className="text-sm italic text-amber-600">Position Vacant</p>}
+      </div>
+
+      <div className="px-4 py-3 space-y-2 text-xs">
+        {supervisor && (
+          <div className="flex justify-between">
+            <span className="text-slate-500">Reports To</span>
+            <span className="font-medium text-slate-800 text-right max-w-40">{supervisor.title}</span>
+          </div>
+        )}
+        {reports.length > 0 && (
+          <div>
+            <p className="text-slate-500 mb-1">Direct Reports ({reports.length})</p>
+            <div className="space-y-1">
+              {reports.map(r => (
+                <div key={r.id} className="flex items-center gap-2">
+                  <span className={`h-1.5 w-1.5 rounded-full ${r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                  <span className="text-slate-700">{r.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Dept list view ───────────────────────────────────────────────────────────
+function DeptListView({ positions, selectedId, onSelect }) {
+  const [open, setOpen] = useState({});
+  const byDept = useMemo(() => {
+    const d = {};
+    positions.forEach(p => {
+      if (!d[p.dept]) d[p.dept] = [];
+      d[p.dept].push(p);
+    });
+    return d;
+  }, [positions]);
+
+  return (
+    <div className="p-4 space-y-2">
+      {Object.entries(byDept).map(([dept, pos]) => {
+        const color = DEPT_COLORS[dept] || '#344A60';
+        const isOpen = open[dept] !== false;
+        return (
+          <div key={dept} className="rounded-xl border border-slate-200 overflow-hidden">
+            <button onClick={() => setOpen(o => ({ ...o, [dept]: !isOpen }))}
+              className="w-full flex items-center justify-between px-4 py-2.5 text-white text-sm font-bold"
+              style={{ background: color }}>
+              <span>{dept}</span>
+              <div className="flex items-center gap-2 text-[10px]">
+                <span className="bg-white/20 px-2 py-0.5 rounded-full">{pos.length}</span>
+                <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </button>
+            {isOpen && (
+              <div className="bg-white">
+                {pos.map(p => (
+                  <div key={p.id} onClick={() => onSelect(p)}
+                    className={`flex items-center gap-3 px-4 py-2 border-b border-slate-50 last:border-0 cursor-pointer hover:bg-slate-50 ${selectedId === p.id ? 'bg-blue-50' : ''}`}>
+                    <span className={`h-2 w-2 rounded-full flex-shrink-0 ${p.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-slate-800 truncate">{p.title}</p>
+                      {p.employee && <p className="text-[10px] text-slate-500 truncate">{p.employee}</p>}
+                    </div>
+                    {!p.fullTime && <span className="text-[9px] text-slate-400">PT</span>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Stats bar ────────────────────────────────────────────────────────────────
+function StatsBar({ positions }) {
+  const filled = positions.filter(p => p.status === 'filled').length;
+  const vacant = positions.filter(p => p.status === 'vacant').length;
+  return (
+    <div className="flex gap-2">
+      {[
+        { label: 'Positions', value: positions.length, cls: 'text-slate-900' },
+        { label: 'Filled',    value: filled,            cls: 'text-emerald-700' },
+        { label: 'Vacant',    value: vacant,            cls: 'text-amber-600' },
+      ].map(s => (
+        <div key={s.label} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center min-w-14">
+          <p className={`text-base font-bold ${s.cls}`}>{s.value}</p>
+          <p className="text-[10px] text-slate-500">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Legend ───────────────────────────────────────────────────────────────────
+function Legend() {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Legend</p>
+      <div className="space-y-1.5">
+        {[
+          { color: '#22c55e', label: 'Filled position' },
+          { color: '#f59e0b', label: 'Vacant position' },
+        ].map(({ color, label }) => (
+          <div key={label} className="flex items-center gap-2 text-[11px] text-slate-600">
+            <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
+            {label}
+          </div>
+        ))}
+      </div>
+      <p className="text-[10px] text-slate-400 mt-3">Drag to pan · scroll to zoom · click +/− to collapse</p>
+    </div>
+  );
 }
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function OrgChart() {
-  const { settings, loading: modelLoading } = useModel();
-  const [positions, setPositions] = useState([]);
-  const [employees, setEmployees] = useState([]);
+  const [orgSettings, setOrgSettings] = useState(DEFAULT_ORG_SETTINGS);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [view, setView] = useState('tree'); // 'tree' | 'dept'
-  const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('tree');
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    await seedIfEmpty();
-    const [pos, emp] = await Promise.all([
-      base44.entities.OrgPosition.list('sort_order', 200),
-      base44.entities.OrgEmployee.list('created_date', 200),
-    ]);
-    setPositions(pos || []);
-    setEmployees(emp || []);
-    setLoading(false);
+  const positions = useMemo(() => getAllPositions(orgSettings), [orgSettings]);
+  const tree = useMemo(() => buildOrgTree(positions), [positions]);
+
+  const handleSelect = useCallback((node) => {
+    setSelectedNode(prev => !node || prev?.id === node.id ? null : node);
   }, []);
-
-  useEffect(() => { load(); }, [load]);
-
-  const employeeMap = useMemo(() => {
-    const map = {};
-    employees.forEach(e => { map[e.position_id] = e; });
-    return map;
-  }, [employees]);
-
-  const scenario = useMemo(() => buildScenarioFromSettings(settings), [settings]);
-
-  const enrichedPositions = useMemo(() => {
-    if (!positions.length) return [];
-    return getVisiblePositions(positions, scenario)
-      .map(p => ({ ...p, employee: employeeMap[p.position_id] || null }));
-  }, [positions, scenario, employeeMap]);
-
-  const tree = useMemo(() => buildTree(enrichedPositions, employeeMap), [enrichedPositions, employeeMap]);
-
-  const handleSelectNode = useCallback((node) => {
-    setSelectedNode(prev => !node || prev?.position_id === node.position_id ? null : node);
-  }, []);
-
-  const stats = useMemo(() => {
-    const vis = enrichedPositions.filter(p => !p._hidden);
-    return {
-      total: vis.length,
-      filled: vis.filter(p => p.status === 'filled').length,
-      vacant: vis.filter(p => p.status === 'vacant').length,
-    };
-  }, [enrichedPositions]);
-
-  if (loading || modelLoading) {
-    return (
-      <div className="flex items-center justify-center" style={{ height: 'calc(100vh - 120px)' }}>
-        <div className="text-center space-y-3">
-          <div className="h-10 w-10 rounded-full border-4 border-slate-200 border-t-slate-800 animate-spin mx-auto" />
-          <p className="text-sm text-slate-500">Loading organizational chart…</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 100px)', minHeight: '600px' }}>
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 96px)', minHeight: '600px' }}>
       {/* Header */}
-      <div className="flex-shrink-0 space-y-3 pb-3">
+      <div className="flex-shrink-0 pb-3 space-y-3">
         <SectionHeader
           title="Municipal Organizational Chart"
-          subtitle="Driven by Model Settings — zoom/pan to explore, click any node for details"
+          subtitle="Settings-driven — changes below update the chart instantly"
           icon={Network}
         />
-
-        {/* Stats + view toggle */}
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex gap-2">
-            {[
-              { label: 'Positions', value: stats.total, color: 'text-slate-900' },
-              { label: 'Filled', value: stats.filled, color: 'text-emerald-700' },
-              { label: 'Vacant', value: stats.vacant, color: 'text-amber-600' },
-            ].map(s => (
-              <div key={s.label} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center min-w-16">
-                <p className={`text-lg font-bold ${s.color}`}>{s.value}</p>
-                <p className="text-[10px] text-slate-500">{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* View toggle */}
+          <StatsBar positions={positions} />
           <div className="flex rounded-lg border border-slate-200 bg-white p-1 gap-1">
-            {[
-              { id: 'tree', label: '⬛ Tree' },
-              { id: 'dept', label: '☰ Departments' },
-            ].map(v => (
+            {[{ id: 'tree', label: '⬛ Tree' }, { id: 'dept', label: '☰ Departments' }].map(v => (
               <button key={v.id} onClick={() => setView(v.id)}
                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${view === v.id ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
                 {v.label}
               </button>
             ))}
           </div>
-
-          <div className="ml-auto text-[10px] text-slate-400 bg-white border border-slate-200 px-3 py-1.5 rounded-lg">
-            Staffing model: <span className="font-semibold text-slate-600">{scenario.finance_structure.replace(/_/g, ' ')}</span>
-            &nbsp;·&nbsp;configured in <a href="/ModelSettings" className="text-blue-600 hover:underline">Model Settings</a>
-          </div>
         </div>
       </div>
 
-      {/* Main layout */}
-      <div className="flex gap-3" style={{ flex: 1, minHeight: 0 }}>
+      {/* Body */}
+      <div className="flex gap-3 min-h-0" style={{ flex: 1 }}>
+        {/* Left sidebar — settings */}
+        <div className="w-64 flex-shrink-0 overflow-y-auto space-y-3">
+          <SettingsPanel settings={orgSettings} onChange={setOrgSettings} />
+          <Legend />
+        </div>
+
         {/* Center — chart */}
-        <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white overflow-hidden" style={{ position: 'relative', minHeight: '500px' }}>
+        <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white"
+          style={{ position: 'relative', minHeight: '500px' }}>
           {view === 'tree' && (
-            <OrgSVGCanvas
-              tree={tree}
-              onSelect={handleSelectNode}
-              selectedId={selectedNode?.position_id}
+            <OrgTreeCanvas
+              roots={tree}
+              selectedId={selectedNode?.id}
+              onSelect={handleSelect}
             />
           )}
           {view === 'dept' && (
-            <div className="absolute inset-0 overflow-y-auto p-4">
-              <OrgDeptView
-                positions={enrichedPositions}
-                onSelect={handleSelectNode}
-                selectedId={selectedNode?.position_id}
-              />
+            <div className="absolute inset-0 overflow-y-auto">
+              <DeptListView positions={positions} selectedId={selectedNode?.id} onSelect={handleSelect} />
             </div>
           )}
         </div>
 
-        {/* Right — detail + budget */}
-        <div className="w-72 flex-shrink-0 overflow-y-auto space-y-3">
+        {/* Right — detail */}
+        <div className="w-64 flex-shrink-0 overflow-y-auto">
           {selectedNode ? (
-            <OrgDetailPanel
-              node={selectedNode}
-              allPositions={enrichedPositions}
-              onClose={() => setSelectedNode(null)}
-            />
+            <DetailPanel node={selectedNode} allPositions={positions} onClose={() => setSelectedNode(null)} />
           ) : (
             <div className="rounded-xl border border-slate-200 bg-white p-5 text-center">
               <Network className="h-8 w-8 mx-auto mb-2 text-slate-200" />
-              <p className="text-xs font-medium text-slate-500">Click any node</p>
-              <p className="text-[10px] text-slate-400 mt-1">to see position details, reporting lines, and budget data</p>
-              <div className="mt-4 text-left space-y-2">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Legend</p>
-                {[
-                  { color: '#22c55e', label: 'Filled' },
-                  { color: '#f59e0b', label: 'Vacant' },
-                  { color: '#3b82f6', label: 'Proposed' },
-                  { color: '#ef4444', label: 'Eliminated' },
-                ].map(({ color, label }) => (
-                  <div key={label} className="flex items-center gap-2 text-[11px] text-slate-600">
-                    <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
-                    {label}
-                  </div>
-                ))}
-                <p className="text-[10px] text-slate-400 pt-2">Scroll/pinch to zoom · drag to pan · click ＋/− to collapse subtrees</p>
-              </div>
+              <p className="text-xs font-medium text-slate-500">Click any node for details</p>
             </div>
           )}
-          <OrgBudgetSummary positions={enrichedPositions} scenario={scenario} />
         </div>
       </div>
     </div>
