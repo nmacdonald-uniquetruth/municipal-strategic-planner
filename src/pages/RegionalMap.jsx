@@ -231,7 +231,7 @@ export default function RegionalMap() {
   const [basemap, setBasemap] = useState('light');
   const [comparisonMode, setComparisonMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState([]);
-  const [showLabels, setShowLabels] = useState(true);
+  const [labelMode, setLabelMode] = useState('map');
   const [layers, setLayers] = useState([
     { id: 'boundaries', label: 'Municipal Boundaries', color: '#1a3a5c', visible: true, available: true },
     { id: 'roads', label: 'Roads', color: '#7a5c1a', visible: false, available: false },
@@ -271,6 +271,8 @@ export default function RegionalMap() {
   }, []);
 
   const boundariesVisible = layers.find(l => l.id === 'boundaries')?.visible;
+  const showMapLabels = labelMode === 'map';
+  const showLegendList = labelMode === 'legend';
 
   // GeoJSON style function
   const styleFeature = useCallback((feature) => {
@@ -372,7 +374,7 @@ export default function RegionalMap() {
                   onEachFeature={onEachFeature}
                 />
               )}
-              {geojson && showLabels && <TownLabels geojson={geojson} />}
+              {geojson && showMapLabels && <TownLabels geojson={geojson} />}
               {geojson && <FitBounds geojson={geojson} />}
             </MapContainer>
           )}
@@ -380,24 +382,37 @@ export default function RegionalMap() {
           {/* Overlay controls */}
           <LayerControls layers={layers} onToggle={toggleLayer} />
           <BasemapSelector current={basemap} onChange={setBasemap} />
-          {/* Label toggle */}
+          {/* Label display mode toggle */}
           <div className="absolute top-3 right-3 z-[1000] bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden">
-            <button onClick={() => setShowLabels(!showLabels)}
-              className={`px-3 py-2 text-xs font-bold transition-all ${
-                showLabels
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-white text-slate-600 border-b border-slate-200'
-              }`}>
-              {showLabels ? '✓ Labels' : 'Legend'}
-            </button>
-            {!showLabels && (
-              <button onClick={() => setShowLabels(true)}
-                className="w-full px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">
-                Show Labels
-              </button>
-            )}
+            <div className="px-3 py-2.5 border-b border-slate-200">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Label Display</p>
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 px-1.5 py-1 rounded">
+                  <input
+                    type="radio"
+                    name="labelMode"
+                    value="map"
+                    checked={labelMode === 'map'}
+                    onChange={() => setLabelMode('map')}
+                    className="w-3.5 h-3.5 text-slate-900"
+                  />
+                  <span className="text-xs font-medium text-slate-700">Map Labels</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 px-1.5 py-1 rounded">
+                  <input
+                    type="radio"
+                    name="labelMode"
+                    value="legend"
+                    checked={labelMode === 'legend'}
+                    onChange={() => setLabelMode('legend')}
+                    className="w-3.5 h-3.5 text-slate-900"
+                  />
+                  <span className="text-xs font-medium text-slate-700">Legend List</span>
+                </label>
+              </div>
+            </div>
           </div>
-          {!loading && !error && geojson && !showLabels && <MapLegend basemap={basemap} />}
+          {!loading && !error && geojson && showLegendList && <MapLegend basemap={basemap} />}
         </div>
 
         {/* Right panel */}
@@ -437,42 +452,48 @@ export default function RegionalMap() {
               color={TOWN_FILL_COLORS[selectedTown.town_name]}
               onClose={() => setSelectedTown(null)}
             />
+          ) : showLegendList ? (
+            /* Legend List Mode */
+            <div className="flex-1 overflow-y-auto rounded-xl border border-slate-200 bg-white">
+              <div className="bg-slate-900 px-4 py-2.5 sticky top-0">
+                <p className="text-xs font-bold text-white">Municipalities</p>
+              </div>
+              <div className="divide-y divide-slate-50">
+                {Object.values(TOWN_PROFILES).sort((a, b) => b.population - a.population).map(profile => (
+                  <button
+                    key={profile.town_name}
+                    onClick={() => setSelectedTown(profile)}
+                    className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-slate-50 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className="h-3 w-3 rounded-sm flex-shrink-0 border border-slate-200"
+                        style={{ background: TOWN_FILL_COLORS[profile.town_name] }}
+                      />
+                      <div>
+                        <p className="text-xs font-medium text-slate-800">{profile.town_name}</p>
+                        <p className="text-[10px] text-slate-400">Pop. {profile.population?.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-1">
+                      {profile.working_waterfront && (
+                        <span className="text-[8px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-bold">WW</span>
+                      )}
+                      {profile.commercial_fishing_presence && (
+                        <span className="text-[8px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Fish</span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : (
+            /* Map Labels Mode */
             <div className="flex flex-col gap-3 overflow-y-auto">
               <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
                 <MapPin className="h-8 w-8 mx-auto mb-2 text-slate-200" />
                 <p className="text-xs font-medium text-slate-500">Click any municipality</p>
                 <p className="text-[10px] text-slate-400 mt-1">to view community profile, demographics, employers, and planning data</p>
-              </div>
-              {/* Town list */}
-              <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-                <div className="bg-slate-900 px-4 py-2.5">
-                  <p className="text-xs font-bold text-white">Municipalities</p>
-                </div>
-                <div className="divide-y divide-slate-50">
-                  {Object.values(TOWN_PROFILES).sort((a, b) => b.population - a.population).map(profile => (
-                    <button key={profile.town_name}
-                      onClick={() => setSelectedTown(profile)}
-                      className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-slate-50 transition-colors text-left">
-                      <div className="flex items-center gap-2.5">
-                        <span className="h-3 w-3 rounded-sm flex-shrink-0 border border-white/20"
-                          style={{ background: TOWN_FILL_COLORS[profile.town_name] }} />
-                        <div>
-                          <p className="text-xs font-medium text-slate-800">{profile.town_name}</p>
-                          <p className="text-[10px] text-slate-400">Pop. {profile.population?.toLocaleString()}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-1">
-                        {profile.working_waterfront && (
-                          <span className="text-[8px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-bold">WW</span>
-                        )}
-                        {profile.commercial_fishing_presence && (
-                          <span className="text-[8px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">Fish</span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
               </div>
               <div className="rounded-xl border border-slate-200 bg-white p-3">
                 <div className="flex items-start gap-2">
