@@ -94,25 +94,27 @@ export const STATIC_POSITIONS = [
 // ─── Generate dynamic finance/billing positions from settings ─────────────────
 export function getDynamicPositions(settings) {
   const positions = [];
-
-  // Finance structure
   const fs = settings.FINANCE_DEPARTMENT_STRUCTURE;
-  if (fs.includes('Controller')) {
+
+  // Controller
+  if (fs === 'Controller + Staff Accountant' ||
+      fs === 'Controller + Two Staff Accountants' ||
+      fs === 'Controller + Staff Accountant + Part-Time Staff Accountant') {
     positions.push({ id: 'controller', title: 'Controller', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
   }
-  if (fs.includes('Two Staff Accountants') || fs.includes('Staff Accountant +')) {
-    positions.push({ id: 'staff_accountant', title: 'Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
-    if (fs.includes('Two Staff Accountants') || fs === 'Controller + Two Staff Accountants') {
-      positions.push({ id: 'staff_accountant_2', title: 'Second Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
-    }
-    if (fs.includes('Part-Time')) {
-      positions.push({ id: 'staff_accountant_pt', title: 'Part-Time Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: false, employee: null });
-    }
-  } else if (fs === 'Controller + Staff Accountant') {
-    positions.push({ id: 'staff_accountant', title: 'Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
-  } else if (fs === 'Two Staff Accountants') {
-    positions.push({ id: 'staff_accountant',   title: 'Staff Accountant',        dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+
+  // Staff Accountant (all options have at least one)
+  positions.push({ id: 'staff_accountant', title: 'Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+
+  // Second Staff Accountant
+  if (fs === 'Controller + Two Staff Accountants' || fs === 'Two Staff Accountants') {
     positions.push({ id: 'staff_accountant_2', title: 'Second Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: true, employee: null });
+  }
+
+  // Part-Time Staff Accountant
+  if (fs === 'Staff Accountant + Part-Time Staff Accountant' ||
+      fs === 'Controller + Staff Accountant + Part-Time Staff Accountant') {
+    positions.push({ id: 'staff_accountant_pt', title: 'Part-Time Staff Accountant', dept: 'Finance', reportsTo: 'finance_director', status: 'vacant', fullTime: false, employee: null });
   }
 
   // Billing structure
