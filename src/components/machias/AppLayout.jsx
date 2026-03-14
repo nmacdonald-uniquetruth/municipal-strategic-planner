@@ -48,6 +48,7 @@ const NAV_GROUPS = [
       { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
       { path: '/QandA', label: 'Q & A', icon: HelpCircle },
       { path: '/SelectBoardPresentation', label: 'SB Presentation', icon: Megaphone },
+      { path: '/BoardMemoGenerator', label: 'Board Memo Generator', icon: FileText },
       { path: '/TaxpayerFAQ', label: 'Taxpayer FAQ', icon: FileText },
     ],
   },
