@@ -253,6 +253,35 @@ function TownCard({ town, contractAmount, settings }) {
             </div>
           </div>
           
+          {/* Service Breakdown */}
+          <div>
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Regional Service Feasibility by Service Type</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              {[
+                { service: 'Police Services', feasibility: 'HIGH', reason: 'Shared dispatch, administrative coordination, regional patrol agreements' },
+                { service: 'Fire Services', feasibility: 'MEDIUM', reason: 'Mutual aid coordination, administrative support for regional response' },
+                { service: 'Financial Services', feasibility: 'HIGH', reason: 'Municipal finance, audit support, grant management, budget prep' },
+                { service: 'Tax Assessor', feasibility: 'MEDIUM-HIGH', reason: 'Shared assessor model, regional revaluation coordination' },
+                { service: 'Code Enforcement / Inspections', feasibility: 'MEDIUM', reason: 'Building, plumbing, electrical inspection scheduling and coordination' },
+                { service: 'Administrative Support', feasibility: 'HIGH', reason: 'Records management, data entry, compliance reporting, scheduling' },
+              ].map((item, i) => (
+                <div key={i} className="rounded-lg border border-slate-200 bg-white p-3">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <p className="font-semibold text-slate-800 text-xs">{item.service}</p>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      item.feasibility.includes('HIGH') ? 'bg-emerald-100 text-emerald-700' :
+                      item.feasibility.includes('MEDIUM-HIGH') ? 'bg-blue-100 text-blue-700' :
+                      'bg-amber-100 text-amber-700'
+                    }`}>
+                      {item.feasibility}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">{item.reason}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Value Proposition */}
           <div>
             <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">What {town.name} Gets for {fmt(contractAmount)}/yr</h4>
