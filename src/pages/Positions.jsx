@@ -1,6 +1,5 @@
 import React from 'react';
 import PositionPlanner from '../components/machias/PositionPlanner';
-import PoliceAdminConfig from '../components/machias/PoliceAdminConfig';
 import SectionHeader from '../components/machias/SectionHeader';
 import { useModel } from '../components/machias/ModelContext';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
@@ -21,9 +20,6 @@ export default function Positions() {
       />
 
       <PositionPlanner />
-
-      {/* Police Administrative Support Configuration */}
-      <PoliceAdminConfig />
 
       {/* Misallocation analysis */}
       <div className="rounded-2xl border border-slate-200/60 bg-white p-5">
