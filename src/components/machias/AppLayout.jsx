@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
-  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network
+  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network, MapPin
 } from 'lucide-react';
 import FeedbackDialog from './FeedbackDialog';
 
