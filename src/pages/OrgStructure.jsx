@@ -24,6 +24,7 @@ const NODE_TYPE_LABELS = Object.entries(NODE_TYPE_CONFIG)
   .map(([k, v]) => ({ key: k, label: v.label }));
 
 export default function OrgStructure() {
+  const { settings } = useModel();
   const [nodes, setNodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
