@@ -184,6 +184,24 @@ export default function RestructuringProposalLibrary() {
     return proposals.filter(p => selectedProposal.relatedProposals?.includes(p.id));
   }, [selectedProposal, proposals]);
 
+  const selectedProposalEvaluation = useMemo(() => {
+    if (!selectedProposal) return null;
+    return evaluations.find(e => e.proposal_id === selectedProposal.id);
+  }, [selectedProposal, evaluations]);
+
+  const handleStatusChange = (newStatus) => {
+    if (selectedProposal) {
+      statusChangeMutation.mutate(
+        { id: selectedProposal.id, status: newStatus },
+        {
+          onSuccess: () => {
+            setSelectedProposal(prev => prev ? { ...prev, status: newStatus } : null);
+          }
+        }
+      );
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
