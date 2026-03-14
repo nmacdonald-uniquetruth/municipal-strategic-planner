@@ -22,6 +22,7 @@ const NAV_GROUPS = [
     label: 'Initiatives',
     items: [
       { path: '/OrgStructure', label: 'Org Structure', icon: Network },
+      { path: '/GovernanceTwin', label: 'Governance Twin', icon: Globe },
       { path: '/EfficiencyAnalyzer', label: 'Efficiency Analyzer', icon: Activity },
       { path: '/FinancialSimulator', label: 'Financial Simulator', icon: Banknote },
       { path: '/Positions', label: 'Positions', icon: Users },
