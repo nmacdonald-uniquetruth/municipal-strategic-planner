@@ -31,6 +31,7 @@ import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import RegionalFeasibility from './pages/RegionalFeasibility';
 import RegionalFiscalFeasibility from './pages/RegionalFiscalFeasibility';
+import RegionalServicesDashboard from './pages/RegionalServicesDashboard';
 import OrgChart from './pages/OrgChart';
 import RegionalMap from './pages/RegionalMap';
 
@@ -81,6 +82,7 @@ const AuthenticatedApp = () => {
           <Route path="/TaxpayerFAQ" element={<TaxpayerFAQ />} />
           <Route path="/RegionalFeasibility" element={<RegionalFeasibility />} />
           <Route path="/RegionalFiscalFeasibility" element={<RegionalFiscalFeasibility />} />
+          <Route path="/RegionalServicesDashboard" element={<RegionalServicesDashboard />} />
           <Route path="/OrgChart" element={<OrgChart />} />
           <Route path="/RegionalMap" element={<RegionalMap />} />
         </Route>
