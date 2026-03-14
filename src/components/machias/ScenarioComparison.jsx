@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { runProFormaFromSettings } from './FinancialModelV2';
 import { X, Plus } from 'lucide-react';
@@ -13,7 +13,7 @@ export default function ScenarioComparison() {
   const [modelSettings, setModelSettings] = useState({});
 
   // Load all scenarios
-  React.useEffect(() => {
+  useEffect(() => {
     base44.entities.Scenario.list().then(setAllScenarios);
     base44.entities.ModelSettings.filter({ key: 'main' }).then(records => {
       if (records?.length > 0) setModelSettings(records[0]);
