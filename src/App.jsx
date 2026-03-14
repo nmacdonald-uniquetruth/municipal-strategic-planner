@@ -118,7 +118,8 @@ const AuthenticatedApp = () => {
           <Route path="/RegionalServiceRevenue" element={<RegionalServiceRevenue />} />
           <Route path="/DepartmentRestructuring" element={<DepartmentRestructuring />} />
           <Route path="/ImplementationRoadmap" element={<ImplementationRoadmap />} />
-        </Route>
+          <Route path="/LeadershipCapacityModeling" element={<LeadershipCapacityModeling />} />
+          </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       </Layout>
