@@ -55,17 +55,24 @@ function TownLabels({ geojson }) {
       }
 
       if (centroid) {
-        // Create a permanent label using HTML
+        // Create a permanent label using HTML with branding
         const label = window.L.divIcon({
           html: `<div style="
-            font-family: 'Open Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1e293b;
-            text-shadow: -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white, 1px 1px 2px white, 0 0 3px white;
+            font-family: 'Raleway', Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #344A60;
+            text-shadow: 
+              0 0 4px rgba(255,255,255,0.9),
+              0 0 6px rgba(255,255,255,0.8),
+              -1.5px -1.5px 3px rgba(255,255,255,0.85),
+              1.5px -1.5px 3px rgba(255,255,255,0.85),
+              -1.5px 1.5px 3px rgba(255,255,255,0.85),
+              1.5px 1.5px 3px rgba(255,255,255,0.85);
             text-align: center;
             white-space: nowrap;
             pointer-events: none;
+            letter-spacing: 0.3px;
           ">${town}</div>`,
           iconSize: null,
           iconAnchor: null,
