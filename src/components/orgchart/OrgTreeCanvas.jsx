@@ -186,10 +186,14 @@ export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
     const c = containerRef.current;
     if (!c || vb.w <= 0 || vb.h <= 0) return;
     const cw = c.clientWidth || 800;
-    const ch = c.clientHeight || 500;
-    const s = Math.min(cw / (vb.w + 80), ch / (vb.h + 80), 1.0);
-    setScale(s);
-    setPan({ x: (cw - vb.w * s) / 2 - vb.minX * s, y: 40 });
+    const ch = c.clientHeight || 600;
+    const PAD = 60;
+    const s = Math.min((cw - PAD * 2) / vb.w, (ch - PAD * 2) / vb.h, 1.0);
+    const clampedScale = Math.max(0.18, Math.min(s, 1.0));
+    const cx = (cw - vb.w * clampedScale) / 2 - vb.minX * clampedScale;
+    const cy = Math.max(PAD, (ch - vb.h * clampedScale) / 2 - vb.minY * clampedScale);
+    setScale(clampedScale);
+    setPan({ x: cx, y: cy });
   }, [vb]);
 
   useEffect(() => {

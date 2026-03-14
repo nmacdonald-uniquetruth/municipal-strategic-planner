@@ -10,15 +10,15 @@ import {
 
 // ─── Settings panel ───────────────────────────────────────────────────────────
 function SettingsPanel({ settings, onChange }) {
-  const sel = (key, options) => (
-    <div key={key} className="space-y-1">
+  const sel = (key, label, options) => (
+    <div key={key} className="space-y-1.5">
       <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-        {key.replace(/_/g, ' ')}
+        {label}
       </label>
       <select
         value={settings[key]}
         onChange={e => onChange({ ...settings, [key]: e.target.value })}
-        className="w-full text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400"
+        className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
       >
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
@@ -26,25 +26,26 @@ function SettingsPanel({ settings, onChange }) {
   );
 
   const tog = (key, label) => (
-    <label key={key} className="flex items-center gap-2 cursor-pointer">
+    <label key={key} className="flex items-center gap-2.5 cursor-pointer py-1">
       <input type="checkbox" checked={settings[key]}
         onChange={e => onChange({ ...settings, [key]: e.target.checked })}
-        className="rounded" />
+        className="rounded w-3.5 h-3.5 accent-slate-700" />
       <span className="text-xs text-slate-700">{label}</span>
     </label>
   );
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-      <div className="bg-slate-900 px-4 py-3 flex items-center gap-2">
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+      <div className="px-5 py-3.5 flex items-center gap-2" style={{ background: '#344A60' }}>
         <Settings2 className="h-4 w-4 text-slate-300" />
         <span className="text-sm font-bold text-white">Chart Settings</span>
       </div>
-      <div className="p-4 space-y-4">
-        {sel('FINANCE_DEPARTMENT_STRUCTURE', FINANCE_STRUCTURES)}
-        {sel('UTILITY_BILLING_STRUCTURE', BILLING_STRUCTURES)}
-        {sel('GA_REPORTING_STRUCTURE', GA_STRUCTURES)}
-        <div className="space-y-2 border-t border-slate-100 pt-3">
+      <div className="p-5 space-y-4">
+        {sel('FINANCE_DEPARTMENT_STRUCTURE', 'Finance Structure', FINANCE_STRUCTURES)}
+        {sel('UTILITY_BILLING_STRUCTURE', 'Billing Structure', BILLING_STRUCTURES)}
+        {sel('GA_REPORTING_STRUCTURE', 'GA Reporting', GA_STRUCTURES)}
+        <div className="border-t border-slate-100 pt-4 space-y-1">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Display</p>
           {tog('SHOW_VACANT_POSITIONS', 'Show Vacant Positions')}
           {tog('SHOW_PART_TIME_POSITIONS', 'Show Part-Time Positions')}
         </div>
@@ -53,57 +54,58 @@ function SettingsPanel({ settings, onChange }) {
   );
 }
 
-// ─── Node detail panel ────────────────────────────────────────────────────────
-function DetailPanel({ node, allPositions, onClose }) {
-  if (!node) return null;
-  const color = DEPT_COLORS[node.dept] || '#344A60';
-  const supervisor = allPositions.find(p => p.id === node.reportsTo);
-  const reports = allPositions.filter(p => p.reportsTo === node.id);
+// ─── Legend ───────────────────────────────────────────────────────────────────
+function Legend() {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Legend</p>
+      <div className="space-y-2">
+        {[
+          { color: '#22c55e', label: 'Filled position' },
+          { color: '#f59e0b', label: 'Vacant position' },
+        ].map(({ color, label }) => (
+          <div key={label} className="flex items-center gap-2.5 text-xs text-slate-600">
+            <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
+            {label}
+          </div>
+        ))}
+      </div>
+      <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
+        Drag to pan · scroll to zoom<br />
+        Click +/− to collapse branches
+      </p>
+    </div>
+  );
+}
+
+// ─── Stats bar + view toggle ──────────────────────────────────────────────────
+function HeaderControls({ positions, view, onViewChange }) {
+  const filled = positions.filter(p => p.status === 'filled').length;
+  const vacant = positions.filter(p => p.status === 'vacant').length;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-      <div className="px-4 py-4 text-white relative" style={{ background: color }}>
-        <button onClick={onClose}
-          className="absolute top-3 right-3 text-white/70 hover:text-white text-lg leading-none">×</button>
-        <p className="text-sm font-bold pr-6">{node.title}</p>
-        <p className="text-[11px] opacity-80 mt-0.5">{node.dept}</p>
-        <div className="mt-2 flex gap-1.5 flex-wrap">
-          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'}`}>
-            {node.status}
-          </span>
-          {!node.fullTime && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20">Part-Time</span>}
-          {node.isUnion && <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>}
-          {node.contracted && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20">Contracted</span>}
-        </div>
-      </div>
-
-      <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
-        {node.employee
-          ? <p className="text-sm font-semibold text-slate-900">{node.employee}</p>
-          : <p className="text-sm italic text-amber-600">Position Vacant</p>}
-      </div>
-
-      <div className="px-4 py-3 space-y-2 text-xs">
-        {supervisor && (
-          <div className="flex justify-between">
-            <span className="text-slate-500">Reports To</span>
-            <span className="font-medium text-slate-800 text-right max-w-40">{supervisor.title}</span>
+    <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex gap-2">
+        {[
+          { label: 'Positions', value: positions.length, cls: 'text-slate-900' },
+          { label: 'Filled',    value: filled,            cls: 'text-emerald-700' },
+          { label: 'Vacant',    value: vacant,            cls: 'text-amber-600' },
+        ].map(s => (
+          <div key={s.label} className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center min-w-16 shadow-sm">
+            <p className={`text-lg font-bold leading-none ${s.cls}`}>{s.value}</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">{s.label}</p>
           </div>
-        )}
-        {reports.length > 0 && (
-          <div>
-            <p className="text-slate-500 mb-1">Direct Reports ({reports.length})</p>
-            <div className="space-y-1">
-              {reports.map(r => (
-                <div key={r.id} className="flex items-center gap-2">
-                  <span className={`h-1.5 w-1.5 rounded-full ${r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
-                  <span className="text-slate-700">{r.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        ))}
+      </div>
+      <div className="ml-auto flex rounded-xl border border-slate-200 bg-white p-1 gap-1 shadow-sm">
+        {[{ id: 'tree', label: '⬛ Tree' }, { id: 'dept', label: '☰ Departments' }].map(v => (
+          <button key={v.id} onClick={() => onViewChange(v.id)}
+            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              view === v.id ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50'
+            }`}>
+            {v.label}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -141,7 +143,7 @@ function DeptListView({ positions, selectedId, onSelect }) {
               <div className="bg-white">
                 {pos.map(p => (
                   <div key={p.id} onClick={() => onSelect(p)}
-                    className={`flex items-center gap-3 px-4 py-2 border-b border-slate-50 last:border-0 cursor-pointer hover:bg-slate-50 ${selectedId === p.id ? 'bg-blue-50' : ''}`}>
+                    className={`flex items-center gap-3 px-4 py-2 border-b border-slate-50 last:border-0 cursor-pointer hover:bg-slate-50 transition-colors ${selectedId === p.id ? 'bg-blue-50' : ''}`}>
                     <span className={`h-2 w-2 rounded-full flex-shrink-0 ${p.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-slate-800 truncate">{p.title}</p>
@@ -159,43 +161,86 @@ function DeptListView({ positions, selectedId, onSelect }) {
   );
 }
 
-// ─── Stats bar ────────────────────────────────────────────────────────────────
-function StatsBar({ positions }) {
-  const filled = positions.filter(p => p.status === 'filled').length;
-  const vacant = positions.filter(p => p.status === 'vacant').length;
-  return (
-    <div className="flex gap-2">
-      {[
-        { label: 'Positions', value: positions.length, cls: 'text-slate-900' },
-        { label: 'Filled',    value: filled,            cls: 'text-emerald-700' },
-        { label: 'Vacant',    value: vacant,            cls: 'text-amber-600' },
-      ].map(s => (
-        <div key={s.label} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center min-w-14">
-          <p className={`text-base font-bold ${s.cls}`}>{s.value}</p>
-          <p className="text-[10px] text-slate-500">{s.label}</p>
+// ─── Detail panel ─────────────────────────────────────────────────────────────
+function DetailPanel({ node, allPositions, onClose }) {
+  if (!node) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white h-full flex flex-col items-center justify-center p-6 text-center shadow-sm">
+        <div className="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
+          <Network className="h-6 w-6 text-slate-300" />
         </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── Legend ───────────────────────────────────────────────────────────────────
-function Legend() {
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Legend</p>
-      <div className="space-y-1.5">
-        {[
-          { color: '#22c55e', label: 'Filled position' },
-          { color: '#f59e0b', label: 'Vacant position' },
-        ].map(({ color, label }) => (
-          <div key={label} className="flex items-center gap-2 text-[11px] text-slate-600">
-            <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
-            {label}
-          </div>
-        ))}
+        <p className="text-sm font-semibold text-slate-500">Select a position</p>
+        <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+          Click any node in the chart to view role details, reporting lines, and status.
+        </p>
       </div>
-      <p className="text-[10px] text-slate-400 mt-3">Drag to pan · scroll to zoom · click +/− to collapse</p>
+    );
+  }
+
+  const color = DEPT_COLORS[node.dept] || '#344A60';
+  const supervisor = allPositions.find(p => p.id === node.reportsTo);
+  const reports = allPositions.filter(p => p.reportsTo === node.id);
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm h-full flex flex-col">
+      {/* Header */}
+      <div className="px-5 py-4 text-white relative flex-shrink-0" style={{ background: color }}>
+        <button onClick={onClose}
+          className="absolute top-3 right-3 h-6 w-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white text-base leading-none transition-colors">
+          ×
+        </button>
+        <p className="text-sm font-bold pr-8 leading-snug">{node.title}</p>
+        <p className="text-[11px] opacity-75 mt-0.5">{node.dept}</p>
+        <div className="mt-2.5 flex gap-1.5 flex-wrap">
+          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+            node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'
+          }`}>
+            {node.status === 'filled' ? 'Filled' : 'Vacant'}
+          </span>
+          {!node.fullTime && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Part-Time</span>
+          )}
+          {node.isUnion && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>
+          )}
+          {node.contracted && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Contracted</span>
+          )}
+        </div>
+      </div>
+
+      {/* Employee */}
+      <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex-shrink-0">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
+        {node.employee
+          ? <p className="text-sm font-semibold text-slate-900">{node.employee}</p>
+          : <p className="text-sm italic text-amber-600">Position Vacant</p>}
+      </div>
+
+      {/* Details */}
+      <div className="px-5 py-4 space-y-3 text-xs flex-1 overflow-y-auto">
+        {supervisor && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Reports To</p>
+            <p className="font-medium text-slate-800">{supervisor.title}</p>
+          </div>
+        )}
+        {reports.length > 0 && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              Direct Reports ({reports.length})
+            </p>
+            <div className="space-y-1.5">
+              {reports.map(r => (
+                <div key={r.id} className="flex items-center gap-2">
+                  <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                  <span className="text-slate-700 leading-snug">{r.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -213,39 +258,35 @@ export default function OrgChart() {
     setSelectedNode(prev => !node || prev?.id === node.id ? null : node);
   }, []);
 
+  // Canvas height: responsive, clamped
+  const canvasStyle = {
+    height: 'clamp(520px, calc(100vh - 280px), 820px)',
+  };
+
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 96px)', minHeight: '600px' }}>
+    <div className="space-y-5 max-w-[1520px] mx-auto">
       {/* Header */}
-      <div className="flex-shrink-0 pb-3 space-y-3">
+      <div className="space-y-4">
         <SectionHeader
           title="Municipal Organizational Chart"
           subtitle="Settings-driven — changes below update the chart instantly"
           icon={Network}
         />
-        <div className="flex items-center gap-3 flex-wrap">
-          <StatsBar positions={positions} />
-          <div className="flex rounded-lg border border-slate-200 bg-white p-1 gap-1">
-            {[{ id: 'tree', label: '⬛ Tree' }, { id: 'dept', label: '☰ Departments' }].map(v => (
-              <button key={v.id} onClick={() => setView(v.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${view === v.id ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
-                {v.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <HeaderControls positions={positions} view={view} onViewChange={setView} />
       </div>
 
-      {/* Body */}
-      <div className="flex gap-3 min-h-0" style={{ flex: 1 }}>
-        {/* Left sidebar — settings */}
-        <div className="w-64 flex-shrink-0 overflow-y-auto space-y-3">
+      {/* 3-column body */}
+      <div className="flex gap-5 items-start">
+
+        {/* Left sidebar */}
+        <div className="flex-shrink-0 space-y-4" style={{ width: '300px' }}>
           <SettingsPanel settings={orgSettings} onChange={setOrgSettings} />
           <Legend />
         </div>
 
-        {/* Center — chart */}
-        <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white"
-          style={{ position: 'relative', minHeight: '500px' }}>
+        {/* Center — chart canvas */}
+        <div className="flex-1 min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+          style={{ ...canvasStyle, position: 'relative', minWidth: '500px' }}>
           {view === 'tree' && (
             <OrgTreeCanvas
               roots={tree}
@@ -260,16 +301,9 @@ export default function OrgChart() {
           )}
         </div>
 
-        {/* Right — detail */}
-        <div className="w-64 flex-shrink-0 overflow-y-auto">
-          {selectedNode ? (
-            <DetailPanel node={selectedNode} allPositions={positions} onClose={() => setSelectedNode(null)} />
-          ) : (
-            <div className="rounded-xl border border-slate-200 bg-white p-5 text-center">
-              <Network className="h-8 w-8 mx-auto mb-2 text-slate-200" />
-              <p className="text-xs font-medium text-slate-500">Click any node for details</p>
-            </div>
-          )}
+        {/* Right — detail panel */}
+        <div className="flex-shrink-0" style={{ width: '300px', ...canvasStyle }}>
+          <DetailPanel node={selectedNode} allPositions={positions} onClose={() => setSelectedNode(null)} />
         </div>
       </div>
     </div>
