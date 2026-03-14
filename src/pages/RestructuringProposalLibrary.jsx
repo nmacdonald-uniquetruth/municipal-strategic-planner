@@ -10,6 +10,7 @@ import ProposalFilters from '../components/proposals/ProposalFilters';
 import ProposalComparison from '../components/proposals/ProposalComparison';
 import ProposalDetail from '../components/proposals/ProposalDetail';
 import ProposalForm from '../components/proposals/ProposalForm';
+import { WORKFLOW_STAGES } from '../components/proposals/workflowValidator';
 
 export default function RestructuringProposalLibrary() {
   const [showForm, setShowForm] = useState(false);
