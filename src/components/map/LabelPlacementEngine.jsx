@@ -13,13 +13,14 @@
 export function findLabelCenter(ring) {
   if (!ring || ring.length < 3) return null;
 
-  const precision = 0.0001; // ~10 meters precision at regional scale
   const minX = Math.min(...ring.map(c => c[0]));
   const minY = Math.min(...ring.map(c => c[1]));
   const maxX = Math.max(...ring.map(c => c[0]));
   const maxY = Math.max(...ring.map(c => c[1]));
 
-  const cellSize = Math.min(maxX - minX, maxY - minY) / 4;
+  const width = maxX - minX;
+  const height = maxY - minY;
+  const cellSize = Math.min(width, height) / 4;
   let bestCell = null;
   let bestDistance = 0;
 
@@ -42,14 +43,14 @@ export function findLabelCenter(ring) {
     return simpleCentroid(ring);
   }
 
-  // Refinement pass: check neighborhood for improvement
+  // Multi-pass refinement: progressively narrow search
   let refined = [...bestCell];
-  for (let i = 0; i < 4; i++) {
-    const searchRadius = (cellSize / 2) / Math.pow(2, i + 1);
+  for (let pass = 0; pass < 5; pass++) {
+    const searchRadius = (cellSize / 2) / Math.pow(2, pass);
     let improved = false;
 
-    for (let dy = -searchRadius; dy <= searchRadius; dy += searchRadius) {
-      for (let dx = -searchRadius; dx <= searchRadius; dx += searchRadius) {
+    for (let dy = -searchRadius; dy <= searchRadius; dy += searchRadius / 2) {
+      for (let dx = -searchRadius; dx <= searchRadius; dx += searchRadius / 2) {
         const candidate = [refined[0] + dx, refined[1] + dy];
         if (pointInPolygon(candidate, ring)) {
           const dist = pointToPolygonDistance(candidate, ring);
@@ -128,38 +129,103 @@ function distanceToSegment(point, a, b) {
 }
 
 /**
- * Estimate label font size based on polygon area
- * Larger polygons get larger labels
+ * Calculate polygon area using shoelace formula
  */
-export function estimateFontSize(ring) {
-  if (!ring || ring.length < 3) return 11;
-
-  // Calculate approximate polygon area
+export function calculatePolygonArea(ring) {
+  if (!ring || ring.length < 3) return 0;
   let area = 0;
   for (let i = 0; i < ring.length - 1; i++) {
     area += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1];
   }
-  area = Math.abs(area) / 2;
+  return Math.abs(area) / 2;
+}
 
-  // Map area to font size (11-14px range)
-  if (area < 0.0005) return 10; // Tiny municipalities
-  if (area < 0.001) return 11;
-  if (area < 0.002) return 12;
-  return 13; // Larger towns
+/**
+ * Estimate label font size based on polygon area and zoom level
+ * Larger polygons and higher zoom levels get larger labels
+ */
+export function estimateFontSize(ring, zoom = 10) {
+  if (!ring || ring.length < 3) return 11;
+
+  const area = calculatePolygonArea(ring);
+
+  // Base size calculation from area (10-14px range)
+  let fontSize;
+  if (area < 0.0003) fontSize = 9.5;
+  else if (area < 0.0006) fontSize = 10.5;
+  else if (area < 0.001) fontSize = 11.5;
+  else if (area < 0.002) fontSize = 12;
+  else fontSize = 13;
+
+  // Subtle zoom adjustment (avoid extreme changes)
+  const zoomFactor = Math.max(0.9, Math.min(1.1, zoom / 11));
+  fontSize = fontSize * zoomFactor;
+
+  return Math.round(fontSize * 2) / 2; // Round to nearest 0.5
 }
 
 /**
  * Check if point is near polygon boundary (too close for clean label placement)
  */
-export function isTooCloseToBoundary(point, ring, minDistance = 0.0008) {
+export function isTooCloseToBoundary(point, ring, minDistance = 0.001) {
   return pointToPolygonDistance(point, ring) < minDistance;
+}
+
+/**
+ * Determine if town name should be wrapped across multiple lines
+ * Considers name length and polygon area for aesthetic balance
+ */
+export function shouldWrapTownName(townName, ring) {
+  if (!townName || townName.length <= 8) return false;
+  if (townName.length > 14) return true;
+
+  const area = calculatePolygonArea(ring);
+  
+  // Very small areas benefit from multi-line
+  if (area < 0.0004) return true;
+  
+  // Two-word names (e.g., "East Machias") should split naturally on small/medium areas
+  if (townName.includes(' ') && area < 0.0015) return true;
+  
+  return false;
+}
+
+/**
+ * Get wrapped town name formatted for clean display
+ * Returns array of lines to display
+ */
+export function getWrappedTownName(townName, ring) {
+  if (!townName || !shouldWrapTownName(townName, ring)) {
+    return [townName]; // Single line
+  }
+
+  // For two-word names, split naturally on space
+  const parts = townName.split(' ');
+  if (parts.length === 2) {
+    return parts;
+  }
+
+  // For longer single words, attempt natural break
+  if (townName.length > 12) {
+    const mid = Math.ceil(townName.length / 2);
+    // Try to break at a logical point (find vowel near middle)
+    let breakPoint = mid;
+    for (let i = mid - 2; i <= mid + 2; i++) {
+      if (i > 0 && i < townName.length && 'aeiou'.includes(townName[i].toLowerCase())) {
+        breakPoint = i + 1;
+        break;
+      }
+    }
+    return [townName.substring(0, breakPoint), townName.substring(breakPoint)];
+  }
+
+  return [townName];
 }
 
 /**
  * Get label position anchoring configuration for Leaflet
  * Ensures label stays centered on the point while being readable
  */
-export function getLabelAnchor(zoomLevel = 10) {
-  // At high zoom, use center anchor; at low zoom, use middle for better spacing
-  return zoomLevel > 11 ? [0.5, 0.5] : [0.5, 0.5];
+export function getLabelAnchor() {
+  return 'center'; // Always use center anchor for consistent positioning
 }
