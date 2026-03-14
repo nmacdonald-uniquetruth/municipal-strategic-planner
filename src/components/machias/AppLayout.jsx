@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
-  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale
+  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network
 } from 'lucide-react';
 import FeedbackDialog from './FeedbackDialog';
 
@@ -21,6 +21,7 @@ const NAV_GROUPS = [
   {
     label: 'Initiatives',
     items: [
+      { path: '/OrgStructure', label: 'Org Structure', icon: Network },
       { path: '/Positions', label: 'Positions', icon: Users },
       { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
       { path: '/RegionalServices', label: 'Regional Services', icon: Target },
