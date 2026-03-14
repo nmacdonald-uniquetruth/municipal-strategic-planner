@@ -45,6 +45,7 @@ import RegionalServiceRevenue from './pages/RegionalServiceRevenue';
 import DepartmentRestructuring from './pages/DepartmentRestructuring';
 import ImplementationRoadmap from './pages/ImplementationRoadmap';
 import ExecutiveDashboard from './pages/ExecutiveDashboard';
+import ProposalComparison from './pages/ProposalComparison';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -101,6 +102,7 @@ const AuthenticatedApp = () => {
           <Route path="/DepartmentProposals" element={<DepartmentProposals />} />
           <Route path="/ProposalEvaluations" element={<ProposalEvaluations />} />
           <Route path="/Proposals" element={<Proposals />} />
+          <Route path="/ProposalComparison" element={<ProposalComparison />} />
           <Route path="/TaxImpact" element={<TaxImpact />} />
           <Route path="/RegionalServiceRevenue" element={<RegionalServiceRevenue />} />
           <Route path="/DepartmentRestructuring" element={<DepartmentRestructuring />} />
