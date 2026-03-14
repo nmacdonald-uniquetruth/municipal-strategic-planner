@@ -18,6 +18,7 @@ export async function generateDepartmentProposal(department, base44, settings, p
 
   const projectedAnnualRevenue = totalAnnualFees * planningHorizon;
   const horizonYears = planningHorizon;
+  const activeTowns = deptParticipations.filter(p => p.status === 'active_partner' || p.status === 'host').map(p => p.municipality);
 
   // Staffing model - derive from PositionConfig or FinancialServicesStaffing
   const staffingRoles = deptMetadata.baselineStaffing || [];
@@ -33,9 +34,9 @@ export async function generateDepartmentProposal(department, base44, settings, p
     department,
     deptMetadata,
     sections: {
-      executiveSummary: generateExecutiveSummary(department, deptMetadata, activeTowns.length, totalAnnualFees),
+      executiveSummary: generateExecutiveSummary(department, deptMetadata, activeTowns.length, totalAnnualFees || 0),
       serviceDescription: generateServiceDescription(department, deptMetadata),
-      participatingTowns: generateParticipatingTowns(participatingTowns, activeT owns, hostTown),
+      participatingTowns: generateParticipatingTowns(participatingTowns, activeTowns, hostTown),
       staffingModel: generateStaffingModel(staffingRoles, totalStaffingCost),
       serviceDeliveryModel: generateServiceDeliveryModel(department, deptMetadata, hostTown),
       financialModel: generateFinancialModel(totalAnnualFees, totalStaffingCost, horizonYears),
