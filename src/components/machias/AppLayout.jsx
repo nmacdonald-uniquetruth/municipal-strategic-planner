@@ -23,6 +23,7 @@ const NAV_GROUPS = [
     items: [
       { path: '/OrgStructure', label: 'Org Structure', icon: Network },
       { path: '/EfficiencyAnalyzer', label: 'Efficiency Analyzer', icon: Activity },
+      { path: '/FinancialSimulator', label: 'Financial Simulator', icon: Banknote },
       { path: '/Positions', label: 'Positions', icon: Users },
       { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
       { path: '/RegionalServices', label: 'Regional Services', icon: Target },
