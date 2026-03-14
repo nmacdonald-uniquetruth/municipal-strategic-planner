@@ -41,6 +41,7 @@ const NAV_GROUPS = [
       { path: '/ProposalEvaluations', label: 'Evaluations', icon: Zap },
       { path: '/DepartmentProposals', label: 'Dept Proposals', icon: FileText },
       { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
+      { path: '/ImplementationRoadmap', label: 'Roadmap', icon: MapPin },
       { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
       { path: '/QandA', label: 'Q & A', icon: HelpCircle },
       { path: '/SelectBoardPresentation', label: 'SB Presentation', icon: Megaphone },

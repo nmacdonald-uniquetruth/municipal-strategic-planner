@@ -43,6 +43,7 @@ import Proposals from './pages/Proposals';
 import TaxImpact from './pages/TaxImpact';
 import RegionalServiceRevenue from './pages/RegionalServiceRevenue';
 import DepartmentRestructuring from './pages/DepartmentRestructuring';
+import ImplementationRoadmap from './pages/ImplementationRoadmap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -101,6 +102,7 @@ const AuthenticatedApp = () => {
           <Route path="/TaxImpact" element={<TaxImpact />} />
           <Route path="/RegionalServiceRevenue" element={<RegionalServiceRevenue />} />
           <Route path="/DepartmentRestructuring" element={<DepartmentRestructuring />} />
+          <Route path="/ImplementationRoadmap" element={<ImplementationRoadmap />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
