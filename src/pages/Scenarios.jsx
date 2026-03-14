@@ -1,13 +1,36 @@
 import React from 'react';
 import ScenarioValueBreakdown from '../components/machias/ScenarioValueBreakdown';
+import ScenarioManager from '../components/machias/ScenarioManager';
+import ScenarioComparison from '../components/machias/ScenarioComparison';
 import SectionHeader from '../components/machias/SectionHeader';
-import { Target } from 'lucide-react';
+import { Target, GitCompare } from 'lucide-react';
 
 export default function Scenarios() {
   return (
     <div className="space-y-8">
       <SectionHeader
-        title="Scenario Modeler — Value vs. Cash"
+        title="Scenario Modeler — Municipal Decision Engine"
+        subtitle="Create, save, and compare scenarios. Track staffing, budgeting, taxation, and regional impact."
+        icon={Target}
+      />
+
+      {/* Scenario Management */}
+      <div className="rounded-lg border border-slate-200 bg-white p-6">
+        <h2 className="text-sm font-bold text-slate-900 mb-4">Scenario Management</h2>
+        <ScenarioManager />
+      </div>
+
+      {/* Scenario Comparison */}
+      <div className="rounded-lg border border-slate-200 bg-white p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <GitCompare className="h-4 w-4 text-slate-600" />
+          <h2 className="text-sm font-bold text-slate-900">Compare Scenarios</h2>
+        </div>
+        <ScenarioComparison />
+      </div>
+
+      <SectionHeader
+        title="Scenario Value Analysis"
         subtitle="Toggle between total value, cash-only, and by-category views. All figures update from Model Settings."
         icon={Target}
       />
