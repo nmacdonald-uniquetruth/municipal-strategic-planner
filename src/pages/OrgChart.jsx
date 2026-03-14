@@ -2,16 +2,16 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { useModel } from '../components/machias/ModelContext';
-import { Network, ChevronDown, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { Network } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
-import OrgCompactCanvas from '../components/orgchart/OrgCompactCanvas';
+import LucidChartStyleCanvas from '../components/orgchart/LucidChartStyleCanvas';
 import OrgDetailPanel from '../components/orgchart/OrgDetailPanel';
 import { getAllPositions, buildOrgTree } from '../components/orgchart/OrgChartData';
 
 export default function OrgChart() {
   const { settings } = useModel();
   const [selectedNode, setSelectedNode] = useState(null);
-  const [showGovernance, setShowGovernance] = useState(false);
+  const [viewMode, setViewMode] = useState('operational'); // operational | governance | full
 
   // Generate positions from current settings
   const positions = useMemo(() => {
@@ -30,6 +30,8 @@ export default function OrgChart() {
   }, [positions]);
 
   const tree = useMemo(() => buildOrgTree(positions), [positions]);
+
+  const showGovernance = viewMode !== 'operational';
 
   const handleSelect = useCallback((node) => {
     setSelectedNode(prev => !node || prev?.id === node.id ? null : node);
@@ -58,12 +60,12 @@ export default function OrgChart() {
         ))}
       </div>
 
-      {/* View toggle */}
+      {/* View mode toggle */}
       <div className="flex gap-2">
         <button
-          onClick={() => setShowGovernance(false)}
+          onClick={() => setViewMode('operational')}
           className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-            !showGovernance
+            viewMode === 'operational'
               ? 'bg-slate-900 text-white shadow-sm'
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
@@ -71,14 +73,24 @@ export default function OrgChart() {
           Operational Structure
         </button>
         <button
-          onClick={() => setShowGovernance(true)}
+          onClick={() => setViewMode('governance')}
           className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-            showGovernance
+            viewMode === 'governance'
               ? 'bg-slate-900 text-white shadow-sm'
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
         >
           Governance Structure
+        </button>
+        <button
+          onClick={() => setViewMode('full')}
+          className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+            viewMode === 'full'
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Full Organization
         </button>
       </div>
 
@@ -87,7 +99,7 @@ export default function OrgChart() {
         {/* Chart area */}
         <div className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden relative">
           {positions.length > 0 && tree.length > 0 ? (
-            <OrgCompactCanvas
+            <LucidChartStyleCanvas
               roots={tree}
               selectedId={selectedNode?.id}
               onSelect={handleSelect}
