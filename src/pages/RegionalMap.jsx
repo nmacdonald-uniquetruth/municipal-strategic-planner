@@ -161,15 +161,25 @@ function BasemapSelector({ current, onChange }) {
 // ─── Map legend ───────────────────────────────────────────────────────────────
 function MapLegend({ basemap }) {
   return (
-    <div className="absolute bottom-8 right-3 z-[1000] bg-white/90 backdrop-blur rounded-xl border border-slate-200 shadow px-3 py-2">
-      <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Municipalities</p>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-        {Object.entries(TOWN_FILL_COLORS).map(([town, color]) => (
-          <div key={town} className="flex items-center gap-1.5">
-            <span className="h-2 w-3 rounded-sm flex-shrink-0 border border-white/40" style={{ background: color + 'cc' }} />
-            <span className="text-[9px] text-slate-700">{town}</span>
+    <div className="absolute bottom-8 right-3 z-[1000] bg-white/90 backdrop-blur rounded-xl border border-slate-200 shadow px-3 py-2 max-w-xs">
+      <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Legend</p>
+      <div className="space-y-1.5 text-[9px] text-slate-700">
+        <p><strong>Town Names:</strong> Permanently displayed on map for accessibility</p>
+        <div className="space-y-1 pt-1 border-t border-slate-200">
+          <p className="font-bold text-slate-500 text-[8px] uppercase">Polygon opacity:</p>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-3 rounded-sm flex-shrink-0 border border-white/40" style={{ background: '#344A6073' }} />
+            <span>Default view</span>
           </div>
-        ))}
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-3 rounded-sm flex-shrink-0 border border-white/40" style={{ background: '#344A60a6' }} />
+            <span>Hover</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-3 rounded-sm flex-shrink-0 border border-white/40" style={{ background: '#344A60c0' }} />
+            <span>Selected</span>
+          </div>
+        </div>
       </div>
     </div>
   );
