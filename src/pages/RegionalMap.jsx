@@ -170,8 +170,9 @@ export default function RegionalMap() {
 
   // Load GeoJSON from ArcGIS REST
   useEffect(() => {
+    const CACHE_KEY = 'machias_region_geojson_v2';
     let cached = null;
-    try { cached = sessionStorage.getItem('machias_region_geojson'); } catch(e) {}
+    try { cached = sessionStorage.getItem(CACHE_KEY); } catch(e) {}
     if (cached) {
       setGeojson(JSON.parse(cached));
       setLoading(false);
@@ -181,7 +182,7 @@ export default function RegionalMap() {
       .then(r => r.json())
       .then(data => {
         setGeojson(data);
-        try { sessionStorage.setItem('machias_region_geojson', JSON.stringify(data)); } catch(e) {}
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch(e) {}
         setLoading(false);
       })
       .catch(err => {
