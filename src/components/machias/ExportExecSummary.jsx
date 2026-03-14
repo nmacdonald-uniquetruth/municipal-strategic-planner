@@ -127,23 +127,25 @@ export default function ExportExecSummary() {
 
         <h2>Five-Year Financial Summary</h2>
         <table>
-          <tr><th>Fiscal Year</th><th>Total Costs</th><th>Total Value</th><th>Net</th><th>GF Levy Impact</th></tr>
-          {data.map(d => (
-            <tr key={d.year}>
-              <td>{d.fiscalYear}</td>
-              <td>{fmt(d.costs.total)}</td>
-              <td>{fmt(d.value.total)}</td>
-              <td style={{fontWeight:'bold',color:d.net>=0?'#166534':'#991b1b'}}>{d.net >= 0 ? fmt(d.net) : `(${fmt(Math.abs(d.net))})`}</td>
-              <td style={{color:d.gf.gfNetLevyImpact<=0?'#166534':'#991b1b'}}>{d.gf.gfNetLevyImpact<=0?`(${fmt(Math.abs(d.gf.gfNetLevyImpact))})`:fmt(d.gf.gfNetLevyImpact)}</td>
+          <thead><tr><th>Fiscal Year</th><th>Total Costs</th><th>Total Value</th><th>Net</th><th>GF Levy Impact</th></tr></thead>
+          <tbody>
+            {data.map(d => (
+              <tr key={d.year}>
+                <td>{d.fiscalYear}</td>
+                <td>{fmt(d.costs.total)}</td>
+                <td>{fmt(d.value.total)}</td>
+                <td style={{fontWeight:'bold',color:d.net>=0?'#166534':'#991b1b'}}>{d.net >= 0 ? fmt(d.net) : `(${fmt(Math.abs(d.net))})`}</td>
+                <td style={{color:d.gf.gfNetLevyImpact<=0?'#166534':'#991b1b'}}>{d.gf.gfNetLevyImpact<=0?`(${fmt(Math.abs(d.gf.gfNetLevyImpact))})`:fmt(d.gf.gfNetLevyImpact)}</td>
+              </tr>
+            ))}
+            <tr style={{fontWeight:'bold',background:'#f8fafc'}}>
+              <td>5-Year Total</td>
+              <td>{fmt(data.reduce((s,d)=>s+d.costs.total,0))}</td>
+              <td>{fmt(data.reduce((s,d)=>s+d.value.total,0))}</td>
+              <td>{fmt(cumulative)}</td>
+              <td>{fmt(data.reduce((s,d)=>s+d.gf.gfNetLevyImpact,0))}</td>
             </tr>
-          ))}
-          <tr style={{fontWeight:'bold',background:'#f8fafc'}}>
-            <td>5-Year Total</td>
-            <td>{fmt(data.reduce((s,d)=>s+d.costs.total,0))}</td>
-            <td>{fmt(data.reduce((s,d)=>s+d.value.total,0))}</td>
-            <td>{fmt(cumulative)}</td>
-            <td>{fmt(data.reduce((s,d)=>s+d.gf.gfNetLevyImpact,0))}</td>
-          </tr>
+          </tbody>
         </table>
 
         <h2>Recommended Next Steps</h2>
