@@ -70,6 +70,7 @@ import SensitivityAnalysis from './pages/SensitivityAnalysis';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import TransferStation from './pages/TransferStation';
 import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
+import FinancialSimulator from './pages/FinancialSimulator';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +98,7 @@ export const PAGES = {
     "TaxpayerFAQ": TaxpayerFAQ,
     "TransferStation": TransferStation,
     "EfficiencyAnalyzer": EfficiencyAnalyzer,
+    "FinancialSimulator": FinancialSimulator,
 }
 
 export const pagesConfig = {
