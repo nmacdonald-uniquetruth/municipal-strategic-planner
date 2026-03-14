@@ -6,6 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Save, CalendarDays, ChevronDown, ChevronRight } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import { readOrgChartSettings, saveOrgChartSettings } from '../orgchart/OrgChartSettings';
+import {
+  FINANCE_STRUCTURES, BILLING_STRUCTURES, GA_STRUCTURES,
+} from '../orgchart/OrgChartData';
 
 function Section({ title, children }) {
   const [open, setOpen] = useState(false);
