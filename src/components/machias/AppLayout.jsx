@@ -63,6 +63,7 @@ export default function AppLayout() {
   // Machias Blue = #344A60, Sand Dune = #E7D0B1, Shiretown Cream = #F3EAD6
   // Misty Blue = #B3C6C8, Salt Marsh Grass = #F6C85F
   return (
+    <ModelProvider>
     <div className="flex h-screen" style={{ background: '#F3EAD6' }}>
       {/* Mobile overlay */}
       {mobileOpen && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setMobileOpen(false)} />}
