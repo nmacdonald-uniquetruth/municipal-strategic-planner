@@ -31,6 +31,7 @@ import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import RegionalFeasibility from './pages/RegionalFeasibility';
 import OrgChart from './pages/OrgChart';
+import RegionalMap from './pages/RegionalMap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
