@@ -19,76 +19,84 @@ export const DEPT_COLORS = {
   Vacant:       '#64748b',
 };
 
+// ─── Node type constants ───────────────────────────────────────────────────────
+// structural = governance/committee body, never shows vacancy
+// position   = actual municipal role, may be filled or vacant
+export const NODE_TYPES = {
+  STRUCTURAL: 'structural',
+  POSITION: 'position',
+};
+
 // ─── Static employees assigned to fixed positions ─────────────────────────────
 export const STATIC_POSITIONS = [
-  // Governance
-  { id: 'residents',      title: 'Residents & Voters',    dept: 'Governance',   reportsTo: null,          status: 'filled', fullTime: false, employee: null },
-  { id: 'town_meeting',   title: 'Town Meeting',          dept: 'Governance',   reportsTo: 'residents',   status: 'filled', fullTime: false, employee: null },
-  { id: 'select_board',   title: 'Select Board',          dept: 'Select Board', reportsTo: 'town_meeting', status: 'filled', fullTime: false, employee: null },
-  { id: 'sb_chair',       title: 'Chair, Select Board',   dept: 'Select Board', reportsTo: 'select_board', status: 'filled', fullTime: false, employee: 'Jake Patryn' },
-  { id: 'sb_vice_chair',  title: 'Vice Chair, Select Board', dept: 'Select Board', reportsTo: 'select_board', status: 'filled', fullTime: false, employee: 'Ben Edwards' },
+  // Governance — structural nodes (no vacancy logic)
+  { id: 'residents',      title: 'Residents & Voters',    dept: 'Governance',   reportsTo: null,           nodeType: 'structural', status: 'structural', fullTime: false, employee: null },
+  { id: 'town_meeting',   title: 'Town Meeting',          dept: 'Governance',   reportsTo: 'residents',    nodeType: 'structural', status: 'structural', fullTime: false, employee: null },
+  { id: 'select_board',   title: 'Select Board',          dept: 'Select Board', reportsTo: 'town_meeting', nodeType: 'structural', status: 'structural', fullTime: false, employee: null },
+  { id: 'sb_chair',       title: 'Chair, Select Board',   dept: 'Select Board', reportsTo: 'select_board', nodeType: 'position',   status: 'filled', fullTime: false, employee: 'Jake Patryn' },
+  { id: 'sb_vice_chair',  title: 'Vice Chair, Select Board', dept: 'Select Board', reportsTo: 'select_board', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Ben Edwards' },
 
-  // Town Manager
-  { id: 'town_manager',   title: 'Town Manager | Treasurer', dept: 'Town Manager', reportsTo: 'select_board', status: 'filled', fullTime: true, employee: 'Sarah Craighead Dedmon' },
+  // Town Manager — position
+  { id: 'town_manager',   title: 'Town Manager | Treasurer', dept: 'Town Manager', reportsTo: 'select_board', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Sarah Craighead Dedmon' },
 
-  // Finance Department
-  { id: 'finance_director', title: 'Finance Director & Asst. Director of HR', dept: 'Finance', reportsTo: 'town_manager', status: 'filled', fullTime: true, employee: 'Nicholas MacDonald' },
+  // Finance Department — positions
+  { id: 'finance_director', title: 'Finance Director & Asst. Director of HR', dept: 'Finance', reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Nicholas MacDonald' },
 
-  // Police
-  { id: 'police_chief',   title: 'Chief of Police',       dept: 'Police',       reportsTo: 'town_manager', status: 'filled', fullTime: true,  employee: 'Keith Mercier' },
-  { id: 'police_corp',    title: 'Corporal',               dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: true,  employee: 'Timothy Mace', isUnion: true },
-  { id: 'police_sgt',     title: 'Sergeant',               dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: true,  employee: 'Wade Walker', isUnion: true },
-  { id: 'police_off1',    title: 'Officer',                dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: true,  employee: 'James Frauenhoffer', isUnion: true },
-  { id: 'police_res1',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'William Sternbergh' },
-  { id: 'police_res2',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Wayde Carter' },
-  { id: 'police_res3',    title: 'Reserve Officer / SRO',  dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Christy Verburgt' },
-  { id: 'police_res4',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Dennis Perry' },
-  { id: 'police_res5',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Amy Wells' },
-  { id: 'police_res6',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Ryan Allen' },
-  { id: 'police_res7',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Wayne Robbins' },
-  { id: 'police_res8',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', status: 'filled', fullTime: false, employee: 'Allen Corey' },
+  // Police — positions
+  { id: 'police_chief',   title: 'Chief of Police',       dept: 'Police',       reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Keith Mercier' },
+  { id: 'police_corp',    title: 'Corporal',               dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Timothy Mace', isUnion: true },
+  { id: 'police_sgt',     title: 'Sergeant',               dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Wade Walker', isUnion: true },
+  { id: 'police_off1',    title: 'Officer',                dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'James Frauenhoffer', isUnion: true },
+  { id: 'police_res1',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'William Sternbergh' },
+  { id: 'police_res2',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Wayde Carter' },
+  { id: 'police_res3',    title: 'Reserve Officer / SRO',  dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Christy Verburgt' },
+  { id: 'police_res4',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Dennis Perry' },
+  { id: 'police_res5',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Amy Wells' },
+  { id: 'police_res6',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Ryan Allen' },
+  { id: 'police_res7',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Wayne Robbins' },
+  { id: 'police_res8',    title: 'Reserve Officer',        dept: 'Police',       reportsTo: 'police_chief', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Allen Corey' },
 
-  // Animal Control / Harbor
-  { id: 'animal_ctrl',    title: 'Animal Control Officer', dept: 'Police',       reportsTo: 'town_manager', status: 'filled', fullTime: false, employee: 'Jennifer Lewis' },
-  { id: 'harbor_master',  title: 'Harbor Master',          dept: 'Town Manager', reportsTo: 'town_manager', status: 'filled', fullTime: false, employee: 'Jake Patryn' },
+  // Animal Control / Harbor — positions
+  { id: 'animal_ctrl',    title: 'Animal Control Officer', dept: 'Police',       reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Jennifer Lewis' },
+  { id: 'harbor_master',  title: 'Harbor Master',          dept: 'Town Manager', reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Jake Patryn' },
 
-  // Public Works
-  { id: 'pw_director',    title: 'Public Works Director',  dept: 'Public Works', reportsTo: 'town_manager', status: 'filled', fullTime: true,  employee: 'Mike Schoppee' },
+  // Public Works — position
+  { id: 'pw_director',    title: 'Public Works Director',  dept: 'Public Works', reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Mike Schoppee' },
 
-  // Fire
-  { id: 'fire_chief',     title: 'Fire Chief',             dept: 'Fire',         reportsTo: 'town_manager', status: 'filled', fullTime: true,  employee: 'Joe Thompson' },
+  // Fire — position
+  { id: 'fire_chief',     title: 'Fire Chief',             dept: 'Fire',         reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Joe Thompson' },
 
-  // Ambulance
-  { id: 'amb_chief',      title: 'Ambulance Chief',        dept: 'Ambulance',    reportsTo: 'town_manager', status: 'filled', fullTime: true,  employee: 'Ryan Maker' },
-  { id: 'paramedic_ruby', title: "Paramedic (Ruby's Position)", dept: 'Ambulance', reportsTo: 'amb_chief', status: 'vacant', fullTime: true,  employee: null },
+  // Ambulance — positions
+  { id: 'amb_chief',      title: 'Ambulance Chief',        dept: 'Ambulance',    reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true,  employee: 'Ryan Maker' },
+  { id: 'paramedic_ruby', title: "Paramedic (Ruby's Position)", dept: 'Ambulance', reportsTo: 'amb_chief',  nodeType: 'position', status: 'vacant', fullTime: true,  employee: null },
 
-  // Wastewater
-  { id: 'ww_super',       title: 'Wastewater Superintendent', dept: 'Wastewater', reportsTo: 'town_manager', status: 'filled', fullTime: true, employee: 'Dakota Norton' },
-  { id: 'ww_contract',    title: 'Contract Operations Oversight', dept: 'Wastewater', reportsTo: 'ww_super', status: 'filled', fullTime: false, employee: 'Annaleis Hanford', contracted: true },
+  // Wastewater — positions
+  { id: 'ww_super',       title: 'Wastewater Superintendent',    dept: 'Wastewater', reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Dakota Norton' },
+  { id: 'ww_contract',    title: 'Contract Operations Oversight', dept: 'Wastewater', reportsTo: 'ww_super',    nodeType: 'position', status: 'filled', fullTime: false, employee: 'Annaleis Hanford', contracted: true },
 
-  // Clerk's Office
-  { id: 'town_clerk',     title: 'Town Clerk | Tax Collector',         dept: "Clerk's Office", reportsTo: 'town_manager', status: 'filled', fullTime: true, employee: 'Sandra Clifford' },
-  { id: 'dep_clerk',      title: 'Deputy Town Clerk | Executive Asst.', dept: "Clerk's Office", reportsTo: 'town_clerk', status: 'filled', fullTime: true, employee: 'Jane Foss' },
+  // Clerk's Office — positions
+  { id: 'town_clerk',     title: 'Town Clerk | Tax Collector',         dept: "Clerk's Office", reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Sandra Clifford' },
+  { id: 'dep_clerk',      title: 'Deputy Town Clerk | Executive Asst.', dept: "Clerk's Office", reportsTo: 'town_clerk',   nodeType: 'position', status: 'filled', fullTime: true, employee: 'Jane Foss' },
 
-  // Assessing
-  { id: 'tax_assessor',   title: 'Tax Assessor',           dept: 'Assessing',    reportsTo: 'town_manager', status: 'filled', fullTime: false, employee: 'Tony Bennett', contracted: true },
+  // Assessing — position
+  { id: 'tax_assessor',   title: 'Tax Assessor',           dept: 'Assessing',    reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Tony Bennett', contracted: true },
 
-  // Code Enforcement
-  { id: 'code_enf',       title: 'Plumbing Inspector | Code Enforcement | Airport Inspector', dept: 'Code Enforcement', reportsTo: 'town_manager', status: 'filled', fullTime: true, employee: 'Betsy Fitzgerald' },
+  // Code Enforcement — position
+  { id: 'code_enf',       title: 'Plumbing Inspector | Code Enforcement | Airport Inspector', dept: 'Code Enforcement', reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Betsy Fitzgerald' },
 
-  // School Committee
-  { id: 'school_committee', title: 'School Committee', dept: 'Schools', reportsTo: 'residents', status: 'filled', fullTime: false, employee: null },
-  { id: 'sc_1', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', status: 'filled', fullTime: false, employee: 'Teresa Saddler' },
-  { id: 'sc_2', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', status: 'filled', fullTime: false, employee: 'Cathy Morse' },
-  { id: 'sc_3', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', status: 'filled', fullTime: false, employee: 'Chloe Flower' },
-  { id: 'sc_4', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', status: 'vacant', fullTime: false, employee: null },
-  { id: 'sc_5', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', status: 'vacant', fullTime: false, employee: null },
+  // School Committee — structural body
+  { id: 'school_committee', title: 'School Committee', dept: 'Schools', reportsTo: 'residents', nodeType: 'structural', status: 'structural', fullTime: false, employee: null },
+  { id: 'sc_1', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Teresa Saddler' },
+  { id: 'sc_2', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Cathy Morse' },
+  { id: 'sc_3', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Chloe Flower' },
+  { id: 'sc_4', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'vacant', fullTime: false, employee: null },
+  { id: 'sc_5', title: 'Committee Member', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'vacant', fullTime: false, employee: null },
 
-  // School Administration
-  { id: 'superintendent', title: 'Superintendent AOS96', dept: 'Schools', reportsTo: 'school_committee', status: 'filled', fullTime: true, employee: 'Nicole Case' },
-  { id: 'mmhs_principal', title: 'MMHS Principal',        dept: 'Schools', reportsTo: 'superintendent', status: 'filled', fullTime: true, employee: 'Wendy Black' },
-  { id: 'rmge_principal', title: 'RMGE Principal',         dept: 'Schools', reportsTo: 'superintendent', status: 'filled', fullTime: true, employee: 'Sue Dow' },
-  { id: 'rmge_ap',        title: 'Assistant Principal & Athletic Director', dept: 'Schools', reportsTo: 'rmge_principal', status: 'filled', fullTime: true, employee: 'Chad Fitzsimmons' },
+  // School Administration — positions
+  { id: 'superintendent', title: 'Superintendent AOS96', dept: 'Schools', reportsTo: 'school_committee', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Nicole Case' },
+  { id: 'mmhs_principal', title: 'MMHS Principal',        dept: 'Schools', reportsTo: 'superintendent',   nodeType: 'position', status: 'filled', fullTime: true, employee: 'Wendy Black' },
+  { id: 'rmge_principal', title: 'RMGE Principal',         dept: 'Schools', reportsTo: 'superintendent',   nodeType: 'position', status: 'filled', fullTime: true, employee: 'Sue Dow' },
+  { id: 'rmge_ap',        title: 'Assistant Principal & Athletic Director', dept: 'Schools', reportsTo: 'rmge_principal', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Chad Fitzsimmons' },
 ];
 
 // ─── Generate dynamic finance/billing positions from settings ─────────────────
