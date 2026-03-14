@@ -52,6 +52,7 @@ import BoardMemoGenerator from './pages/BoardMemoGenerator';
 import CapitalProjects from './pages/CapitalProjects';
 import ServiceTerritoryAnalysis from './pages/ServiceTerritoryAnalysis';
 import LeadershipCapacityModeling from './pages/LeadershipCapacityModeling';
+import RestructuringProposalLibrary from './pages/RestructuringProposalLibrary';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
