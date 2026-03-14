@@ -77,7 +77,9 @@ export default function Layout({ children }) {
         /* Stat cards */
         .bg-white { background-color: #ffffff; }
       `}</style>
-      {children || <Outlet />}
+      <ModelProvider>
+        {children || <Outlet />}
+      </ModelProvider>
     </>
   );
 }
