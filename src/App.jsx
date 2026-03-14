@@ -46,6 +46,7 @@ import DepartmentRestructuring from './pages/DepartmentRestructuring';
 import ImplementationRoadmap from './pages/ImplementationRoadmap';
 import ExecutiveDashboard from './pages/ExecutiveDashboard';
 import ProposalComparison from './pages/ProposalComparison';
+import AssumptionsManager from './pages/AssumptionsManager';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => {
           <Route path="/Milestones" element={<Milestones />} />
           <Route path="/MathVerify" element={<MathVerify />} />
           <Route path="/ModelSettings" element={<ModelSettings />} />
+          <Route path="/AssumptionsManager" element={<AssumptionsManager />} />
           <Route path="/AIPlanner" element={<AIPlanner />} />
           <Route path="/Narrative" element={<Narrative />} />
           <Route path="/RegionalServices" element={<RegionalServices />} />
