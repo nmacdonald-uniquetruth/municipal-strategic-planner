@@ -25,6 +25,60 @@ const BASEMAPS = {
   },
 };
 
+// ─── Component to add town labels on map ─────────────────────────────────────
+function TownLabels({ geojson }) {
+  const map = useMap();
+  const labelsRef = useRef(null);
+
+  useEffect(() => {
+    if (!geojson || !geojson.features || !map) return;
+
+    // Clear existing labels
+    if (labelsRef.current) {
+      labelsRef.current.clearLayers();
+    } else {
+      labelsRef.current = window.L.featureGroup().addTo(map);
+    }
+
+    // Create label for each feature
+    geojson.features.forEach(feature => {
+      const town = feature?.properties?.TOWN;
+      if (!town || !feature.geometry) return;
+
+      // Calculate centroid
+      let centroid = null;
+      if (feature.geometry.type === 'Polygon') {
+        const coords = feature.geometry.coordinates[0];
+        let sumLat = 0, sumLng = 0;
+        coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
+        centroid = [sumLat / coords.length, sumLng / coords.length];
+      }
+
+      if (centroid) {
+        // Create a permanent label using HTML
+        const label = window.L.divIcon({
+          html: `<div style="
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            text-shadow: -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white, 1px 1px 2px white, 0 0 3px white;
+            text-align: center;
+            white-space: nowrap;
+            pointer-events: none;
+          ">${town}</div>`,
+          iconSize: null,
+          iconAnchor: null,
+          popupAnchor: null,
+        });
+        window.L.marker(centroid, { icon: label, interactive: false }).addTo(labelsRef.current);
+      }
+    });
+  }, [geojson, map]);
+
+  return null;
+}
+
 // ─── Component to fit bounds after GeoJSON loads ──────────────────────────────
 function FitBounds({ geojson }) {
   const map = useMap();
