@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MapPin, Layers, Map, ChevronDown, ChevronRight, Info, BarChart3 } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { MapPin, Layers, Map, ChevronDown, ChevronRight, Info, BarChart3, Network } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import 'leaflet/dist/leaflet.css';
 import SectionHeader from '../components/machias/SectionHeader';
 import TownInfoPanel from '../components/map/TownInfoPanel';
 import ComparisonView from '../components/map/ComparisonView';
+import RelationshipPlanningPanel from '../components/regionalmap/RelationshipPlanningPanel';
 import { TOWN_PROFILES, TOWN_FILL_COLORS, ARCGIS_URL } from '../components/map/TownProfiles';
 
 // ─── Basemap options ───────────────────────────────────────────────────────────
