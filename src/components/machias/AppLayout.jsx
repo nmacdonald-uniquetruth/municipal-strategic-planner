@@ -34,6 +34,7 @@ const NAV_GROUPS = [
   {
     label: 'Planning',
     items: [
+      { path: '/DepartmentProposals', label: 'Dept Proposals', icon: FileText },
       { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
       { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
       { path: '/QandA', label: 'Q & A', icon: HelpCircle },
