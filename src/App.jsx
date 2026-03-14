@@ -36,6 +36,7 @@ import RegionalServicesDashboard from './pages/RegionalServicesDashboard';
 import OrgChart from './pages/OrgChart';
 import RegionalMap from './pages/RegionalMap';
 import RegionalParticipationSettings from './pages/RegionalParticipationSettings';
+import DepartmentProposals from './pages/DepartmentProposals';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -88,6 +89,7 @@ const AuthenticatedApp = () => {
           <Route path="/OrgChart" element={<OrgChart />} />
           <Route path="/RegionalMap" element={<RegionalMap />} />
           <Route path="/RegionalParticipationSettings" element={<RegionalParticipationSettings />} />
+          <Route path="/DepartmentProposals" element={<DepartmentProposals />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
