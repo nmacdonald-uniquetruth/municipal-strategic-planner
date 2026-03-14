@@ -32,6 +32,7 @@ const NAV_GROUPS = [
       { path: '/RegionalFeasibility', label: 'Regional Feasibility', icon: Scale },
       { path: '/TransferStation', label: 'Transfer Station', icon: Truck },
       { path: '/EnterpriseFunds', label: 'Enterprise Funds', icon: Landmark },
+      { path: '/CapitalProjects', label: 'Capital Projects', icon: Landmark },
     ],
   },
   {
