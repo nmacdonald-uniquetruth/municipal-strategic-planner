@@ -244,12 +244,15 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
   const fitView = useCallback(() => {
     if (!svgEl) return;
     const rect = svgEl.getBoundingClientRect();
-    const scaleX = rect.width / (viewBox.width + 80);
-    const scaleY = rect.height / (viewBox.height + 80);
+    const w = rect.width || svgEl.clientWidth || 800;
+    const h = rect.height || svgEl.clientHeight || 600;
+    if (viewBox.width <= 0 || viewBox.height <= 0) return;
+    const scaleX = w / (viewBox.width + 80);
+    const scaleY = h / (viewBox.height + 80);
     const scale = Math.min(scaleX, scaleY, 1.0);
     setTransform({
       scale,
-      x: (rect.width - viewBox.width * scale) / 2 - viewBox.minX * scale,
+      x: (w - viewBox.width * scale) / 2 - viewBox.minX * scale,
       y: 40,
     });
   }, [svgEl, viewBox]);
