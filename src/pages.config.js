@@ -51,7 +51,10 @@ import AIPlanner from './pages/AIPlanner';
 import CommunicationStrategy from './pages/CommunicationStrategy';
 import Dashboard from './pages/Dashboard';
 import ERPRoadmapPage from './pages/ERPRoadmapPage';
+import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
 import EnterpriseFunds from './pages/EnterpriseFunds';
+import FinancialSimulator from './pages/FinancialSimulator';
+import GovernanceTwin from './pages/GovernanceTwin';
 import MathVerify from './pages/MathVerify';
 import Milestones from './pages/Milestones';
 import ModelSettings from './pages/ModelSettings';
@@ -69,9 +72,6 @@ import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import SensitivityAnalysis from './pages/SensitivityAnalysis';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import TransferStation from './pages/TransferStation';
-import EfficiencyAnalyzer from './pages/EfficiencyAnalyzer';
-import FinancialSimulator from './pages/FinancialSimulator';
-import GovernanceTwin from './pages/GovernanceTwin';
 import __Layout from './Layout.jsx';
 
 
@@ -80,7 +80,10 @@ export const PAGES = {
     "CommunicationStrategy": CommunicationStrategy,
     "Dashboard": Dashboard,
     "ERPRoadmapPage": ERPRoadmapPage,
+    "EfficiencyAnalyzer": EfficiencyAnalyzer,
     "EnterpriseFunds": EnterpriseFunds,
+    "FinancialSimulator": FinancialSimulator,
+    "GovernanceTwin": GovernanceTwin,
     "MathVerify": MathVerify,
     "Milestones": Milestones,
     "ModelSettings": ModelSettings,
@@ -98,9 +101,6 @@ export const PAGES = {
     "SensitivityAnalysis": SensitivityAnalysis,
     "TaxpayerFAQ": TaxpayerFAQ,
     "TransferStation": TransferStation,
-    "EfficiencyAnalyzer": EfficiencyAnalyzer,
-    "FinancialSimulator": FinancialSimulator,
-    "GovernanceTwin": GovernanceTwin,
 }
 
 export const pagesConfig = {

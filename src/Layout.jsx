@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { ModelProvider } from './components/machias/ModelContext';
 
 export default function Layout({ children }) {
   return (
@@ -77,9 +76,7 @@ export default function Layout({ children }) {
         /* Stat cards */
         .bg-white { background-color: #ffffff; }
       `}</style>
-      <ModelProvider>
-        {children || <Outlet />}
-      </ModelProvider>
+      {children || <Outlet />}
     </>
   );
 }
