@@ -15,7 +15,7 @@ const CATEGORY_ICONS = {
   administration: '📋'
 };
 
-export default function ProposalDetail({ proposal, onClose, onEdit, onDelete, relatedProposals = [] }) {
+export default function ProposalDetail({ proposal, onClose, onEdit, onDelete, onStatusChange, evaluation, relatedProposals = [] }) {
   if (!proposal) return null;
 
   return (
