@@ -1,123 +1,110 @@
 import React from 'react';
-import { X, DollarSign, User, Building2, ArrowUp, Briefcase, Clock, Edit2 } from 'lucide-react';
-import { DEPT_COLORS, FUND_LABELS } from './OrgData';
-
-const STATUS_COLORS = {
-  filled: 'bg-emerald-100 text-emerald-800',
-  vacant: 'bg-amber-100 text-amber-800',
-  proposed: 'bg-blue-100 text-blue-800',
-  eliminated: 'bg-red-100 text-red-800',
-  frozen: 'bg-slate-100 text-slate-700',
-};
-
-function Row({ label, value, mono = false }) {
-  if (!value && value !== 0) return null;
-  return (
-    <div className="flex items-start justify-between gap-3 py-2 border-b border-slate-100 last:border-0">
-      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex-shrink-0">{label}</span>
-      <span className={`text-xs text-slate-800 text-right ${mono ? 'font-mono' : 'font-medium'}`}>{value}</span>
-    </div>
-  );
-}
+import { Network, ChevronRight } from 'lucide-react';
+import { DEPT_COLORS } from './OrgChartData';
 
 export default function OrgDetailPanel({ node, allPositions, onClose }) {
-  if (!node) return null;
-  const deptColor = DEPT_COLORS[node.department] || '#344A60';
-
-  // Find supervisor name
-  const supervisor = node.reports_to
-    ? allPositions.find(p => p.position_id === node.reports_to)
-    : null;
-
-  // Find direct reports
-  const directReports = allPositions.filter(p => p.reports_to === node.position_id && !p._hidden);
-
-  // Budget calculation
-  const healthAnnual = 30938; // family tier default
-  const ficaRate = 0.0765;
-  const persRate = 0.085;
-  const wcRate = 0.025;
-  let fullyLoaded = node.base_salary || 0;
-  if (node.employment_type === 'full_time' && fullyLoaded > 0) {
-    fullyLoaded = Math.round(fullyLoaded * (1 + ficaRate + persRate + wcRate) + healthAnnual);
+  if (!node) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center">
+        <div className="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
+          <Network className="h-6 w-6 text-slate-300" />
+        </div>
+        <p className="text-sm font-semibold text-slate-500">Select a position</p>
+        <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+          Click any node to view details
+        </p>
+      </div>
+    );
   }
 
+  const isStructural = node.nodeType === 'structural';
+  const color = DEPT_COLORS[node.dept] || DEPT_COLORS.Governance;
+  const supervisor = allPositions.find(p => p.id === node.reportsTo);
+  const reports = allPositions.filter(p => p.reportsTo === node.id);
+
   return (
-    <div className="w-80 flex-shrink-0 rounded-xl border border-slate-200 bg-white overflow-hidden shadow-lg">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-4 text-white relative" style={{ background: deptColor }}>
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 p-1 rounded hover:bg-white/20 transition-colors"
-        >
-          <X className="h-4 w-4" />
+      <div className="px-5 py-4 text-white flex-shrink-0" style={{ background: color }}>
+        <button onClick={onClose}
+          className="absolute top-3 right-3 h-6 w-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white text-base leading-none transition-colors">
+          ×
         </button>
-        <div className="flex items-start gap-3 pr-8">
-          <div className="h-10 w-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
-            <User className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-bold leading-tight">{node.title}</p>
-            {node.subtitle && <p className="text-[11px] opacity-80 leading-tight mt-0.5">{node.subtitle}</p>}
-            <p className="text-[11px] opacity-70 mt-1">{node.department}</p>
-          </div>
-        </div>
-        {/* Status badge */}
-        <div className="mt-3 flex gap-2 flex-wrap">
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${STATUS_COLORS[node.status] || 'bg-white/20 text-white'}`}>
-            {node.status}
-          </span>
-          {node.employment_type && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20">
-              {node.employment_type.replace('_', ' ')}
+        <p className="text-sm font-bold pr-8 leading-snug">{node.title}</p>
+        <p className="text-[11px] opacity-75 mt-0.5">{node.dept}</p>
+
+        {isStructural ? (
+          <div className="mt-2.5">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">
+              Governance Body
             </span>
-          )}
-          {node.is_union && (
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200 text-purple-900">Union</span>
-          )}
-        </div>
-      </div>
-
-      {/* Employee */}
-      <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Assigned Employee</p>
-        {node.employee
-          ? <p className="text-sm font-semibold text-slate-900">{node.employee.full_name}</p>
-          : <p className="text-sm italic text-amber-600">Position Vacant</p>
-        }
-      </div>
-
-      {/* Details */}
-      <div className="px-4 py-2">
-        <Row label="Department" value={node.department} />
-        <Row label="Level" value={`Level ${node.level}`} />
-        <Row label="Reports To" value={supervisor ? `${supervisor.title}` : '—'} />
-        <Row label="Direct Reports" value={directReports.length > 0 ? `${directReports.length} positions` : 'None'} />
-        <Row label="Fund Source" value={FUND_LABELS[node.fund_source] || node.fund_source} mono />
-        {node.base_salary > 0 && <Row label="Base Salary" value={`$${node.base_salary.toLocaleString()}`} mono />}
-        {fullyLoaded > 0 && node.employment_type === 'full_time' && (
-          <Row label="Fully Loaded (est.)" value={`$${fullyLoaded.toLocaleString()}`} mono />
-        )}
-        {node.account_code && <Row label="Account Code" value={node.account_code} mono />}
-        {node.is_configurable && <Row label="Configurable" value="Yes — scenario-driven" />}
-        {node.notes && <Row label="Notes" value={node.notes} />}
-      </div>
-
-      {/* Direct reports list */}
-      {directReports.length > 0 && (
-        <div className="px-4 py-3 border-t border-slate-100">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Direct Reports</p>
-          <div className="space-y-1">
-            {directReports.map(r => (
-              <div key={r.position_id} className="flex items-center gap-2 text-xs text-slate-700 py-1 border-b border-slate-50 last:border-0">
-                <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'}`} />
-                <span className="font-medium truncate">{r.title}</span>
-                {r.status === 'vacant' && <span className="text-[9px] text-amber-600 italic flex-shrink-0">vacant</span>}
-              </div>
-            ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="mt-2.5 flex gap-1.5 flex-wrap">
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+              node.status === 'filled' ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'
+            }`}>
+              {node.status === 'filled' ? 'Filled' : 'Vacant'}
+            </span>
+            {!node.fullTime && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Part-Time</span>
+            )}
+            {node.isUnion && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 font-bold">Union</span>
+            )}
+            {node.contracted && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-medium">Contracted</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="px-5 py-4 space-y-3 text-xs flex-1 overflow-y-auto">
+        {isStructural && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Type</p>
+            <p className="text-slate-700">Governance / Structural Body</p>
+          </div>
+        )}
+
+        {!isStructural && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Employee</p>
+            {node.employee ? (
+              <p className="font-medium text-slate-800">{node.employee}</p>
+            ) : (
+              <p className="italic text-amber-600">Position Vacant</p>
+            )}
+          </div>
+        )}
+
+        {supervisor && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Reports To</p>
+            <p className="font-medium text-slate-800">{supervisor.title}</p>
+          </div>
+        )}
+
+        {reports.length > 0 && (
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              Direct Reports ({reports.length})
+            </p>
+            <div className="space-y-1.5">
+              {reports.map(r => (
+                <div key={r.id} className="flex items-center gap-2">
+                  <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
+                    r.nodeType === 'structural' ? 'bg-slate-400' :
+                    r.status === 'filled' ? 'bg-emerald-500' : 'bg-amber-400'
+                  }`} />
+                  <span className="text-slate-700 leading-snug">{r.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
