@@ -122,6 +122,17 @@ export default function ModelSettingsEditor() {
             </SelectContent>
           </Select>
         </div>
+        <div className="col-span-2 md:col-span-3">
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">GA Coordinator — Reports To</Label>
+          <p className="text-[9px] text-slate-400 mb-1">Determines where GA Coordinator appears in the org chart</p>
+          <Select value={local.ga_reports_to || 'finance_director'} onValueChange={set('ga_reports_to')}>
+            <SelectTrigger className="h-8 mt-1 text-xs w-64"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="finance_director" className="text-xs">Finance Director (Finance &amp; HR Dept.)</SelectItem>
+              <SelectItem value="town_manager" className="text-xs">Town Manager</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <Field label="Annual Wage Growth Rate" value={local.wage_growth_rate} onChange={set('wage_growth_rate')} suffix="%" />
         <div>
           <Label className="text-[10px] text-slate-500 uppercase font-medium">Default Health Tier</Label>
