@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
-  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network, MapPin
+  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network, MapPin, Zap
 } from 'lucide-react';
 import FeedbackDialog from './FeedbackDialog';
 
@@ -34,6 +34,7 @@ const NAV_GROUPS = [
   {
     label: 'Planning',
     items: [
+      { path: '/ProposalEvaluations', label: 'Evaluations', icon: Zap },
       { path: '/DepartmentProposals', label: 'Dept Proposals', icon: FileText },
       { path: '/Milestones', label: 'Milestones', icon: ClipboardList },
       { path: '/CommunicationStrategy', label: 'Communications', icon: Megaphone },
