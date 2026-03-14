@@ -40,6 +40,7 @@ const STATUS_COLORS = {
 };
 
 export default function ProposalCard({ proposal, onSelect, isSelected, showCheckbox }) {
+  const [showPublicSummary, setShowPublicSummary] = useState(false);
   const netFinancialImpact = (proposal.estimatedAnnualSavings || 0) + (proposal.estimatedAnnualRevenue || 0);
   const hasPositiveImpact = netFinancialImpact > 0;
 
