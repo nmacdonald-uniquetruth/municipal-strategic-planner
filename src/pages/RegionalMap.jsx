@@ -511,9 +511,32 @@ export default function RegionalMap() {
                 ))}
               </div>
             </div>
+          ) : showRelationshipPanel ? (
+            <RelationshipPlanningPanel
+              relationships={allRelationships}
+              selectedTypes={selectedRelationshipTypes}
+              onTypeChange={setSelectedRelationshipTypes}
+              highlightedTowns={highlightedTowns}
+              onClose={() => setShowRelationshipPanel(false)}
+            />
           ) : (
             /* Map Labels Mode */
             <div className="flex flex-col gap-3 overflow-y-auto">
+              <button
+                onClick={() => setShowRelationshipPanel(true)}
+                className="rounded-lg border border-slate-200 bg-white p-3 hover:bg-slate-50 transition-colors text-left group"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-1.5 rounded bg-slate-100 group-hover:bg-slate-200 transition-colors">
+                    <Network className="h-4 w-4 text-slate-700" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-slate-900">Regional Relationships</p>
+                    <p className="text-[10px] text-slate-500">Strategic planning tool</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-600">View and plan interlocal service relationships</p>
+              </button>
               <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
                 <MapPin className="h-8 w-8 mx-auto mb-2 text-slate-200" />
                 <p className="text-xs font-medium text-slate-500">Click any municipality</p>
@@ -530,8 +553,8 @@ export default function RegionalMap() {
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </div>
-  );
-}
+          </div>
+          </div>
+          </div>
+          );
+          }
