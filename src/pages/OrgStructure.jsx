@@ -91,10 +91,12 @@ export default function OrgStructure() {
     setSeeding(false);
   }
 
-  // Build filtered tree
+  // Build filtered tree — apply model settings overlay first
   const tree = useMemo(() => {
     if (!nodes.length) return [];
-    let filtered = nodes;
+    // Apply dynamic settings overlay (GA reporting, SA/BS/RC under FD, Y5 label)
+    const patched = applySettingsOverlay(nodes, settings);
+    let filtered = patched;
     if (filterType !== 'all') filtered = filtered.filter(n => n.node_type === filterType);
 
     const currentBranch = VIEW_MODES.find(v => v.id === viewMode)?.branch;
@@ -106,7 +108,7 @@ export default function OrgStructure() {
     }
 
     return buildTree(filtered);
-  }, [nodes, viewMode, filterType]);
+  }, [nodes, viewMode, filterType, settings]);
 
   // Filter roots by view
   const displayRoots = useMemo(() => {
