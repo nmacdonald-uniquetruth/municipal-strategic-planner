@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ModelProvider } from './components/machias/ModelContext.jsx';
+import { ScenarioProvider } from './components/machias/ScenarioContext.jsx';
 
 import AppLayout from './components/machias/AppLayout';
 import Layout from './Layout';
@@ -102,11 +103,13 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <DepartmentProvider>
-          <Router>
-            <AuthenticatedApp />
-          </Router>
-        </DepartmentProvider>
+        <ScenarioProvider>
+          <DepartmentProvider>
+            <Router>
+              <AuthenticatedApp />
+            </Router>
+          </DepartmentProvider>
+        </ScenarioProvider>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
