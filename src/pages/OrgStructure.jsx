@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { buildTree, NODE_TYPE_CONFIG, RESTRUCTURING_STATUS_CONFIG } from '../components/org/orgUtils';
 import { MACHIAS_ORG_SEED } from '../components/org/orgData';
+import { applySettingsOverlay } from '../components/org/orgSettingsOverlay';
+import { useModel } from '../components/machias/ModelContext';
 import OrgTree from '../components/org/OrgTree';
 import OrgNodeDetail from '../components/org/OrgNodeDetail';
 import OrgLegend from '../components/org/OrgLegend';
