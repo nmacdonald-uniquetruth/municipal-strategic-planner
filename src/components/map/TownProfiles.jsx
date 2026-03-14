@@ -605,6 +605,87 @@ export const TOWN_PROFILES = {
     planning_map_url: null,
   },
 
+  Machiasport: {
+    town_name: 'Machiasport',
+    county: 'Washington County',
+    population: 1258,
+    median_age: 50.1,
+    households: 578,
+    median_household_income: 46200,
+    labor_force: 560,
+    employment: 520,
+    major_employers: [
+      'Commercial fishing and lobster',
+      'Machiasport town services',
+      'Tourism and hospitality (seasonal)',
+      'Machias-area employers (commuters)',
+    ],
+    industry_sectors: ['Commercial Fishing', 'Government', 'Tourism', 'Retail', 'Construction'],
+    education_levels: {
+      high_school_or_higher: '88%',
+      bachelors_or_higher: '20%',
+    },
+    housing_units: 748,
+    housing_occupancy: '77.3%',
+    median_home_value: 162000,
+    transportation_access: 'ME Route 92; close proximity to Machias (approx. 5 miles). No public transit.',
+    broadband_availability: 'Partial — ConnectMaine expansion underway; rural gaps remain.',
+    water_access: 'Machias Bay frontage; tidal coves and working waterfront harbor',
+    working_waterfront: true,
+    commercial_fishing_presence: true,
+    aquaculture_presence: true,
+    tourism_assets: [
+      'Fort O\'Brien State Historic Site (Revolutionary War fort)',
+      'Machias Bay scenic views',
+      'Tidal and coastal access',
+      'Birding and wildlife observation',
+      'Historic Fort Machias / Fort O\'Brien',
+    ],
+    natural_resources: ['Machias Bay', 'Tidal flats and coves', 'Coastal shoreline', 'Fishery habitat'],
+    parks_and_recreation: ['Fort O\'Brien State Historic Site', 'Coastal access points', 'Kayaking and boating', 'Birdwatching'],
+    local_institutions: [
+      'Machiasport Town Office',
+      'Fort O\'Brien State Historic Site',
+      'Local fishing cooperative infrastructure',
+    ],
+    school_system: 'AOS 96 region — students attend Machias Memorial High School',
+    healthcare_access: 'Close proximity to Down East Community Hospital in Machias',
+    municipal_services: 'Basic — road maintenance, volunteer fire/EMS; close service relationship with Machias',
+    economic_development_opportunities: [
+      'Aquaculture expansion on Machias Bay',
+      'Heritage and coastal tourism (Fort O\'Brien)',
+      'Working waterfront preservation and investment',
+      'Proximity to Machias employment and services',
+      'Broadband connectivity for remote workers',
+      'Interlocal service agreements with Machias',
+    ],
+    community_assets: [
+      'Machias Bay waterfront access',
+      'Working harbor and fishing infrastructure',
+      'Fort O\'Brien historic site',
+      'Proximity to Machias services',
+      'Scenic coastal character',
+    ],
+    community_challenges: [
+      'Small municipal tax base',
+      'Seasonal population fluctuation',
+      'Limited year-round economic activity',
+      'Aging demographics',
+      'Broadband gaps in outlying areas',
+    ],
+    planning_priorities: [
+      'Working waterfront preservation',
+      'Aquaculture permitting and support',
+      'Broadband infrastructure',
+      'Heritage tourism development',
+      'Regional service sharing with Machias',
+    ],
+    regional_connections: ['Machias', 'East Machias', 'Roque Bluffs', 'Jonesport'],
+    profile_url: 'https://sunrisecounty.org/communities/machiasport/',
+    planning_map_url: null,
+    note: 'Active interlocal agreement candidate with Machias for municipal finance services.',
+  },
+
   Northfield: {
     town_name: 'Northfield',
     county: 'Washington County',
@@ -650,6 +731,7 @@ export const TOWN_PROFILES = {
 // Color scheme for map polygons
 export const TOWN_FILL_COLORS = {
   Machias: '#1a6b5c',
+  Machiasport: '#1a7a6b',
   'East Machias': '#2a7a4a',
   'Roque Bluffs': '#2a5c7a',
   Jonesboro: '#5c3d8a',
@@ -664,11 +746,9 @@ export const TOWN_FILL_COLORS = {
 };
 
 export const REGION_TOWNS = [
-  'Machias', 'East Machias', 'Roque Bluffs', 'Jonesboro', 'Jonesport',
+  'Machias', 'Machiasport', 'East Machias', 'Roque Bluffs', 'Jonesboro', 'Jonesport',
   'Beals', 'Cutler', 'Whiting', 'Whitneyville', 'Marshfield', 'Wesley', 'Northfield',
 ];
 
 export const ARCGIS_URL =
-  `https://services1.arcgis.com/RbMX0mRVOFNTdLzd/arcgis/rest/services/Maine_Town_and_Townships_Boundary_Polygons_Dissolved/FeatureServer/0/query?` +
-  `where=TOWN%20IN%20('Machias','East%20Machias','Roque%20Bluffs','Jonesboro','Jonesport','Beals','Cutler','Whiting','Whitneyville','Marshfield','Wesley','Northfield')` +
-  `&outFields=TOWN&outSR=4326&f=geojson`;
+  `https://services1.arcgis.com/RbMX0mRVOFNTdLzd/arcgis/rest/services/Maine_Town_and_Townships_Boundary_Polygons_Dissolved/FeatureServer/0/query?where=TOWN%20IN%20('Machias','Machiasport','East%20Machias','Roque%20Bluffs','Jonesboro','Jonesport','Beals','Cutler','Whiting','Whitneyville','Marshfield','Wesley','Northfield')&outFields=TOWN&outSR=4326&f=geojson`;
