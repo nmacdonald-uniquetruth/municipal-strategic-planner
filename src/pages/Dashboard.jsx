@@ -3,6 +3,8 @@ import { ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
 import { useModel } from '../components/machias/ModelContext';
 import { useDepartment, DEPARTMENTS } from '../components/machias/DepartmentContext';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 import StatCard from '../components/machias/StatCard';
 import SectionHeader from '../components/machias/SectionHeader';
 import ProFormaChart from '../components/machias/ProFormaChart';
@@ -20,7 +22,8 @@ const formatShortCurrency = (value) => {
 
 export default function Dashboard() {
   const { settings } = useModel();
-  const { selectedDepartment, changeDepartment, DEPARTMENTS } = useDepartment();
+  const { selectedDepartments, toggleDepartment, DEPARTMENTS } = useDepartment();
+  const [deptDropdownOpen, setDeptDropdownOpen] = useState(false);
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
   const cumulative = data.reduce((s, d) => s + d.net, 0);
   const y1Net = data[0]?.net || 0;
@@ -53,18 +56,34 @@ export default function Dashboard() {
 
       {/* Department filter */}
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Department Being Evaluated</label>
-        <select
-          value={selectedDepartment}
-          onChange={(e) => changeDepartment(e.target.value)}
-          className="w-full md:w-80 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-0"
-        >
-          {DEPARTMENTS.map(dept => (
-            <option key={dept.id} value={dept.id}>
-              {dept.label}
-            </option>
-          ))}
-        </select>
+        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Departments Being Evaluated</label>
+        <div className="relative w-full md:w-96">
+          <button
+            onClick={() => setDeptDropdownOpen(!deptDropdownOpen)}
+            className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-0 flex items-center justify-between"
+          >
+            <span>{selectedDepartments.length === 0 ? 'Select departments...' : selectedDepartments.includes('all') ? 'All Departments' : `${selectedDepartments.length} selected`}</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${deptDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {deptDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
+              {DEPARTMENTS.map(dept => (
+                <label
+                  key={dept.id}
+                  className="flex items-center gap-2 px-3 py-2.5 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-b-0"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedDepartments.includes('all') || selectedDepartments.includes(dept.id)}
+                    onChange={() => toggleDepartment(dept.id)}
+                    className="w-4 h-4 rounded border-slate-300"
+                  />
+                  <span className="text-sm text-slate-700">{dept.label}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Key insight banner */}
