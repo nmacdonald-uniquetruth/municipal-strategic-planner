@@ -254,8 +254,11 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     });
   }, [svgEl, viewBox]);
 
-  // Auto-fit on tree change
-  useEffect(() => { fitView(); }, [processedTree.length]);
+  // Auto-fit on tree change — defer one frame so SVG has rendered size
+  useEffect(() => {
+    const id = requestAnimationFrame(() => { fitView(); });
+    return () => cancelAnimationFrame(id);
+  }, [nodes.length]);
 
   if (nodes.length === 0) {
     return (
