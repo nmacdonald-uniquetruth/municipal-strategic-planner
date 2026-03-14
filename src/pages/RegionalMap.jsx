@@ -73,7 +73,7 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
         window.L.marker(centroid, { icon: label, interactive: false }).addTo(labelsRef.current);
       }
     });
-  }, [geojson, map]);
+  }, [geojson, map, hoveredTown, selectedTown]);
 
   return null;
 }
