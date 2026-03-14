@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
 import { useModel } from '../components/machias/ModelContext';
-import { useDepartment, DEPARTMENTS } from '../components/strategic/DepartmentContext';
+import { useDepartment, DEPARTMENTS } from '../components/machias/DepartmentContext';
 import StatCard from '../components/machias/StatCard';
 import SectionHeader from '../components/machias/SectionHeader';
 import ProFormaChart from '../components/machias/ProFormaChart';

@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Settings, Plus, Trash2 } from 'lucide-react';
 import SectionHeader from '../components/machias/SectionHeader';
-import { DEPARTMENTS } from '../components/strategic/DepartmentContext';
+import { DEPARTMENTS } from '../components/machias/DepartmentContext';
 
 const TOWNS = ['Machias', 'Beals', 'Machiasport', 'Marshfield', 'Whitneyville', 'Northfield', 'Roque Bluffs', 'Jonesport', 'Jonesborough', 'East Machias'];
 
