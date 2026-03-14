@@ -38,7 +38,7 @@ export async function generateDepartmentProposal(department, base44, settings, p
       participatingTowns: generateParticipatingTowns(participatingTowns, activeTowns, hostTown),
       staffingModel: generateStaffingModel(staffingRoles, totalStaffingCost),
       serviceDeliveryModel: generateServiceDeliveryModel(department, deptMetadata, hostTown),
-      financialModel: generateFinancialModel(totalAnnualFees, totalStaffingCost, horizonYears),
+      financialModel: generateFinancialModel(totalAnnualFees, totalStaffingCost, horizonYears, department, deptParticipations, settings),
       costAllocationMethod: generateCostAllocation(deptMetadata, pricingMethods),
       revenueOpportunities: generateRevenueOpportunities(department, deptMetadata, deptParticipations),
       costSavingsPotential: generateCostSavings(department, deptMetadata),
