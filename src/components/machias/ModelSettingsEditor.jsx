@@ -89,7 +89,7 @@ export default function ModelSettingsEditor() {
         </div>
       </Section>
 
-      <Section title="Personnel — Salary & Benefits Rates">
+      <Section title="Personnel — Salary, Benefits & Org Chart Reporting">
         <Field label="Staff Accountant Base" value={local.sa_base_salary} onChange={set('sa_base_salary')} prefix="$" />
         <Field label="Billing Specialist Base" value={local.bs_base_salary} onChange={set('bs_base_salary')} prefix="$" />
         <Field label="GA Coordinator Stipend" value={local.ga_stipend} onChange={set('ga_stipend')} prefix="$" />
