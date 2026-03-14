@@ -5,7 +5,7 @@ import OrgTreeCanvas from '../components/orgchart/OrgTreeCanvas';
 import {
   getAllPositions, buildOrgTree, DEPT_COLORS,
 } from '../components/orgchart/OrgChartData';
-import OrgChartSettings from '../components/orgchart/OrgChartSettings';
+import OrgChartSettings from '../components/orgchart/OrgChartSettings.jsx';
 
 // ─── Legend ───────────────────────────────────────────────────────────────────
 function Legend() {
