@@ -51,6 +51,20 @@ export default function ProposalDetail({ proposal, onClose, onEdit, onDelete, on
         </CardHeader>
 
         <CardContent className="space-y-6 pt-6">
+          {/* Workflow Status */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <ProposalWorkflowStatus proposal={proposal} evaluation={evaluation} />
+            </div>
+            <div>
+              <ProposalWorkflowActions
+                proposal={proposal}
+                evaluation={evaluation}
+                onStatusChange={onStatusChange}
+              />
+            </div>
+          </div>
+
           {/* Description */}
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Description</h3>
