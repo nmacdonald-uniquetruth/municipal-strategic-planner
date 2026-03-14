@@ -384,7 +384,36 @@ export default function RegionalMap() {
 
         {/* Right panel */}
         <div className="w-72 flex-shrink-0 overflow-hidden" style={{ display: 'flex', flexDirection: 'column' }}>
-          {selectedTown ? (
+          {/* Mode toggle */}
+          <div className="flex gap-1.5 mb-3">
+            <button onClick={() => { setComparisonMode(false); setSelectedTown(null); setSelectedForComparison([]); }}
+              className={`flex-1 px-3 py-2 rounded-lg text-[10px] font-bold transition-all ${
+                !comparisonMode
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+              }`}>
+              Profile
+            </button>
+            <button onClick={() => { setComparisonMode(true); setSelectedTown(null); }}
+              className={`flex-1 px-3 py-2 rounded-lg text-[10px] font-bold transition-all flex items-center justify-center gap-1 ${
+                comparisonMode
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+              }`}>
+              <BarChart3 className="h-3 w-3" />
+              Compare
+            </button>
+          </div>
+
+          {comparisonMode ? (
+            <div className="flex-1 overflow-y-auto">
+              <ComparisonView
+                selectedTowns={selectedForComparison}
+                onRemoveTown={town => setSelectedForComparison(prev => prev.filter(t => t.town_name !== town))}
+                onClear={() => setSelectedForComparison([])}
+              />
+            </div>
+          ) : selectedTown ? (
             <TownInfoPanel
               profile={selectedTown}
               color={TOWN_FILL_COLORS[selectedTown.town_name]}
