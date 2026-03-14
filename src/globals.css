@@ -1,0 +1,54 @@
+/* ─── Map Label Styling ──────────────────────────────────────────────────── */
+/* Accessible municipal labels for Leaflet map with high contrast text halo */
+
+.map-label {
+  font-family: 'Raleway', Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.3px;
+  /* High-contrast halo using multi-layer text-shadow for accessibility across all basemaps */
+  text-shadow:
+    0 0 2px rgba(255,255,255,0.95),
+    0 0 4px rgba(255,255,255,0.9),
+    -0.5px -0.5px 1px rgba(255,255,255,0.85),
+    0.5px -0.5px 1px rgba(255,255,255,0.85),
+    -0.5px 0.5px 1px rgba(255,255,255,0.85),
+    0.5px 0.5px 1px rgba(255,255,255,0.85),
+    -1px -1px 2px rgba(255,255,255,0.8),
+    1px -1px 2px rgba(255,255,255,0.8),
+    -1px 1px 2px rgba(255,255,255,0.8),
+    1px 1px 2px rgba(255,255,255,0.8);
+}
+
+.map-label:hover {
+  font-weight: 800;
+  color: #111827;
+  text-shadow:
+    0 0 3px rgba(255,255,255,0.98),
+    0 0 6px rgba(255,255,255,0.95),
+    -1px -1px 2px rgba(255,255,255,0.9),
+    1px -1px 2px rgba(255,255,255,0.9),
+    -1px 1px 2px rgba(255,255,255,0.9),
+    1px 1px 2px rgba(255,255,255,0.9),
+    -1.5px -1.5px 3px rgba(255,255,255,0.85),
+    1.5px -1.5px 3px rgba(255,255,255,0.85),
+    -1.5px 1.5px 3px rgba(255,255,255,0.85),
+    1.5px 1.5px 3px rgba(255,255,255,0.85);
+}
+
+.map-label--selected {
+  font-weight: 900;
+  color: #344A60;
+  text-shadow:
+    0 0 4px rgba(255,255,255,0.99),
+    0 0 8px rgba(255,255,255,0.97),
+    -2px -2px 3px rgba(255,255,255,0.92),
+    2px -2px 3px rgba(255,255,255,0.92),
+    -2px 2px 3px rgba(255,255,255,0.92),
+    2px 2px 3px rgba(255,255,255,0.92);
+}
