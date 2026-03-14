@@ -47,8 +47,58 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AIPlanner from './pages/AIPlanner';
+import CommunicationStrategy from './pages/CommunicationStrategy';
+import Dashboard from './pages/Dashboard';
+import ERPRoadmapPage from './pages/ERPRoadmapPage';
+import EnterpriseFunds from './pages/EnterpriseFunds';
+import MathVerify from './pages/MathVerify';
+import Milestones from './pages/Milestones';
+import ModelSettings from './pages/ModelSettings';
+import Narrative from './pages/Narrative';
+import PerformanceMetrics from './pages/PerformanceMetrics';
+import Positions from './pages/Positions';
+import ProForma from './pages/ProForma';
+import QandA from './pages/QandA';
+import ReferencesAndResearch from './pages/ReferencesAndResearch';
+import RegionalFeasibility from './pages/RegionalFeasibility';
+import RegionalServices from './pages/RegionalServices';
+import Scenarios from './pages/Scenarios';
+import SelectBoardPresentation from './pages/SelectBoardPresentation';
+import SensitivityAnalysis from './pages/SensitivityAnalysis';
+import TaxpayerFAQ from './pages/TaxpayerFAQ';
+import TransferStation from './pages/TransferStation';
+import OrgChart from './pages/OrgChart';
+import __Layout from './Layout.jsx';
 
-export const pagesConfig = {
-	Pages: {}
+
+export const PAGES = {
+    "AIPlanner": AIPlanner,
+    "CommunicationStrategy": CommunicationStrategy,
+    "Dashboard": Dashboard,
+    "ERPRoadmapPage": ERPRoadmapPage,
+    "EnterpriseFunds": EnterpriseFunds,
+    "MathVerify": MathVerify,
+    "Milestones": Milestones,
+    "ModelSettings": ModelSettings,
+    "Narrative": Narrative,
+    "PerformanceMetrics": PerformanceMetrics,
+    "Positions": Positions,
+    "ProForma": ProForma,
+    "QandA": QandA,
+    "ReferencesAndResearch": ReferencesAndResearch,
+    "RegionalFeasibility": RegionalFeasibility,
+    "RegionalServices": RegionalServices,
+    "Scenarios": Scenarios,
+    "SelectBoardPresentation": SelectBoardPresentation,
+    "SensitivityAnalysis": SensitivityAnalysis,
+    "TaxpayerFAQ": TaxpayerFAQ,
+    "TransferStation": TransferStation,
+    "OrgChart": OrgChart,
 }
 
+export const pagesConfig = {
+    mainPage: "Dashboard",
+    Pages: PAGES,
+    Layout: __Layout,
+};
