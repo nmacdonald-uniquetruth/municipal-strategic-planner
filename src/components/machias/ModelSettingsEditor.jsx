@@ -89,7 +89,7 @@ export default function ModelSettingsEditor() {
         </div>
       </Section>
 
-      <Section title="Personnel — Salary, Benefits & Org Chart Reporting">
+      <Section title="Personnel — Salary & Benefits Rates">
         <Field label="Staff Accountant Base" value={local.sa_base_salary} onChange={set('sa_base_salary')} prefix="$" />
         <Field label="Billing Specialist Base" value={local.bs_base_salary} onChange={set('bs_base_salary')} prefix="$" />
         <Field label="GA Coordinator Stipend" value={local.ga_stipend} onChange={set('ga_stipend')} prefix="$" />
@@ -119,17 +119,6 @@ export default function ModelSettingsEditor() {
             <SelectContent>
               <SelectItem value="staff_accountant" className="text-xs">2nd Staff Accountant</SelectItem>
               <SelectItem value="controller" className="text-xs">Controller (½ year)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="col-span-2 md:col-span-3">
-          <Label className="text-[10px] text-slate-500 uppercase font-medium">GA Coordinator — Reports To</Label>
-          <p className="text-[9px] text-slate-400 mb-1">Determines where GA Coordinator appears in the org chart</p>
-          <Select value={local.ga_reports_to || 'finance_director'} onValueChange={set('ga_reports_to')}>
-            <SelectTrigger className="h-8 mt-1 text-xs w-64"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="finance_director" className="text-xs">Finance Director (Finance &amp; HR Dept.)</SelectItem>
-              <SelectItem value="town_manager" className="text-xs">Town Manager</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -91,13 +91,11 @@ export default function ExportExecSummary() {
 
         <h3>1. Administrative Restructuring — Three New Positions</h3>
         <table>
-          <thead><tr><th>Position</th><th>Base Salary</th><th>Fully Loaded</th><th>Y1 Cost</th><th>Fund Source</th></tr></thead>
-          <tbody>
-            <tr><td>Staff Accountant</td><td>{fmt(settings.sa_base_salary)}</td><td>{fmt(saFL)}</td><td>{fmt(d1.costs.staffAccountant)}</td><td>General Fund</td></tr>
-            <tr><td>Billing Specialist</td><td>{fmt(settings.bs_base_salary)}</td><td>{fmt(bsFL)}</td><td>{fmt(d1.costs.billingSpecialist)}</td><td>Ambulance Fund (not GF)</td></tr>
-            <tr><td>GA Coordinator</td><td>{fmt(settings.ga_stipend)}</td><td>Stipend</td><td>{fmt(d1.costs.gaCoordinator)}</td><td>General Fund</td></tr>
-            <tr><td>Revenue Coord. (Y3 trigger)</td><td>{fmt(settings.rc_base_salary)}</td><td>—</td><td>Triggered</td><td>Regional Revenue</td></tr>
-          </tbody>
+          <tr><th>Position</th><th>Base Salary</th><th>Fully Loaded</th><th>Y1 Cost</th><th>Fund Source</th></tr>
+          <tr><td>Staff Accountant</td><td>{fmt(settings.sa_base_salary)}</td><td>{fmt(saFL)}</td><td>{fmt(d1.costs.staffAccountant)}</td><td>General Fund</td></tr>
+          <tr><td>Billing Specialist</td><td>{fmt(settings.bs_base_salary)}</td><td>{fmt(bsFL)}</td><td>{fmt(d1.costs.billingSpecialist)}</td><td>Ambulance Fund (not GF)</td></tr>
+          <tr><td>GA Coordinator</td><td>{fmt(settings.ga_stipend)}</td><td>Stipend</td><td>{fmt(d1.costs.gaCoordinator)}</td><td>General Fund</td></tr>
+          <tr><td>Revenue Coord. (Y3 trigger)</td><td>{fmt(settings.rc_base_salary)}</td><td>—</td><td>Triggered</td><td>Regional Revenue</td></tr>
         </table>
 
         <h3>2. EMS Billing Transition</h3>
@@ -111,14 +109,12 @@ export default function ExportExecSummary() {
 
         <h2>General Fund Fiscal Impact — Year 1</h2>
         <table>
-          <thead><tr><th>Item</th><th>Amount</th></tr></thead>
-          <tbody>
-            <tr><td>GF-Funded Position Costs (SA + GA + Airport + ERP)</td><td>{fmt(d1.gf.gfFundedCosts)}</td></tr>
-            <tr><td>GF Cash Offsets (regional + Comstar + stipends + overhead)</td><td>({fmt(d1.gf.gfCashOffsets)})</td></tr>
-            <tr><td style={{fontWeight:'bold'}}>Net GF Levy Impact</td><td style={{fontWeight:'bold'}}>{d1.gf.gfNetLevyImpact <= 0 ? `(${fmt(Math.abs(d1.gf.gfNetLevyImpact))}) surplus` : fmt(d1.gf.gfNetLevyImpact)}</td></tr>
-            <tr><td>Mill Rate Impact</td><td>{d1.gf.millRateImpact.toFixed(4)} mills</td></tr>
-            <tr><td>Undesignated Fund Draw</td><td>{d1.gf.undesignatedDraw === 0 ? 'None required' : fmt(d1.gf.undesignatedDraw)}</td></tr>
-          </tbody>
+          <tr><th>Item</th><th>Amount</th></tr>
+          <tr><td>GF-Funded Position Costs (SA + GA + Airport + ERP)</td><td>{fmt(d1.gf.gfFundedCosts)}</td></tr>
+          <tr><td>GF Cash Offsets (regional + Comstar + stipends + overhead)</td><td>({fmt(d1.gf.gfCashOffsets)})</td></tr>
+          <tr><td style={{fontWeight:'bold'}}>Net GF Levy Impact</td><td style={{fontWeight:'bold'}}>{d1.gf.gfNetLevyImpact <= 0 ? `(${fmt(Math.abs(d1.gf.gfNetLevyImpact))}) surplus` : fmt(d1.gf.gfNetLevyImpact)}</td></tr>
+          <tr><td>Mill Rate Impact</td><td>{d1.gf.millRateImpact.toFixed(4)} mills</td></tr>
+          <tr><td>Undesignated Fund Draw</td><td>{d1.gf.undesignatedDraw === 0 ? 'None required' : fmt(d1.gf.undesignatedDraw)}</td></tr>
         </table>
 
         <div className={d1.gf.gfNetLevyImpact <= 0 ? 'highlight' : 'warning'}>
@@ -127,25 +123,23 @@ export default function ExportExecSummary() {
 
         <h2>Five-Year Financial Summary</h2>
         <table>
-          <thead><tr><th>Fiscal Year</th><th>Total Costs</th><th>Total Value</th><th>Net</th><th>GF Levy Impact</th></tr></thead>
-          <tbody>
-            {data.map(d => (
-              <tr key={d.year}>
-                <td>{d.fiscalYear}</td>
-                <td>{fmt(d.costs.total)}</td>
-                <td>{fmt(d.value.total)}</td>
-                <td style={{fontWeight:'bold',color:d.net>=0?'#166534':'#991b1b'}}>{d.net >= 0 ? fmt(d.net) : `(${fmt(Math.abs(d.net))})`}</td>
-                <td style={{color:d.gf.gfNetLevyImpact<=0?'#166534':'#991b1b'}}>{d.gf.gfNetLevyImpact<=0?`(${fmt(Math.abs(d.gf.gfNetLevyImpact))})`:fmt(d.gf.gfNetLevyImpact)}</td>
-              </tr>
-            ))}
-            <tr style={{fontWeight:'bold',background:'#f8fafc'}}>
-              <td>5-Year Total</td>
-              <td>{fmt(data.reduce((s,d)=>s+d.costs.total,0))}</td>
-              <td>{fmt(data.reduce((s,d)=>s+d.value.total,0))}</td>
-              <td>{fmt(cumulative)}</td>
-              <td>{fmt(data.reduce((s,d)=>s+d.gf.gfNetLevyImpact,0))}</td>
+          <tr><th>Fiscal Year</th><th>Total Costs</th><th>Total Value</th><th>Net</th><th>GF Levy Impact</th></tr>
+          {data.map(d => (
+            <tr key={d.year}>
+              <td>{d.fiscalYear}</td>
+              <td>{fmt(d.costs.total)}</td>
+              <td>{fmt(d.value.total)}</td>
+              <td style={{fontWeight:'bold',color:d.net>=0?'#166534':'#991b1b'}}>{d.net >= 0 ? fmt(d.net) : `(${fmt(Math.abs(d.net))})`}</td>
+              <td style={{color:d.gf.gfNetLevyImpact<=0?'#166534':'#991b1b'}}>{d.gf.gfNetLevyImpact<=0?`(${fmt(Math.abs(d.gf.gfNetLevyImpact))})`:fmt(d.gf.gfNetLevyImpact)}</td>
             </tr>
-          </tbody>
+          ))}
+          <tr style={{fontWeight:'bold',background:'#f8fafc'}}>
+            <td>5-Year Total</td>
+            <td>{fmt(data.reduce((s,d)=>s+d.costs.total,0))}</td>
+            <td>{fmt(data.reduce((s,d)=>s+d.value.total,0))}</td>
+            <td>{fmt(cumulative)}</td>
+            <td>{fmt(data.reduce((s,d)=>s+d.gf.gfNetLevyImpact,0))}</td>
+          </tr>
         </table>
 
         <h2>Recommended Next Steps</h2>

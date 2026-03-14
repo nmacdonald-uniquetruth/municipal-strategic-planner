@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ModelProvider } from './ModelContext';
 import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
-  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale, Network, Banknote, Globe
+  Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity, Scale
 } from 'lucide-react';
 import FeedbackDialog from './FeedbackDialog';
 
@@ -22,10 +21,6 @@ const NAV_GROUPS = [
   {
     label: 'Initiatives',
     items: [
-      { path: '/OrgStructure', label: 'Org Structure', icon: Network },
-      { path: '/GovernanceTwin', label: 'Governance Twin', icon: Globe },
-      { path: '/EfficiencyAnalyzer', label: 'Efficiency Analyzer', icon: Activity },
-      { path: '/FinancialSimulator', label: 'Financial Simulator', icon: Banknote },
       { path: '/Positions', label: 'Positions', icon: Users },
       { path: '/ERPRoadmap', label: 'ERP / Payroll', icon: Monitor },
       { path: '/RegionalServices', label: 'Regional Services', icon: Target },
@@ -63,7 +58,6 @@ export default function AppLayout() {
   // Machias Blue = #344A60, Sand Dune = #E7D0B1, Shiretown Cream = #F3EAD6
   // Misty Blue = #B3C6C8, Salt Marsh Grass = #F6C85F
   return (
-    <ModelProvider>
     <div className="flex h-screen" style={{ background: '#F3EAD6' }}>
       {/* Mobile overlay */}
       {mobileOpen && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setMobileOpen(false)} />}
@@ -158,6 +152,5 @@ export default function AppLayout() {
         </div>
       </main>
     </div>
-  </ModelProvider>
   );
 }

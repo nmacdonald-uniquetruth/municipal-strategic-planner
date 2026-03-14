@@ -12,7 +12,6 @@ const DEFAULT_SETTINGS = {
   controller_base_salary: 85000,
   y5_senior_hire: 'staff_accountant',
   y1_staffing_model: 'fulltime_sa',
-  ga_reports_to: 'finance_director',
   clerk_stipend_realloc: 26000,
   wage_growth_rate: 0.04,
   health_tier: 'family',
