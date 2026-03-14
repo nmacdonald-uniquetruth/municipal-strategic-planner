@@ -92,7 +92,7 @@ export default function ProposalDetail({ proposal, onClose, onEdit, onDelete, re
                 <CardContent className="pt-4">
                   <p className="text-sm text-gray-600 mb-1">Net Annual Impact</p>
                   <p className="text-2xl font-bold text-emerald-600">
-                    +${((proposal.estimatedAnnualSavings || 0) + (proposal.estimatedAnnualRevenue || 0)) / 1000).toFixed(0)}k
+                    +${(((proposal.estimatedAnnualSavings || 0) + (proposal.estimatedAnnualRevenue || 0)) / 1000).toFixed(0)}k
                   </p>
                 </CardContent>
               </Card>
