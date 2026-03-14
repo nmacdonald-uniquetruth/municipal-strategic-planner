@@ -40,6 +40,7 @@ import RegionalParticipationSettings from './pages/RegionalParticipationSettings
 import DepartmentProposals from './pages/DepartmentProposals';
 import ProposalEvaluations from './pages/ProposalEvaluations';
 import Proposals from './pages/Proposals';
+import TaxImpact from './pages/TaxImpact';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -95,6 +96,7 @@ const AuthenticatedApp = () => {
           <Route path="/DepartmentProposals" element={<DepartmentProposals />} />
           <Route path="/ProposalEvaluations" element={<ProposalEvaluations />} />
           <Route path="/Proposals" element={<Proposals />} />
+          <Route path="/TaxImpact" element={<TaxImpact />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
