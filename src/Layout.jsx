@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { ModelProvider } from './components/machias/ModelContext';
 
 export default function Layout({ children }) {
   return (
