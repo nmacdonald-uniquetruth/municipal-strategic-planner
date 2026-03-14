@@ -1,0 +1,113 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { base44 } from '@/api/base44Client';
+
+const ScenarioContext = createContext(null);
+
+export function ScenarioProvider({ children }) {
+  const [activeScenario, setActiveScenario] = useState(null);
+  const [allScenarios, setAllScenarios] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load scenarios on mount
+  useEffect(() => {
+    loadScenarios();
+  }, []);
+
+  const loadScenarios = useCallback(async () => {
+    try {
+      const scenarios = await base44.entities.Scenario.list();
+      setAllScenarios(scenarios || []);
+      const active = scenarios?.find(s => s.is_active);
+      setActiveScenario(active || null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const activateScenario = useCallback(async (scenarioId) => {
+    try {
+      // Deactivate all others
+      await Promise.all(
+        allScenarios
+          .filter(s => s.is_active)
+          .map(s => base44.entities.Scenario.update(s.id, { is_active: false }))
+      );
+
+      // Activate selected
+      await base44.entities.Scenario.update(scenarioId, { is_active: true });
+
+      // Update local state
+      const updated = allScenarios.map(s => ({
+        ...s,
+        is_active: s.id === scenarioId,
+      }));
+      setAllScenarios(updated);
+      setActiveScenario(updated.find(s => s.id === scenarioId));
+    } catch (error) {
+      console.error('Error activating scenario:', error);
+    }
+  }, [allScenarios]);
+
+  const createScenario = useCallback(async (scenarioData) => {
+    try {
+      const created = await base44.entities.Scenario.create(scenarioData);
+      setAllScenarios([...allScenarios, created]);
+      return created;
+    } catch (error) {
+      console.error('Error creating scenario:', error);
+      throw error;
+    }
+  }, [allScenarios]);
+
+  const updateScenario = useCallback(async (scenarioId, updates) => {
+    try {
+      await base44.entities.Scenario.update(scenarioId, updates);
+      const updated = allScenarios.map(s => s.id === scenarioId ? { ...s, ...updates } : s);
+      setAllScenarios(updated);
+      if (activeScenario?.id === scenarioId) {
+        setActiveScenario({ ...activeScenario, ...updates });
+      }
+    } catch (error) {
+      console.error('Error updating scenario:', error);
+      throw error;
+    }
+  }, [allScenarios, activeScenario]);
+
+  const deleteScenario = useCallback(async (scenarioId) => {
+    try {
+      await base44.entities.Scenario.delete(scenarioId);
+      setAllScenarios(allScenarios.filter(s => s.id !== scenarioId));
+      if (activeScenario?.id === scenarioId) {
+        setActiveScenario(null);
+      }
+    } catch (error) {
+      console.error('Error deleting scenario:', error);
+      throw error;
+    }
+  }, [allScenarios, activeScenario]);
+
+  return (
+    <ScenarioContext.Provider
+      value={{
+        activeScenario,
+        allScenarios,
+        loading,
+        activateScenario,
+        createScenario,
+        updateScenario,
+        deleteScenario,
+        loadScenarios,
+      }}
+    >
+      {children}
+    </ScenarioContext.Provider>
+  );
+}
+
+export function useScenario() {
+  const context = useContext(ScenarioContext);
+  if (!context) {
+    throw new Error('useScenario must be used within ScenarioProvider');
+  }
+  return context;
+}
