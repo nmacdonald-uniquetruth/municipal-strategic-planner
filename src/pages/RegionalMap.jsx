@@ -136,7 +136,7 @@ function RegionStats() {
       {[
         { label: 'Region Population', value: totalPop.toLocaleString(), color: 'text-slate-900' },
         { label: 'Avg. Median HHI', value: '$' + avgIncome.toLocaleString(), color: 'text-emerald-700' },
-        { label: 'Municipalities', value: 12, color: 'text-blue-700' },
+        { label: 'Municipalities', value: 13, color: 'text-blue-700' },
         { label: 'Working Waterfronts', value: waterfrontTowns, color: 'text-teal-700' },
         { label: 'Fishing Communities', value: fishingTowns, color: 'text-amber-700' },
       ].map(s => (
