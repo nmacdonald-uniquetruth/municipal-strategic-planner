@@ -372,7 +372,7 @@ export default function RegionalMap() {
                   onEachFeature={onEachFeature}
                 />
               )}
-              {geojson && <TownLabels geojson={geojson} />}
+              {geojson && showLabels && <TownLabels geojson={geojson} />}
               {geojson && <FitBounds geojson={geojson} />}
             </MapContainer>
           )}
