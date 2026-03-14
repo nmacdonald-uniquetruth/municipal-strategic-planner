@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
 import { useModel } from '../components/machias/ModelContext';
+import { useDepartment, DEPARTMENTS } from '../components/strategic/DepartmentContext';
 import StatCard from '../components/machias/StatCard';
 import SectionHeader from '../components/machias/SectionHeader';
 import ProFormaChart from '../components/machias/ProFormaChart';
@@ -19,6 +20,7 @@ const formatShortCurrency = (value) => {
 
 export default function Dashboard() {
   const { settings } = useModel();
+  const { selectedDepartment, changeDepartment, DEPARTMENTS } = useDepartment();
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
   const cumulative = data.reduce((s, d) => s + d.net, 0);
   const y1Net = data[0]?.net || 0;
@@ -37,8 +39,8 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Administrative Restructuring</h1>
-          <p className="text-sm text-slate-500 mt-1">Comprehensive 5-year analysis — admin realignment, ERP modernization & regional service strategy</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Bay Region Strategic Planning</h1>
+          <p className="text-sm text-slate-500 mt-1">Regional service consolidation, fiscal simulation, and leadership planning platform</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <ExportExecSummary />
@@ -47,6 +49,22 @@ export default function Dashboard() {
             Full Narrative
           </Link>
         </div>
+      </div>
+
+      {/* Department filter */}
+      <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Department Being Evaluated</label>
+        <select
+          value={selectedDepartment}
+          onChange={(e) => changeDepartment(e.target.value)}
+          className="w-full md:w-80 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-0"
+        >
+          {DEPARTMENTS.map(dept => (
+            <option key={dept.id} value={dept.id}>
+              {dept.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Key insight banner */}
