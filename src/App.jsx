@@ -30,6 +30,7 @@ import PerformanceMetrics from './pages/PerformanceMetrics';
 import SelectBoardPresentation from './pages/SelectBoardPresentation';
 import TaxpayerFAQ from './pages/TaxpayerFAQ';
 import RegionalFeasibility from './pages/RegionalFeasibility';
+import OrgChart from './pages/OrgChart';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
