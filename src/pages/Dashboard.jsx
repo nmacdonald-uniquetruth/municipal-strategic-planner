@@ -13,6 +13,7 @@ import InfoTooltip from '../components/machias/InfoTooltip';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
 import ExportExecSummary from '../components/machias/ExportExecSummary';
+import PlanningHorizonToggle from '../components/machias/PlanningHorizonToggle';
 
 const formatShortCurrency = (value) => {
   if (value >= 1000000) return `$${(value / 1000000).toFixed(2)}M`;
@@ -21,16 +22,19 @@ const formatShortCurrency = (value) => {
 };
 
 export default function Dashboard() {
-  const { settings } = useModel();
+  const { settings, planningHorizon } = useModel();
   const { selectedDepartments, toggleDepartment, DEPARTMENTS } = useDepartment();
   const [deptDropdownOpen, setDeptDropdownOpen] = useState(false);
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
-  const cumulative = data.reduce((s, d) => s + d.net, 0);
-  const y1Net = data[0]?.net || 0;
-  const y5Value = data[4]?.value.total || 0;
+  
+  // Slice data based on planning horizon
+  const horizonData = planningHorizon === 5 ? data.slice(0, 5) : data;
+  const cumulativeValue = horizonData.reduce((s, d) => s + d.net, 0);
+  const y1Net = horizonData[0]?.net || 0;
+  const finalYearValue = horizonData[horizonData.length - 1]?.value.total || 0;
 
-  // Cash-only 5-year net (excludes FD/TM capacity, control risk, ERP value, enterprise overhead)
-  const cashOnly5yr = data.reduce((s, d) => {
+  // Cash-only net (excludes FD/TM capacity, control risk, ERP value, enterprise overhead)
+  const cashOnlyNet = horizonData.reduce((s, d) => {
     const cashRev = d.value.comstarAvoided + d.value.collectionImprovement +
       d.value.stipendSavings + d.value.airportSavings +
       d.value.regionalServices + d.value.emsExternal + d.value.transferStation;
@@ -53,6 +57,9 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+
+      {/* Planning Horizon Toggle */}
+      <PlanningHorizonToggle />
 
       {/* Department filter */}
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
@@ -107,13 +114,13 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-4 flex-wrap justify-end">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnly5yr)}</p>
-              <p className="text-[10px] text-slate-400">5-Yr Cash Net</p>
+              <p className="text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnlyNet)}</p>
+              <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Cash Net</p>
               <p className="text-[9px] text-slate-500">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-300">{formatShortCurrency(cumulative)}</p>
-              <p className="text-[10px] text-slate-400">5-Yr Total Value</p>
+              <p className="text-2xl font-bold text-slate-300">{formatShortCurrency(cumulativeValue)}</p>
+              <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Total Value</p>
               <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
             </div>
             <div className="text-center">
@@ -137,10 +144,10 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-           <StatCard label="Year 5 Gross Value" value={formatShortCurrency(y5Value)} icon={TrendingUp} sub="Structural + regional" />
+           <StatCard label={`Year ${planningHorizon} Gross Value`} value={formatShortCurrency(finalYearValue)} icon={TrendingUp} sub="Structural + regional" />
           <div className="absolute top-2 right-2">
-            <InfoTooltip title="Year 5 Gross Value">
-              <p>The total projected annual value of the restructuring by Year 5, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
+            <InfoTooltip title={`Year ${planningHorizon} Gross Value`}>
+              <p>The total projected annual value of the restructuring by Year {planningHorizon}, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
             </InfoTooltip>
           </div>
         </div>
@@ -160,7 +167,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="relative">
-          <StatCard label="Undesignated Draw Y1" value={data[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${data[0]?.gf?.undesignatedDraw.toLocaleString()}`} icon={AlertTriangle} sub={data[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
+           <StatCard label="Undesignated Draw Y1" value={horizonData[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${horizonData[0]?.gf?.undesignatedDraw.toLocaleString()}`} icon={AlertTriangle} sub={horizonData[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
           <div className="absolute top-2 right-2">
             <InfoTooltip title="Undesignated Fund Draw">
               <p>If GF-funded costs exceed GF cash offsets in Year 1, the gap would need to be covered by a draw from the undesignated fund balance (currently ~${settings.gf_undesignated_balance?.toLocaleString()}).</p>
@@ -172,14 +179,14 @@ export default function Dashboard() {
 
       {/* Charts */}
       <div className="flex items-center gap-2">
-        <SectionHeader title="5-Year Financial Pro Forma" subtitle="Base case: all revenue streams active" icon={TrendingUp} />
+        <SectionHeader title={`${planningHorizon}-Year Financial Pro Forma`} subtitle="Base case: all revenue streams active" icon={TrendingUp} />
         <InfoTooltip title="How to read the Pro Forma chart">
           <p>The stacked bars show three value categories: <strong>Structural</strong> (avoided costs, enterprise overhead, capacity), <strong>Regional</strong> (contracts + EMS external + Transfer Station), and <strong>ERP</strong> (starting Year 2).</p>
           <p>The orange line shows total costs. When stacked bars exceed the line, the restructuring is net-positive for that year.</p>
-          <p>Note: the chart includes all value categories including non-cash items. See "5-Yr Cash Net" for actual dollars only.</p>
+          <p>Note: the chart includes all value categories including non-cash items. See "{planningHorizon}-Yr Cash Net" for actual dollars only.</p>
         </InfoTooltip>
       </div>
-      <ProFormaChart data={data} />
+      <ProFormaChart data={horizonData} />
 
       <div className="flex items-center gap-2">
         <SectionHeader title="Payback Timeline" subtitle="Quarterly cost-value analysis through 24 months" icon={Clock} />
@@ -210,7 +217,7 @@ export default function Dashboard() {
             Actual cash deposited to the General Fund. Regional services contracts, EMS collection improvement,
             Transfer Station member fees, and external EMS billing revenue.
           </p>
-          <p className="mt-3 text-lg font-bold text-emerald-800">~$900K over 5 years</p>
+          <p className="mt-3 text-lg font-bold text-emerald-800">~${(planningHorizon === 5 ? 900 : 1800)}K over {planningHorizon} years</p>
           <Link to="/Narrative" className="mt-2 text-[10px] text-emerald-600 hover:underline block">Read full narrative →</Link>
         </div>
 
@@ -220,7 +227,7 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-amber-800">Category 2: Budget Impact</h3>
           </div>
           <p className="text-xs text-amber-700 leading-relaxed">
-            Real cost reductions. Comstar fee avoided (${data[0]?.value?.comstarAvoided?.toLocaleString()}+ and growing), stipend elimination (${settings.stipend_elimination?.toLocaleString()}/yr),
+            Real cost reductions. Comstar fee avoided (${horizonData[0]?.value?.comstarAvoided?.toLocaleString()}+ and growing), stipend elimination (${settings.stipend_elimination?.toLocaleString()}/yr),
             airport inspection savings, enterprise overhead allocation.
           </p>
           <p className="mt-3 text-lg font-bold text-amber-800">Direct GF reductions</p>
@@ -234,9 +241,9 @@ export default function Dashboard() {
           </div>
           <p className="text-xs text-blue-700 leading-relaxed">
             Time redirected to strategic work. FD: 45-60% capacity recovered. TM: 18-22% recovered.
-            Control risk mitigation ${data[0]?.value?.controlRisk?.toLocaleString()}–${data[1]?.value?.controlRisk?.toLocaleString()}/yr. Enables economic development.
+            Control risk mitigation ${horizonData[0]?.value?.controlRisk?.toLocaleString()}–${horizonData[1]?.value?.controlRisk?.toLocaleString()}/yr. Enables economic development.
           </p>
-          <p className="mt-3 text-lg font-bold text-blue-800">~$700K time value</p>
+          <p className="mt-3 text-lg font-bold text-blue-800">~${(planningHorizon === 5 ? 700 : 1400)}K time value</p>
           <Link to="/Narrative" className="mt-2 text-[10px] text-blue-600 hover:underline block">Read full narrative →</Link>
         </div>
       </div>
