@@ -50,6 +50,7 @@ import AssumptionsManager from './pages/AssumptionsManager';
 import RiskAdjustedPlanning from './pages/RiskAdjustedPlanning';
 import BoardMemoGenerator from './pages/BoardMemoGenerator';
 import CapitalProjects from './pages/CapitalProjects';
+import ServiceTerritoryAnalysis from './pages/ServiceTerritoryAnalysis';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -90,6 +91,7 @@ const AuthenticatedApp = () => {
           <Route path="/RiskAdjustedPlanning" element={<RiskAdjustedPlanning />} />
           <Route path="/BoardMemoGenerator" element={<BoardMemoGenerator />} />
           <Route path="/CapitalProjects" element={<CapitalProjects />} />
+          <Route path="/ServiceTerritoryAnalysis" element={<ServiceTerritoryAnalysis />} />
           <Route path="/AIPlanner" element={<AIPlanner />} />
           <Route path="/Narrative" element={<Narrative />} />
           <Route path="/RegionalServices" element={<RegionalServices />} />
