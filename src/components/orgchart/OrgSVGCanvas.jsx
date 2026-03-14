@@ -233,19 +233,21 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     }));
   }, []);
 
-  const svgEl = svgRef.current;
+  // Wheel zoom — attach to ref directly
   useEffect(() => {
-    if (!svgEl) return;
-    svgEl.addEventListener('wheel', onWheel, { passive: false });
-    return () => svgEl.removeEventListener('wheel', onWheel);
-  }, [svgEl, onWheel]);
+    const el = svgRef.current;
+    if (!el) return;
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [onWheel]);
 
-  // Fit to view
+  // Fit to view — always reads ref fresh
   const fitView = useCallback(() => {
-    if (!svgEl) return;
-    const rect = svgEl.getBoundingClientRect();
-    const w = rect.width || svgEl.clientWidth || 800;
-    const h = rect.height || svgEl.clientHeight || 600;
+    const el = svgRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const w = rect.width > 10 ? rect.width : (el.parentElement?.clientWidth || 800);
+    const h = rect.height > 10 ? rect.height : (el.parentElement?.clientHeight || 500);
     if (viewBox.width <= 0 || viewBox.height <= 0) return;
     const scaleX = w / (viewBox.width + 80);
     const scaleY = h / (viewBox.height + 80);
@@ -255,13 +257,16 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
       x: (w - viewBox.width * scale) / 2 - viewBox.minX * scale,
       y: 40,
     });
-  }, [svgEl, viewBox]);
+  }, [viewBox]);
 
-  // Auto-fit on tree change — defer one frame so SVG has rendered size
+  // Auto-fit on tree/viewBox change — double RAF to ensure DOM has fully laid out
   useEffect(() => {
-    const id = requestAnimationFrame(() => { fitView(); });
-    return () => cancelAnimationFrame(id);
-  }, [nodes.length]);
+    const id1 = requestAnimationFrame(() => {
+      const id2 = requestAnimationFrame(() => { fitView(); });
+      return () => cancelAnimationFrame(id2);
+    });
+    return () => cancelAnimationFrame(id1);
+  }, [nodes.length, viewBox.width, viewBox.height]);
 
   if (nodes.length === 0) {
     return (
