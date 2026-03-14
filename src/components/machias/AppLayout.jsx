@@ -158,6 +158,6 @@ export default function AppLayout() {
         </div>
       </main>
     </div>
-    </ModelProvider>
+  </ModelProvider>
   );
 }
