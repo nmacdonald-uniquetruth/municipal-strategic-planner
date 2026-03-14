@@ -9,7 +9,7 @@ import TownInfoPanel from '../components/map/TownInfoPanel';
 import ComparisonView from '../components/map/ComparisonView';
 import RelationshipPlanningPanel from '../components/regionalmap/RelationshipPlanningPanel';
 import { TOWN_PROFILES, TOWN_FILL_COLORS, ARCGIS_URL } from '../components/map/TownProfiles';
-import { findLabelCenter, estimateFontSize, isTooCloseToBoundary, getLabelAnchor } from '../components/map/LabelPlacementEngine';
+import { findLabelCenter, estimateFontSize, isTooCloseToBoundary, getLabelAnchor, getWrappedTownName } from '../components/map/LabelPlacementEngine';
 
 // ─── Basemap options ───────────────────────────────────────────────────────────
 const BASEMAPS = {
@@ -54,9 +54,8 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
       labelsRef.current = window.L.featureGroup().addTo(map);
     }
 
-    // Scale-dependent visibility: show all labels at zoom 9+
-    // At lower zoom levels, labels remain visible but may overlap
-    if (zoom < 9) return;
+    // Show labels at zoom 8+ for good visibility
+    if (zoom < 8) return;
 
     // Create label for each feature
     geojson.features.forEach(feature => {
@@ -65,6 +64,7 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
 
       let labelPos = null;
       let fontSize = 11;
+      let lines = [town];
 
       if (feature.geometry.type === 'Polygon') {
         const ring = feature.geometry.coordinates[0];
@@ -72,8 +72,11 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
         // Find optimal label position (pole of inaccessibility)
         labelPos = findLabelCenter(ring);
         
-        // Estimate font size based on polygon area
-        fontSize = estimateFontSize(ring);
+        // Estimate font size based on polygon area and current zoom
+        fontSize = estimateFontSize(ring, zoom);
+        
+        // Determine if name should wrap for better fit
+        lines = getWrappedTownName(town, ring);
         
         // Fallback to centroid if calculation fails
         if (!labelPos) {
@@ -90,8 +93,13 @@ function TownLabels({ geojson, hoveredTown, selectedTown }) {
           labelClass = 'map-label map-label--selected';
         }
 
-        // Create label with scale-aware sizing
-        const html = `<div class="${labelClass}" style="font-size: ${fontSize}px">${town}</div>`;
+        // Create multi-line label with proper spacing
+        const lineHeight = fontSize * 1.3;
+        const htmlLines = lines
+          .map((line) => `<div style="line-height: ${lineHeight}px; white-space: nowrap">${line}</div>`)
+          .join('');
+        const html = `<div class="${labelClass}" style="font-size: ${fontSize}px">${htmlLines}</div>`;
+        
         const label = window.L.divIcon({
           html,
           iconSize: null,
