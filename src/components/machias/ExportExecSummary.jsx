@@ -111,12 +111,14 @@ export default function ExportExecSummary() {
 
         <h2>General Fund Fiscal Impact — Year 1</h2>
         <table>
-          <tr><th>Item</th><th>Amount</th></tr>
-          <tr><td>GF-Funded Position Costs (SA + GA + Airport + ERP)</td><td>{fmt(d1.gf.gfFundedCosts)}</td></tr>
-          <tr><td>GF Cash Offsets (regional + Comstar + stipends + overhead)</td><td>({fmt(d1.gf.gfCashOffsets)})</td></tr>
-          <tr><td style={{fontWeight:'bold'}}>Net GF Levy Impact</td><td style={{fontWeight:'bold'}}>{d1.gf.gfNetLevyImpact <= 0 ? `(${fmt(Math.abs(d1.gf.gfNetLevyImpact))}) surplus` : fmt(d1.gf.gfNetLevyImpact)}</td></tr>
-          <tr><td>Mill Rate Impact</td><td>{d1.gf.millRateImpact.toFixed(4)} mills</td></tr>
-          <tr><td>Undesignated Fund Draw</td><td>{d1.gf.undesignatedDraw === 0 ? 'None required' : fmt(d1.gf.undesignatedDraw)}</td></tr>
+          <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>GF-Funded Position Costs (SA + GA + Airport + ERP)</td><td>{fmt(d1.gf.gfFundedCosts)}</td></tr>
+            <tr><td>GF Cash Offsets (regional + Comstar + stipends + overhead)</td><td>({fmt(d1.gf.gfCashOffsets)})</td></tr>
+            <tr><td style={{fontWeight:'bold'}}>Net GF Levy Impact</td><td style={{fontWeight:'bold'}}>{d1.gf.gfNetLevyImpact <= 0 ? `(${fmt(Math.abs(d1.gf.gfNetLevyImpact))}) surplus` : fmt(d1.gf.gfNetLevyImpact)}</td></tr>
+            <tr><td>Mill Rate Impact</td><td>{d1.gf.millRateImpact.toFixed(4)} mills</td></tr>
+            <tr><td>Undesignated Fund Draw</td><td>{d1.gf.undesignatedDraw === 0 ? 'None required' : fmt(d1.gf.undesignatedDraw)}</td></tr>
+          </tbody>
         </table>
 
         <div className={d1.gf.gfNetLevyImpact <= 0 ? 'highlight' : 'warning'}>
