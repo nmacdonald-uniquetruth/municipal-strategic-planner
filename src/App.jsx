@@ -80,6 +80,7 @@ const AuthenticatedApp = () => {
           <Route path="/SelectBoardPresentation" element={<SelectBoardPresentation />} />
           <Route path="/TaxpayerFAQ" element={<TaxpayerFAQ />} />
           <Route path="/RegionalFeasibility" element={<RegionalFeasibility />} />
+          <Route path="/RegionalFiscalFeasibility" element={<RegionalFiscalFeasibility />} />
           <Route path="/OrgChart" element={<OrgChart />} />
           <Route path="/RegionalMap" element={<RegionalMap />} />
         </Route>
