@@ -76,7 +76,7 @@ export const STATIC_POSITIONS = [
 
   // Clerk's Office — positions
   { id: 'town_clerk',     title: 'Town Clerk | Tax Collector',         dept: "Clerk's Office", reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: true, employee: 'Sandra Clifford' },
-  { id: 'dep_clerk',      title: 'Deputy Town Clerk | Executive Asst.', dept: "Clerk's Office", reportsTo: 'town_clerk',   nodeType: 'position', status: 'filled', fullTime: true, employee: 'Jane Foss' },
+  { id: 'dep_clerk',      title: 'Deputy Town Clerk | Executive Asst.', dept: "Clerk's Office", reportsTo: 'town_manager',   nodeType: 'position', status: 'filled', fullTime: true, employee: 'Jane Foss' },
 
   // Assessing — position
   { id: 'tax_assessor',   title: 'Tax Assessor',           dept: 'Assessing',    reportsTo: 'town_manager', nodeType: 'position', status: 'filled', fullTime: false, employee: 'Tony Bennett', contracted: true },
