@@ -298,7 +298,8 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
 
       <svg
         ref={svgRef}
-        className="w-full h-full"
+        className="w-full"
+        style={{ height: '100%', minHeight: '500px' }}
         style={{ cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none' }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
