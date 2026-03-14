@@ -200,6 +200,74 @@ export default function ModelSettingsEditor() {
         <Field label="Current Mill Rate" value={local.current_mill_rate} onChange={set('current_mill_rate')} />
         <Field label="Annual Tax Levy" value={local.annual_tax_levy} onChange={set('annual_tax_levy')} prefix="$" />
       </Section>
+
+      {/* ── Org Chart Display Settings ───────────────────────────────────── */}
+      <Section title="Org Chart Display Settings">
+        {/* Finance / Billing / GA structure */}
+        <div className="col-span-2 md:col-span-3">
+          <p className="text-[10px] text-slate-500 mb-3">
+            These settings control which positions appear in the Organizational Chart and how the finance department is structured.
+            Changes take effect immediately when saved.
+          </p>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">Finance Dept. Structure</Label>
+          <Select value={orgLocal.FINANCE_DEPARTMENT_STRUCTURE} onValueChange={setOrg('FINANCE_DEPARTMENT_STRUCTURE')}>
+            <SelectTrigger className="h-8 mt-1 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {FINANCE_STRUCTURES.map(o => <SelectItem key={o} value={o} className="text-xs">{o}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">Utility Billing Structure</Label>
+          <Select value={orgLocal.UTILITY_BILLING_STRUCTURE} onValueChange={setOrg('UTILITY_BILLING_STRUCTURE')}>
+            <SelectTrigger className="h-8 mt-1 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {BILLING_STRUCTURES.map(o => <SelectItem key={o} value={o} className="text-xs">{o}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">GA Coordinator Reports To</Label>
+          <Select value={orgLocal.GA_REPORTING_STRUCTURE} onValueChange={setOrg('GA_REPORTING_STRUCTURE')}>
+            <SelectTrigger className="h-8 mt-1 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {GA_STRUCTURES.map(o => <SelectItem key={o} value={o} className="text-xs">{o}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Label className="text-[10px] text-slate-500 uppercase font-medium">Default Chart View</Label>
+          <Select value={orgLocal.DEFAULT_ORG_CHART_VIEW || 'tree'} onValueChange={setOrg('DEFAULT_ORG_CHART_VIEW')}>
+            <SelectTrigger className="h-8 mt-1 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="tree" className="text-xs">Tree View</SelectItem>
+              <SelectItem value="dept" className="text-xs">Department View</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="col-span-2 md:col-span-3 border-t border-slate-100 pt-3 space-y-2">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Visibility Filters</p>
+          <label className="flex items-center gap-2.5 cursor-pointer py-1">
+            <input type="checkbox" checked={orgLocal.SHOW_VACANT_POSITIONS !== false}
+              onChange={setOrgBool('SHOW_VACANT_POSITIONS')}
+              className="rounded w-3.5 h-3.5 accent-slate-700" />
+            <span className="text-xs text-slate-700">Show Vacant Positions</span>
+          </label>
+          <label className="flex items-center gap-2.5 cursor-pointer py-1">
+            <input type="checkbox" checked={orgLocal.SHOW_PART_TIME_POSITIONS !== false}
+              onChange={setOrgBool('SHOW_PART_TIME_POSITIONS')}
+              className="rounded w-3.5 h-3.5 accent-slate-700" />
+            <span className="text-xs text-slate-700">Show Part-Time Positions</span>
+          </label>
+        </div>
+      </Section>
     </div>
   );
 }
