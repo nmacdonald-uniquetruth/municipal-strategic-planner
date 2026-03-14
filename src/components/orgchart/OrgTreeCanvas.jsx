@@ -1,13 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { DEPT_COLORS } from './OrgChartData';
 
-// ─── Layout constants ─────────────────────────────────────────────────────────
-const NODE_W = 186;
-const NODE_H = 72;
-const H_GAP  = 20;
-const V_GAP  = 56;
+const NODE_W = 200;
+const NODE_H = 80;
+const H_GAP = 24;
+const V_GAP = 60;
 
-// ─── Subtree width assignment ─────────────────────────────────────────────────
+// Assign subtree widths for layout
 function assignWidths(node) {
   const visible = (node.children || []).filter(c => !node._collapsed);
   if (!visible.length) { node._sw = NODE_W; return; }
@@ -16,7 +15,7 @@ function assignWidths(node) {
   node._sw = Math.max(NODE_W, total);
 }
 
-// ─── Position assignment ──────────────────────────────────────────────────────
+// Position nodes in 2D space
 function assignPositions(node, x, y) {
   node._x = x;
   node._y = y;
@@ -30,7 +29,7 @@ function assignPositions(node, x, y) {
   });
 }
 
-// ─── Collect all visible nodes + edges ───────────────────────────────────────
+// Collect all visible nodes and edges
 function collectAll(node, nodes, edges) {
   nodes.push(node);
   if (!node.children || node._collapsed) return;
@@ -40,68 +39,27 @@ function collectAll(node, nodes, edges) {
       y1: node._y + NODE_H,
       x2: child._x + NODE_W / 2,
       y2: child._y,
-      dashed: child.contracted,
     });
     collectAll(child, nodes, edges);
   });
 }
 
-// ─── Single node ──────────────────────────────────────────────────────────────
+// Org node card
 function OrgNode({ node, selectedId, onSelect, onToggle }) {
-  const isSelected   = selectedId === node.id;
+  const isSelected = selectedId === node.id;
   const isStructural = node.nodeType === 'structural';
-  const isVacant     = !isStructural && node.status === 'vacant';
-  const color        = DEPT_COLORS[node.dept] || DEPT_COLORS.Governance;
-  const hasChildren  = node.children && node.children.length > 0;
-  const R = 8;
+  const isVacant = !isStructural && node.status === 'vacant';
+  const color = DEPT_COLORS[node.dept] || DEPT_COLORS.Governance;
+  const hasChildren = node.children && node.children.length > 0;
 
-  // Structural nodes get a solid filled card; positions get white/yellow card
+  const R = 10;
   const cardFill = isStructural ? color : (isVacant ? '#fffbeb' : '#ffffff');
-  const border   = isSelected ? '#3b82f6' : isStructural ? color : (isVacant ? '#fcd34d' : '#e2e8f0');
-  const borderW  = isSelected ? 2.5 : isStructural ? 0 : 1.5;
+  const borderColor = isSelected ? '#3b82f6' : isStructural ? color : (isVacant ? '#fcd34d' : '#e5e7eb');
+  const borderW = isSelected ? 2.5 : 1.5;
+  const textColor = isStructural ? '#ffffff' : '#1f2937';
 
   const trunc = (text, maxLen) => text && text.length > maxLen ? text.slice(0, maxLen - 1) + '…' : (text || '');
 
-  // Structural nodes: centered title on solid background, no employee line
-  if (isStructural) {
-    return (
-      <g
-        transform={`translate(${node._x},${node._y})`}
-        style={{ cursor: 'pointer' }}
-        onClick={e => { e.stopPropagation(); onSelect(node); }}
-      >
-        {/* Shadow */}
-        <rect x={2} y={3} width={NODE_W} height={NODE_H} rx={R} fill="rgba(0,0,0,0.15)" />
-        {/* Solid card */}
-        <rect width={NODE_W} height={NODE_H} rx={R} fill={color}
-          stroke={isSelected ? '#60a5fa' : 'transparent'} strokeWidth={borderW} />
-        {/* Title — centered, white, bold */}
-        <text x={NODE_W / 2} y={NODE_H / 2 - 4} textAnchor="middle"
-          fontSize={10} fontWeight="800" fill="#ffffff"
-          style={{ fontFamily: 'Raleway, sans-serif' }}>
-          {trunc(node.title, 24)}
-        </text>
-        <text x={NODE_W / 2} y={NODE_H / 2 + 10} textAnchor="middle"
-          fontSize={8} fill="rgba(255,255,255,0.65)"
-          style={{ fontFamily: 'Open Sans, sans-serif' }}>
-          {node.dept}
-        </text>
-        {/* Collapse toggle */}
-        {hasChildren && (
-          <g transform={`translate(${NODE_W / 2 - 8}, ${NODE_H - 2})`}
-            onClick={e => { e.stopPropagation(); onToggle(node.id); }}
-            style={{ cursor: 'pointer' }}>
-            <circle cx={8} cy={8} r={8} fill="rgba(255,255,255,0.25)" stroke="white" strokeWidth={1.5} />
-            <text x={8} y={12} textAnchor="middle" fontSize={10} fill="white" fontWeight="bold">
-              {node._collapsed ? '+' : '−'}
-            </text>
-          </g>
-        )}
-      </g>
-    );
-  }
-
-  // ── Position node ──────────────────────────────────────────────────────────
   return (
     <g
       transform={`translate(${node._x},${node._y})`}
@@ -109,65 +67,83 @@ function OrgNode({ node, selectedId, onSelect, onToggle }) {
       onClick={e => { e.stopPropagation(); onSelect(node); }}
     >
       {/* Shadow */}
-      <rect x={2} y={3} width={NODE_W} height={NODE_H} rx={R} fill="rgba(0,0,0,0.07)" />
+      <rect x={2} y={3} width={NODE_W} height={NODE_H} rx={R} fill="rgba(0,0,0,0.12)" />
 
-      {/* Card */}
+      {/* Card body */}
       <rect width={NODE_W} height={NODE_H} rx={R}
-        fill={cardFill} stroke={border} strokeWidth={borderW}
-        strokeDasharray={node.contracted ? '5,3' : undefined}
+        fill={cardFill} stroke={borderColor} strokeWidth={borderW}
       />
 
-      {/* Coloured header bar */}
-      <rect x={0} y={0} width={NODE_W} height={20} rx={R} fill={color} />
-      <rect x={0} y={12} width={NODE_W} height={8} fill={color} />
-
-      {/* Title */}
-      <text x={8} y={13} fontSize={8.5} fontWeight="700" fill="#fff"
-        style={{ fontFamily: 'Raleway, sans-serif' }}>
-        {trunc(node.title, 30)}
-      </text>
-
-      {/* Employee / Vacant */}
-      <text x={8} y={31}
-        fontSize={9} fontWeight={isVacant ? '400' : '600'}
-        fill={isVacant ? '#d97706' : '#1e293b'}
-        fontStyle={isVacant ? 'italic' : 'normal'}
-        style={{ fontFamily: 'Open Sans, sans-serif' }}>
-        {trunc(node.employee || '— Vacant —', 26)}
-      </text>
-
-      {/* Dept label */}
-      <text x={8} y={45} fontSize={7.5} fill="#64748b" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-        {trunc(node.dept, 28)}
-      </text>
-
-      {/* Badges */}
-      {node.isUnion && (
+      {/* Header bar (structural: full color, position: thin accent) */}
+      {isStructural ? (
         <>
-          <rect x={8} y={50} width={26} height={11} rx={3} fill="#ede9fe" />
-          <text x={21} y={58} textAnchor="middle" fontSize={7} fill="#5b21b6" fontWeight="700">Union</text>
+          <rect x={0} y={0} width={NODE_W} height={NODE_H} rx={R} fill={color} />
+          <text x={NODE_W / 2} y={30} textAnchor="middle"
+            fontSize={11} fontWeight="700" fill="#ffffff"
+            style={{ fontFamily: 'Raleway, sans-serif' }}>
+            {trunc(node.title, 28)}
+          </text>
+          <text x={NODE_W / 2} y={52} textAnchor="middle"
+            fontSize={8.5} fill="rgba(255,255,255,0.7)"
+            style={{ fontFamily: 'Open Sans, sans-serif' }}>
+            {trunc(node.dept, 30)}
+          </text>
+        </>
+      ) : (
+        <>
+          {/* Thin header accent */}
+          <rect x={0} y={0} width={NODE_W} height={4} rx={R} fill={color} />
+
+          {/* Title */}
+          <text x={8} y={17} fontSize={9.5} fontWeight="700" fill={textColor}
+            style={{ fontFamily: 'Raleway, sans-serif' }}>
+            {trunc(node.title, 28)}
+          </text>
+
+          {/* Employee name or vacant */}
+          <text x={8} y={37}
+            fontSize={8.5} fontWeight={isVacant ? '400' : '600'}
+            fill={isVacant ? '#b45309' : '#374151'}
+            fontStyle={isVacant ? 'italic' : 'normal'}
+            style={{ fontFamily: 'Open Sans, sans-serif' }}>
+            {trunc(node.employee || '(Vacant)', 26)}
+          </text>
+
+          {/* Department */}
+          <text x={8} y={53} fontSize={7.5} fill="#9ca3af"
+            style={{ fontFamily: 'Open Sans, sans-serif' }}>
+            {node.dept}
+          </text>
+
+          {/* Status badges */}
+          {node.isUnion && (
+            <>
+              <rect x={8} y={56} width={24} height={10} rx={3} fill="#f3e8ff" />
+              <text x={20} y={63} textAnchor="middle" fontSize={7} fill="#6b21a8" fontWeight="700">U</text>
+            </>
+          )}
+          {!node.fullTime && (
+            <>
+              <rect x={node.isUnion ? 36 : 8} y={56} width={16} height={10} rx={3} fill="#f1f5f9" />
+              <text x={(node.isUnion ? 36 : 8) + 8} y={63} textAnchor="middle" fontSize={7} fill="#64748b" fontWeight="600">PT</text>
+            </>
+          )}
+
+          {/* Status indicator dot */}
+          <circle cx={NODE_W - 10} cy={10} r={4}
+            fill={isVacant ? '#f59e0b' : '#10b981'}
+            stroke="white" strokeWidth={1.5}
+          />
         </>
       )}
-      {!node.fullTime && (
-        <>
-          <rect x={node.isUnion ? 38 : 8} y={50} width={16} height={11} rx={3} fill="#f1f5f9" />
-          <text x={(node.isUnion ? 38 : 8) + 8} y={58} textAnchor="middle" fontSize={7} fill="#475569" fontWeight="600">PT</text>
-        </>
-      )}
 
-      {/* Status dot — only on position nodes */}
-      <circle cx={NODE_W - 8} cy={8} r={4}
-        fill={isVacant ? '#f59e0b' : '#22c55e'}
-        stroke="white" strokeWidth={1.5}
-      />
-
-      {/* Collapse toggle */}
+      {/* Collapse toggle for parents */}
       {hasChildren && (
-        <g transform={`translate(${NODE_W / 2 - 8}, ${NODE_H - 2})`}
+        <g transform={`translate(${NODE_W / 2 - 8}, ${NODE_H - 10})`}
           onClick={e => { e.stopPropagation(); onToggle(node.id); }}
           style={{ cursor: 'pointer' }}>
-          <circle cx={8} cy={8} r={8} fill="#334155" stroke="white" strokeWidth={1.5} />
-          <text x={8} y={12} textAnchor="middle" fontSize={10} fill="white" fontWeight="bold">
+          <circle cx={8} cy={8} r={7} fill="#334155" stroke="white" strokeWidth={1.5} />
+          <text x={8} y={11.5} textAnchor="middle" fontSize={9} fill="white" fontWeight="bold">
             {node._collapsed ? '+' : '−'}
           </text>
         </g>
@@ -176,23 +152,21 @@ function OrgNode({ node, selectedId, onSelect, onToggle }) {
   );
 }
 
-// ─── Edge ─────────────────────────────────────────────────────────────────────
+// Connector line
 function OrgEdge({ edge }) {
-  const d = `M${edge.x1},${edge.y1} C${edge.x1},${edge.y1 + 28} ${edge.x2},${edge.y2 - 28} ${edge.x2},${edge.y2}`;
-  return <path d={d} fill="none" stroke={edge.dashed ? '#94a3b8' : '#cbd5e1'}
-    strokeWidth={1.5} strokeDasharray={edge.dashed ? '5,3' : undefined} />;
+  const d = `M${edge.x1},${edge.y1} C${edge.x1},${edge.y1 + 30} ${edge.x2},${edge.y2 - 30} ${edge.x2},${edge.y2}`;
+  return <path d={d} fill="none" stroke="#cbd5e1" strokeWidth={1.5} />;
 }
 
-// ─── Main canvas ──────────────────────────────────────────────────────────────
-export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
+// Main canvas
+export default function OrgTreeCanvas({ roots, selectedId, onSelect, view = 'tree' }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
-  const [pan, setPan] = useState({ x: 40, y: 40 });
+  const [pan, setPan] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const [dragging, setDragging] = useState(null);
   const [collapsed, setCollapsed] = useState({});
 
-  // Deep-clone and apply collapsed state
   const applyCollapsed = useCallback((nodes) =>
     nodes.map(n => ({
       ...n,
@@ -202,47 +176,48 @@ export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
 
   const processedRoots = useMemo(() => applyCollapsed(roots), [roots, applyCollapsed]);
 
-  // Layout
+  // Calculate layout
   const { nodes, edges, vb } = useMemo(() => {
-    if (!processedRoots.length) return { nodes: [], edges: [], vb: { minX: 0, minY: 0, w: 0, h: 0 } };
+    if (!processedRoots.length) return { nodes: [], edges: [], vb: { minX: 0, minY: 0, w: 800, h: 600 } };
+    
     processedRoots.forEach(assignWidths);
-    let cx = 0;
-    processedRoots.forEach(r => { assignPositions(r, cx, 0); cx += r._sw + 80; });
+    let cx = 40;
+    processedRoots.forEach(r => { assignPositions(r, cx, 40); cx += r._sw + 100; });
+    
     const allNodes = [], allEdges = [];
     processedRoots.forEach(r => collectAll(r, allNodes, allEdges));
+    
     const xs = allNodes.map(n => n._x);
     const ys = allNodes.map(n => n._y);
+    const minX = Math.min(...xs) - 30;
+    const minY = Math.min(...ys) - 30;
+    const maxX = Math.max(...xs) + NODE_W + 30;
+    const maxY = Math.max(...ys) + NODE_H + 30;
+    
     return {
       nodes: allNodes, edges: allEdges,
-      vb: {
-        minX: Math.min(...xs) - 40,
-        minY: Math.min(...ys) - 40,
-        w: Math.max(...xs) + NODE_W + 40 - (Math.min(...xs) - 40),
-        h: Math.max(...ys) + NODE_H + 40 - (Math.min(...ys) - 40),
-      },
+      vb: { minX, minY, w: maxX - minX, h: maxY - minY },
     };
   }, [processedRoots]);
 
+  // Auto-fit on mount
   const fitView = useCallback(() => {
     const c = containerRef.current;
     if (!c || vb.w <= 0 || vb.h <= 0) return;
     const cw = c.clientWidth || 800;
     const ch = c.clientHeight || 600;
-    const PAD = 60;
-    const s = Math.min((cw - PAD * 2) / vb.w, (ch - PAD * 2) / vb.h, 1.0);
-    const clampedScale = Math.max(0.18, Math.min(s, 1.0));
+    const pad = 40;
+    const s = Math.min((cw - pad * 2) / vb.w, (ch - pad * 2) / vb.h, 1.2);
+    const clampedScale = Math.max(0.2, Math.min(s, 1.5));
     const cx = (cw - vb.w * clampedScale) / 2 - vb.minX * clampedScale;
-    const cy = Math.max(PAD, (ch - vb.h * clampedScale) / 2 - vb.minY * clampedScale);
+    const cy = (ch - vb.h * clampedScale) / 2 - vb.minY * clampedScale;
     setScale(clampedScale);
     setPan({ x: cx, y: cy });
   }, [vb]);
 
   useEffect(() => {
     const t1 = requestAnimationFrame(() => {
-      const t2 = requestAnimationFrame(() => {
-        const t3 = requestAnimationFrame(fitView);
-        return () => cancelAnimationFrame(t3);
-      });
+      const t2 = requestAnimationFrame(fitView);
       return () => cancelAnimationFrame(t2);
     });
     return () => cancelAnimationFrame(t1);
@@ -254,7 +229,7 @@ export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
     if (!el) return;
     const handler = (e) => {
       e.preventDefault();
-      setScale(s => Math.max(0.15, Math.min(2.5, s * (e.deltaY < 0 ? 1.1 : 0.9))));
+      setScale(s => Math.max(0.2, Math.min(2.0, s * (e.deltaY < 0 ? 1.12 : 0.89))));
     };
     el.addEventListener('wheel', handler, { passive: false });
     return () => el.removeEventListener('wheel', handler);
@@ -264,29 +239,26 @@ export default function OrgTreeCanvas({ roots, selectedId, onSelect }) {
     if (e.target.closest('[data-ctrl]')) return;
     setDragging({ sx: e.clientX - pan.x, sy: e.clientY - pan.y });
   }, [pan]);
+
   const onMouseMove = useCallback((e) => {
     if (!dragging) return;
     setPan({ x: e.clientX - dragging.sx, y: e.clientY - dragging.sy });
   }, [dragging]);
-  const onMouseUp = useCallback(() => setDragging(null), []);
 
+  const onMouseUp = useCallback(() => setDragging(null), []);
   const toggleCollapse = useCallback((id) => setCollapsed(p => ({ ...p, [id]: !p[id] })), []);
 
   if (!nodes.length) {
-    return (
-      <div className="flex items-center justify-center h-full text-slate-400 text-sm">
-        No positions to display.
-      </div>
-    );
+    return <div className="flex items-center justify-center h-full text-slate-400">No positions to display</div>;
   }
 
   return (
     <div ref={containerRef} style={{ position: 'absolute', inset: 0 }}>
-      {/* Zoom controls — top-right inset */}
+      {/* Controls */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-1.5 rounded-xl bg-white border border-slate-200 shadow-md p-1.5" data-ctrl="1">
         {[
-          { l: '+', title: 'Zoom in',   a: () => setScale(s => Math.min(2.5, s * 1.2)) },
-          { l: '−', title: 'Zoom out',  a: () => setScale(s => Math.max(0.15, s / 1.2)) },
+          { l: '+', title: 'Zoom in', a: () => setScale(s => Math.min(2.0, s * 1.2)) },
+          { l: '−', title: 'Zoom out', a: () => setScale(s => Math.max(0.2, s / 1.2)) },
           { l: '⊡', title: 'Fit view', a: fitView },
         ].map(({ l, title, a }) => (
           <button key={l} data-ctrl="1" onClick={a} title={title}
