@@ -91,11 +91,13 @@ export default function ExportExecSummary() {
 
         <h3>1. Administrative Restructuring — Three New Positions</h3>
         <table>
-          <tr><th>Position</th><th>Base Salary</th><th>Fully Loaded</th><th>Y1 Cost</th><th>Fund Source</th></tr>
-          <tr><td>Staff Accountant</td><td>{fmt(settings.sa_base_salary)}</td><td>{fmt(saFL)}</td><td>{fmt(d1.costs.staffAccountant)}</td><td>General Fund</td></tr>
-          <tr><td>Billing Specialist</td><td>{fmt(settings.bs_base_salary)}</td><td>{fmt(bsFL)}</td><td>{fmt(d1.costs.billingSpecialist)}</td><td>Ambulance Fund (not GF)</td></tr>
-          <tr><td>GA Coordinator</td><td>{fmt(settings.ga_stipend)}</td><td>Stipend</td><td>{fmt(d1.costs.gaCoordinator)}</td><td>General Fund</td></tr>
-          <tr><td>Revenue Coord. (Y3 trigger)</td><td>{fmt(settings.rc_base_salary)}</td><td>—</td><td>Triggered</td><td>Regional Revenue</td></tr>
+          <thead><tr><th>Position</th><th>Base Salary</th><th>Fully Loaded</th><th>Y1 Cost</th><th>Fund Source</th></tr></thead>
+          <tbody>
+            <tr><td>Staff Accountant</td><td>{fmt(settings.sa_base_salary)}</td><td>{fmt(saFL)}</td><td>{fmt(d1.costs.staffAccountant)}</td><td>General Fund</td></tr>
+            <tr><td>Billing Specialist</td><td>{fmt(settings.bs_base_salary)}</td><td>{fmt(bsFL)}</td><td>{fmt(d1.costs.billingSpecialist)}</td><td>Ambulance Fund (not GF)</td></tr>
+            <tr><td>GA Coordinator</td><td>{fmt(settings.ga_stipend)}</td><td>Stipend</td><td>{fmt(d1.costs.gaCoordinator)}</td><td>General Fund</td></tr>
+            <tr><td>Revenue Coord. (Y3 trigger)</td><td>{fmt(settings.rc_base_salary)}</td><td>—</td><td>Triggered</td><td>Regional Revenue</td></tr>
+          </tbody>
         </table>
 
         <h3>2. EMS Billing Transition</h3>
