@@ -16,10 +16,19 @@ export const DEPARTMENTS = [
 ];
 
 export function DepartmentProvider({ children }) {
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedDepartments, setSelectedDepartments] = useState(['all']);
 
-  const changeDepartment = useCallback((deptId) => {
-    setSelectedDepartment(deptId);
+  const toggleDepartment = useCallback((deptId) => {
+    setSelectedDepartments(prev => {
+      if (deptId === 'all') {
+        return prev.includes('all') ? [] : ['all'];
+      }
+      const filtered = prev.filter(d => d !== 'all');
+      const updated = filtered.includes(deptId)
+        ? filtered.filter(d => d !== deptId)
+        : [...filtered, deptId];
+      return updated.length === 0 ? [] : updated;
+    });
   }, []);
 
   const getDepartmentLabel = useCallback((deptId) => {
@@ -30,8 +39,8 @@ export function DepartmentProvider({ children }) {
   return (
     <DepartmentContext.Provider
       value={{
-        selectedDepartment,
-        changeDepartment,
+        selectedDepartments,
+        toggleDepartment,
         getDepartmentLabel,
         DEPARTMENTS,
       }}
@@ -47,4 +56,9 @@ export function useDepartment() {
     throw new Error('useDepartment must be used within DepartmentProvider');
   }
   return context;
+}
+
+export function isDepartmentSelected(selectedDepartments, deptId) {
+  if (selectedDepartments.includes('all')) return true;
+  return selectedDepartments.includes(deptId);
 }
