@@ -223,17 +223,250 @@ function generateServiceDeliveryModel(department, metadata, hostTown) {
   };
 }
 
-function generateFinancialModel(annualRevenue, staffingCost, horizonYears) {
-  const netCashflow = annualRevenue - staffingCost;
-  const horizonTotal = netCashflow * horizonYears;
+function generateFinancialModel(annualRevenue, staffingCost, horizonYears, department, deptParticipations, settings) {
+  // Build comprehensive cost structure
+  const costStructure = buildCostStructure(department, staffingCost, settings);
+  
+  // Calculate revenue opportunities
+  const revenueModel = buildRevenueModel(department, deptParticipations, settings);
+  
+  // Calculate net cost
+  const totalOperatingCost = costStructure.total;
+  const totalRevenue = revenueModel.total;
+  const netAnnualCost = totalOperatingCost - totalRevenue;
+  
+  // Calculate cost allocation
+  const costAllocation = calculateCostAllocation(deptParticipations, netAnnualCost);
+  
+  // Multi-year projection
+  const yearsArray = Array.from({ length: horizonYears }, (_, i) => ({
+    year: i + 1,
+    operatingCost: totalOperatingCost,
+    revenue: totalRevenue,
+    netCost: netAnnualCost,
+    cumulativeNetCost: netAnnualCost * (i + 1),
+  }));
+
   return {
-    title: 'Financial Model',
-    annualRevenue: annualRevenue,
-    annualOperatingCost: staffingCost,
-    annualNetCashflow: netCashflow,
-    projectedPeriod: `${horizonYears}-year horizon`,
-    horizonTotalValue: horizonTotal,
-    breakEven: netCashflow > 0 ? 'Year 1' : 'To be determined based on ramp-up',
+    title: 'Comprehensive Financial Model',
+    costStructure: {
+      staffing: costStructure.staffing,
+      benefits: costStructure.benefits,
+      equipment: costStructure.equipment,
+      vehicles: costStructure.vehicles,
+      technology: costStructure.technology,
+      training: costStructure.training,
+      overhead: costStructure.overhead,
+      insurance: costStructure.insurance,
+      total: Math.round(costStructure.total),
+    },
+    revenueOpportunities: {
+      serviceContracts: revenueModel.serviceContracts,
+      operationalRevenue: revenueModel.operationalRevenue,
+      specialServices: revenueModel.specialServices,
+      total: Math.round(revenueModel.total),
+    },
+    netCostCalculation: {
+      totalOperatingCost: Math.round(totalOperatingCost),
+      totalRevenue: Math.round(totalRevenue),
+      netAnnualCost: Math.round(netAnnualCost),
+      netCostPerCapita: deptParticipations.length > 0 ? Math.round(netAnnualCost / deptParticipations.length) : 0,
+    },
+    costAllocation: costAllocation,
+    multiYearProjection: yearsArray,
+    horizonTotalNetCost: Math.round(netAnnualCost * horizonYears),
+  };
+}
+
+function buildCostStructure(department, basestaffingCost, settings) {
+  const departmentCosts = {
+    admin: {
+      staffing: 107000,
+      benefits: 42000,
+      equipment: 8000,
+      vehicles: 0,
+      technology: 15000,
+      training: 3000,
+      overhead: 22000,
+      insurance: 5000,
+    },
+    finance: {
+      staffing: 188000,
+      benefits: 85000,
+      equipment: 5000,
+      vehicles: 0,
+      technology: 18000,
+      training: 2000,
+      overhead: 25000,
+      insurance: 8000,
+    },
+    transfer_station: {
+      staffing: 90000,
+      benefits: 35000,
+      equipment: 45000,
+      vehicles: 35000,
+      technology: 4000,
+      training: 2000,
+      overhead: 18000,
+      insurance: 12000,
+    },
+    assessor: {
+      staffing: 90000,
+      benefits: 32000,
+      equipment: 6000,
+      vehicles: 8000,
+      technology: 5000,
+      training: 1500,
+      overhead: 15000,
+      insurance: 3000,
+    },
+    animal_control: {
+      staffing: 42000,
+      benefits: 16000,
+      equipment: 3000,
+      vehicles: 22000,
+      technology: 2000,
+      training: 1000,
+      overhead: 8000,
+      insurance: 4000,
+    },
+    ambulance: {
+      staffing: 155000,
+      benefits: 65000,
+      equipment: 35000,
+      vehicles: 48000,
+      technology: 8000,
+      training: 5000,
+      overhead: 20000,
+      insurance: 25000,
+    },
+    police: {
+      staffing: 110000,
+      benefits: 48000,
+      equipment: 12000,
+      vehicles: 55000,
+      technology: 10000,
+      training: 4000,
+      overhead: 18000,
+      insurance: 15000,
+    },
+    fire: {
+      staffing: 105000,
+      benefits: 45000,
+      equipment: 25000,
+      vehicles: 42000,
+      technology: 6000,
+      training: 6000,
+      overhead: 16000,
+      insurance: 18000,
+    },
+    inspection: {
+      staffing: 95000,
+      benefits: 33000,
+      equipment: 4000,
+      vehicles: 18000,
+      technology: 3000,
+      training: 1500,
+      overhead: 14000,
+      insurance: 4000,
+    },
+  };
+
+  const costs = departmentCosts[department] || departmentCosts.admin;
+  const total = Object.values(costs).reduce((s, v) => s + v, 0);
+
+  return {
+    ...costs,
+    total,
+  };
+}
+
+function buildRevenueModel(department, deptParticipations, settings) {
+  const departmentRevenue = {
+    finance: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 22000,
+      operationalRevenue: 35000,
+      specialServices: 8000,
+    },
+    transfer_station: {
+      serviceContracts: deptParticipations.filter(p => p.annual_fee).reduce((s, p) => s + (p.annual_fee || 0), 0),
+      operationalRevenue: 18000,
+      specialServices: 5000,
+    },
+    assessor: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 12000,
+      operationalRevenue: 4000,
+      specialServices: 2000,
+    },
+    inspection: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 15000,
+      operationalRevenue: 12000,
+      specialServices: 6000,
+    },
+    animal_control: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 8000,
+      operationalRevenue: 2000,
+      specialServices: 1000,
+    },
+    ambulance: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 18000,
+      operationalRevenue: 42000,
+      specialServices: 15000,
+    },
+    police: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 25000,
+      operationalRevenue: 8000,
+      specialServices: 3000,
+    },
+    fire: {
+      serviceContracts: deptParticipations.filter(p => p.status !== 'not_participating').length * 20000,
+      operationalRevenue: 5000,
+      specialServices: 2000,
+    },
+  };
+
+  const revenue = departmentRevenue[department] || { serviceContracts: 0, operationalRevenue: 0, specialServices: 0 };
+  const total = revenue.serviceContracts + revenue.operationalRevenue + revenue.specialServices;
+
+  return {
+    ...revenue,
+    total,
+  };
+}
+
+function calculateCostAllocation(deptParticipations, netAnnualCost) {
+  const hostTown = deptParticipations.find(p => p.host_town);
+  const activeTowns = deptParticipations.filter(p => p.status === 'active_partner' || p.status === 'host');
+  
+  if (activeTowns.length === 0) {
+    return {
+      methodology: 'No active participants',
+      allocations: [],
+    };
+  }
+
+  // Calculate per capita allocation (simplified)
+  const costPerParticipant = netAnnualCost / activeTowns.length;
+  
+  // Host town typically bears a portion of overhead
+  const hostShare = netAnnualCost * 0.35;
+  const remainingCost = netAnnualCost - hostShare;
+  const partnerShare = remainingCost / (activeTowns.length - 1 || 1);
+
+  const allocations = activeTowns.map(town => ({
+    municipality: town.municipality,
+    isHost: town.host_town || false,
+    annualCost: town.host_town ? Math.round(hostShare) : Math.round(partnerShare),
+    costPerCapita: Math.round(costPerParticipant),
+    percentOfTotal: Math.round((town.host_town ? hostShare : partnerShare) / netAnnualCost * 100),
+  }));
+
+  return {
+    methodology: 'Host Town 35% + Equal Share Among Partners',
+    hostTown: hostTown?.municipality || 'TBD',
+    totalNetCost: Math.round(netAnnualCost),
+    averageCostPerTown: Math.round(netAnnualCost / activeTowns.length),
+    allocations,
   };
 }
 
