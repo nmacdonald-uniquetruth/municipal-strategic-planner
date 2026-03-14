@@ -30,6 +30,7 @@ const BASEMAPS = {
 function TownLabels({ geojson, hoveredTown, selectedTown }) {
   const map = useMap();
   const labelsRef = useRef(null);
+  const [zoom, setZoom] = useState(10);
 
   // Track zoom level for scale-dependent label visibility
   useEffect(() => {
