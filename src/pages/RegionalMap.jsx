@@ -292,7 +292,22 @@ export default function RegionalMap() {
       mouseout: () => setHoveredTown(null),
       click: () => {
         const profile = TOWN_PROFILES[town];
-        if (profile) setSelectedTown(profile);
+        if (profile) {
+          if (comparisonMode) {
+            // Add/remove from comparison
+            setSelectedForComparison(prev => {
+              const isSelected = prev.some(t => t.town_name === town);
+              if (isSelected) {
+                return prev.filter(t => t.town_name !== town);
+              } else if (prev.length < 3) {
+                return [...prev, profile];
+              }
+              return prev;
+            });
+          } else {
+            setSelectedTown(profile);
+          }
+        }
       },
     });
     layer.bindTooltip(town || '', {
@@ -300,7 +315,7 @@ export default function RegionalMap() {
       direction: 'center',
       className: 'bg-white text-slate-900 text-xs font-bold border-slate-200 shadow rounded px-2 py-1',
     });
-  }, []);
+  }, [comparisonMode]);
 
   return (
     <div className="flex flex-col space-y-4" style={{ height: 'calc(100vh - 96px)', minHeight: '650px' }}>
