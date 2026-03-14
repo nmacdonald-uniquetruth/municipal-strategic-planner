@@ -13,9 +13,8 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
 
   const x = node.x;
   const y = node.y;
-  const R = 8; // border-radius
+  const R = 8;
 
-  // Card background
   const cardBg = isVacant ? '#fffbeb' : '#ffffff';
   const borderColor = isSelected ? '#3b82f6' : isVacant ? '#fcd34d' : '#e2e8f0';
   const borderW = isSelected ? 2.5 : 1.5;
@@ -26,18 +25,13 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
       style={{ cursor: 'pointer' }}
       onClick={(e) => { e.stopPropagation(); onSelect(node); }}
     >
-      {/* Shadow */}
       <rect x={2} y={3} width={NODE_W} height={NODE_H} rx={R} ry={R} fill="rgba(0,0,0,0.07)" />
-
-      {/* Card background */}
       <rect
         width={NODE_W} height={NODE_H} rx={R} ry={R}
         fill={cardBg}
         stroke={borderColor} strokeWidth={borderW}
         strokeDasharray={isContracted ? '5,3' : undefined}
       />
-
-      {/* Left accent bar */}
       <rect x={0} y={0} width={4} height={NODE_H} rx={R} ry={0}
         fill={palette.bg}
         clipPath={`url(#lclip-${node.position_id})`}
@@ -45,15 +39,12 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
       <clipPath id={`lclip-${node.position_id}`}>
         <rect x={0} y={0} width={4} height={NODE_H} rx={R} />
       </clipPath>
-
-      {/* Dept color header strip */}
       <rect x={4} y={0} width={NODE_W - 4} height={22} rx={0} fill={palette.bg}
         clipPath={`url(#hclip-${node.position_id})`}
       />
       <clipPath id={`hclip-${node.position_id}`}>
         <rect x={4} y={0} width={NODE_W - 4} height={22} rx={0} />
       </clipPath>
-      {/* Round top-right header */}
       <rect x={4} y={0} width={NODE_W - 4} height={22} rx={R} ry={R} fill={palette.bg}
         clipPath={`url(#htop-${node.position_id})`}
       />
@@ -61,23 +52,17 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
         <rect x={4} y={0} width={NODE_W - 4} height={16} />
       </clipPath>
 
-      {/* Title text */}
-      <text
-        x={10} y={14}
-        fontSize={9.5} fontWeight="700" fill="#ffffff"
-        style={{ fontFamily: 'Raleway, sans-serif' }}
-      >
+      <text x={10} y={14} fontSize={9.5} fontWeight="700" fill="#ffffff"
+        style={{ fontFamily: 'Raleway, sans-serif' }}>
         <TruncText text={node.title} maxW={NODE_W - 22} />
       </text>
 
-      {/* Subtitle */}
       {node.subtitle && (
         <text x={10} y={30} fontSize={8} fill="#64748b" style={{ fontFamily: 'Open Sans, sans-serif' }}>
           <TruncText text={node.subtitle} maxW={NODE_W - 16} />
         </text>
       )}
 
-      {/* Employee name */}
       <text
         x={10} y={node.subtitle ? 42 : 33}
         fontSize={9.5} fontWeight={isVacant ? 'normal' : '600'}
@@ -88,20 +73,16 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
         <TruncText text={node.employee ? node.employee.full_name : '— Vacant —'} maxW={NODE_W - 16} />
       </text>
 
-      {/* Badges row */}
       <BadgesRow node={node} y={node.subtitle ? 52 : 43} statusColor={statusColor} />
 
-      {/* Salary */}
       {node.base_salary > 0 && (
         <text x={10} y={NODE_H - 6} fontSize={8} fill="#94a3b8" style={{ fontFamily: 'monospace' }}>
           ${node.base_salary.toLocaleString()}
         </text>
       )}
 
-      {/* Status dot top-right */}
       <circle cx={NODE_W - 7} cy={7} r={4} fill={statusColor} stroke="white" strokeWidth={1.5} />
 
-      {/* Collapse button */}
       {hasChildren && (
         <g
           transform={`translate(${NODE_W / 2 - 9}, ${NODE_H - 2})`}
@@ -120,7 +101,6 @@ function SvgNode({ node, onSelect, selectedId, onToggleCollapse }) {
 
 function TruncText({ text, maxW }) {
   if (!text) return null;
-  // SVG doesn't natively truncate — estimate ~5.8px per char at font-size 9.5
   const maxChars = Math.floor(maxW / 5.8);
   const display = text.length > maxChars ? text.slice(0, maxChars - 1) + '…' : text;
   return <>{display}</>;
@@ -130,9 +110,9 @@ function BadgesRow({ node, y, statusColor }) {
   const badges = [];
   let bx = 10;
 
-  const addBadge = (label, bg, fg, dashed = false) => {
+  const addBadge = (label, bg, fg) => {
     const w = label.length * 5.2 + 8;
-    badges.push({ label, bg, fg, x: bx, w, dashed });
+    badges.push({ label, bg, fg, x: bx, w });
     bx += w + 4;
   };
 
@@ -157,10 +137,7 @@ function BadgesRow({ node, y, statusColor }) {
     <g>
       {badges.map((b, i) => (
         <g key={i}>
-          <rect x={b.x} y={y} width={b.w} height={11} rx={4}
-            fill={b.bg}
-            stroke={b.dashed ? b.fg : 'none'} strokeDasharray={b.dashed ? '2,1' : undefined}
-          />
+          <rect x={b.x} y={y} width={b.w} height={11} rx={4} fill={b.bg} />
           <text x={b.x + b.w / 2} y={y + 8} textAnchor="middle" fontSize={7.5} fill={b.fg} fontWeight="600">
             {b.label}
           </text>
@@ -172,16 +149,11 @@ function BadgesRow({ node, y, statusColor }) {
 
 // ─── Edge / connector ─────────────────────────────────────────────────────────
 function SvgEdge({ edge }) {
-  const mx = (edge.x1 + edge.x2) / 2;
-  const my = (edge.y1 + edge.y2) / 2;
-  // Smooth S-curve
   const d = `M ${edge.x1} ${edge.y1} C ${edge.x1} ${edge.y1 + 30}, ${edge.x2} ${edge.y2 - 30}, ${edge.x2} ${edge.y2}`;
   return (
-    <path
-      d={d}
-      fill="none"
+    <path d={d} fill="none"
       stroke={edge.dashed ? '#94a3b8' : '#cbd5e1'}
-      strokeWidth={edge.dashed ? 1.5 : 1.5}
+      strokeWidth={1.5}
       strokeDasharray={edge.dashed ? '5,3' : undefined}
     />
   );
@@ -189,12 +161,12 @@ function SvgEdge({ edge }) {
 
 // ─── Main SVG Canvas ──────────────────────────────────────────────────────────
 export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
+  const containerRef = useRef(null);
   const svgRef = useRef(null);
   const [transform, setTransform] = useState({ x: 40, y: 40, scale: 1 });
   const [dragging, setDragging] = useState(null);
   const [collapsed, setCollapsed] = useState({});
 
-  // Apply collapsed state to tree nodes
   const applyCollapsed = useCallback((nodes) => {
     return nodes.map(n => ({
       ...n,
@@ -210,7 +182,6 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     setCollapsed(prev => ({ ...prev, [pid]: !prev[pid] }));
   }, []);
 
-  // Pan handling
   const onMouseDown = useCallback((e) => {
     if (e.target.closest('[data-no-pan]')) return;
     setDragging({ startX: e.clientX - transform.x, startY: e.clientY - transform.y });
@@ -223,7 +194,6 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
 
   const onMouseUp = useCallback(() => setDragging(null), []);
 
-  // Wheel zoom
   const onWheel = useCallback((e) => {
     e.preventDefault();
     const factor = e.deltaY < 0 ? 1.1 : 0.9;
@@ -233,7 +203,6 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     }));
   }, []);
 
-  // Wheel zoom — attach to ref directly
   useEffect(() => {
     const el = svgRef.current;
     if (!el) return;
@@ -241,14 +210,12 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     return () => el.removeEventListener('wheel', onWheel);
   }, [onWheel]);
 
-  // Fit to view — always reads ref fresh
   const fitView = useCallback(() => {
-    const el = svgRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const w = rect.width > 10 ? rect.width : (el.parentElement?.clientWidth || 800);
-    const h = rect.height > 10 ? rect.height : (el.parentElement?.clientHeight || 500);
-    if (viewBox.width <= 0 || viewBox.height <= 0) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const w = container.clientWidth || 800;
+    const h = container.clientHeight || 500;
+    if (viewBox.width <= 0 || viewBox.height <= 0 || w <= 0 || h <= 0) return;
     const scaleX = w / (viewBox.width + 80);
     const scaleY = h / (viewBox.height + 80);
     const scale = Math.min(scaleX, scaleY, 1.0);
@@ -259,52 +226,51 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
     });
   }, [viewBox]);
 
-  // Auto-fit on tree/viewBox change — double RAF to ensure DOM has fully laid out
+  // Auto-fit whenever layout changes — triple RAF to ensure container has fully painted
   useEffect(() => {
     const id1 = requestAnimationFrame(() => {
-      const id2 = requestAnimationFrame(() => { fitView(); });
+      const id2 = requestAnimationFrame(() => {
+        const id3 = requestAnimationFrame(() => { fitView(); });
+        return () => cancelAnimationFrame(id3);
+      });
       return () => cancelAnimationFrame(id2);
     });
     return () => cancelAnimationFrame(id1);
-  }, [nodes.length, viewBox.width, viewBox.height]);
+  }, [nodes.length, viewBox.width, viewBox.height, fitView]);
 
   if (nodes.length === 0) {
     return (
       <div className="flex items-center justify-center h-full text-slate-400 text-sm">
-        No positions match current scenario settings.
+        No positions match current settings.
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-full">
-      {/* Controls */}
+    <div ref={containerRef} style={{ position: 'absolute', inset: 0 }}>
+      {/* Zoom controls */}
       <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5">
         {[
           { label: '+', action: () => setTransform(t => ({ ...t, scale: Math.min(2.5, t.scale * 1.2) })) },
           { label: '−', action: () => setTransform(t => ({ ...t, scale: Math.max(0.2, t.scale / 1.2) })) },
           { label: '⊡', action: fitView },
         ].map(({ label, action }) => (
-          <button
-            key={label}
-            onClick={action}
-            data-no-pan="true"
-            className="h-8 w-8 rounded-lg bg-white border border-slate-200 shadow text-sm font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-center"
-          >
+          <button key={label} onClick={action} data-no-pan="true"
+            className="h-8 w-8 rounded-lg bg-white border border-slate-200 shadow text-sm font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-center">
             {label}
           </button>
         ))}
       </div>
 
-      {/* Scale indicator */}
       <div className="absolute bottom-3 right-3 z-10 text-[10px] text-slate-400 bg-white/80 px-2 py-1 rounded">
         {Math.round(transform.scale * 100)}%
       </div>
 
       <svg
         ref={svgRef}
-        className="w-full"
-        style={{ height: '100%', minHeight: '500px', cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none' }}
+        width="100%"
+        height="100%"
+        style={{ cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', display: 'block' }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
@@ -312,9 +278,7 @@ export default function OrgSVGCanvas({ tree, onSelect, selectedId }) {
         onClick={() => onSelect(null)}
       >
         <g transform={`translate(${transform.x},${transform.y}) scale(${transform.scale})`}>
-          {/* Edges first (under nodes) */}
           {edges.map((edge, i) => <SvgEdge key={i} edge={edge} />)}
-          {/* Nodes */}
           {nodes.map(node => (
             <SvgNode
               key={node.position_id}
