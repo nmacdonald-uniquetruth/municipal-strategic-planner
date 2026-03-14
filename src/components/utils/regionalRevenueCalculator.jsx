@@ -182,6 +182,18 @@ export function calculateAdoptionScenarios(contract) {
 }
 
 /**
+ * Format currency for display
+ */
+export function formatCurrency(value) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+/**
  * Format service type for display
  */
 export function formatServiceType(type) {
