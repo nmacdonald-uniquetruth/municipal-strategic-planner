@@ -57,6 +57,13 @@ export default function RestructuringProposalLibrary() {
     }
   });
 
+  const statusChangeMutation = useMutation({
+    mutationFn: ({ id, status }) => base44.entities.RestructuringProposal.update(id, { status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['restructuringProposals'] });
+    }
+  });
+
   // Extract unique values for filters
   const departments = useMemo(() => {
     const all = new Set();
