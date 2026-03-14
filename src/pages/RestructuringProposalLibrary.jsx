@@ -386,9 +386,11 @@ export default function RestructuringProposalLibrary() {
         {selectedProposal && (
           <ProposalDetail
             proposal={selectedProposal}
+            evaluation={selectedProposalEvaluation}
             onClose={() => setSelectedProposal(null)}
             onEdit={handleEdit}
             onDelete={(id) => deleteMutation.mutate(id)}
+            onStatusChange={handleStatusChange}
             relatedProposals={relatedProposals}
           />
         )}
