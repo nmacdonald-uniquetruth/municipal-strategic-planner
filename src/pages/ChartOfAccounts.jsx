@@ -58,50 +58,12 @@ const TABS = [
   { id: 'import',       label: 'Import',           icon: Upload },
 ];
 
-// ── Import panel ──────────────────────────────────────────────────────────────
-function ImportPanel({ onImport }) {
-  const [json, setJson] = useState('');
-  const [status, setStatus] = useState(null);
-
-  const handleParse = () => {
-    try {
-      const rows = JSON.parse(json);
-      if (!Array.isArray(rows)) throw new Error('Expected an array of objects.');
-      const parsed = parseCOAImport(rows);
-      onImport(parsed);
-      setStatus({ ok: true, msg: `Imported ${parsed.length} accounts.` });
-    } catch (e) {
-      setStatus({ ok: false, msg: `Parse error: ${e.message}` });
-    }
-  };
-
-  return (
-    <div className="space-y-4 max-w-3xl">
-      <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
-        <p className="text-xs font-semibold text-blue-800">Import from TRIO Workbook</p>
-        <p className="text-[10px] text-blue-700 mt-1">
-          Paste a JSON array of objects exported from Excel or extracted via the file upload tool.
-          Expected fields: <code className="bg-blue-100 px-1 rounded">TRIO Account</code>, <code className="bg-blue-100 px-1 rounded">TRIO Dept</code>, <code className="bg-blue-100 px-1 rounded">Object Code</code>, <code className="bg-blue-100 px-1 rounded">New Account</code>, <code className="bg-blue-100 px-1 rounded">New Title</code>, <code className="bg-blue-100 px-1 rounded">Fund</code>, <code className="bg-blue-100 px-1 rounded">Account Type</code>, <code className="bg-blue-100 px-1 rounded">Prior Budget</code>, <code className="bg-blue-100 px-1 rounded">Prior Actual</code>.
-          All fields are optional — blank cells become empty strings or 0.
-        </p>
-      </div>
-      <textarea
-        rows={12}
-        value={json}
-        onChange={e => setJson(e.target.value)}
-        placeholder={'[\n  {"TRIO Account": "01-001-5100", "TRIO Dept": "Administration", "Object Code": "5100", "TRIO Description": "Town Manager Salary", "New Account": "01-110-51100", "New Title": "Town Manager — Salary", "Fund": "general_fund", "Account Type": "expenditure", "Prior Budget": 75000, "Prior Actual": 74800},\n  ...\n]'}
-        className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-mono focus:outline-none focus:ring-1 focus:ring-slate-400 bg-white resize-none"
-      />
-      <div className="flex items-center gap-3">
-        <button onClick={handleParse} className="text-xs bg-slate-900 text-white px-4 py-1.5 rounded-lg font-semibold hover:bg-slate-700 transition-colors">
-          Parse & Import
-        </button>
-        {status && (
-          <p className={`text-xs font-medium ${status.ok ? 'text-emerald-700' : 'text-red-600'}`}>{status.msg}</p>
-        )}
-      </div>
-    </div>
-  );
+// ── Audit log helper ──────────────────────────────────────────────────────────
+async function writeAuditLog(entry) {
+  await base44.entities.COAAuditLog.create({
+    ...entry,
+    timestamp: new Date().toISOString(),
+  });
 }
 
 // ── Main page ─────────────────────────────────────────────────────────────────
