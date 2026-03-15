@@ -115,6 +115,23 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
             </div>
           </td>
         </tr>
+        {linkedCoaAccounts.length > 0 && (
+          <tr>
+            <td colSpan={99} className="bg-white px-4 py-3 border-t border-slate-100">
+              <button onClick={() => setShowCOA(!showCOA)} className="text-[9px] font-semibold text-slate-600 hover:text-slate-900 py-1 px-2 rounded hover:bg-slate-100 flex items-center gap-1">
+                <Link2 className="h-3 w-3" /> {showCOA ? 'Hide' : 'Show'} COA Mapping ({linkedCoaAccounts.length} account{linkedCoaAccounts.length !== 1 ? 's' : ''})
+              </button>
+              {showCOA && (
+                <div className="mt-3 space-y-2">
+                  {linkedCoaAccounts.map(coa => (
+                    <TraceabilityPanel key={coa.id} newAccountNumber={coa.new_account_number} coaAccounts={coaAccounts} budgetValue={dept.adopted_budget} />
+                  ))}
+                </div>
+              )}
+            </td>
+          </tr>
+        )}
+        </>
       )}
     </>
   );
