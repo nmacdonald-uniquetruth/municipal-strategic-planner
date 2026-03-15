@@ -190,7 +190,7 @@ export default function DepartmentBudgetTable({ depts, activePhase, showHistory 
           </thead>
           <tbody>
             {Object.entries(grouped).map(([fund, ds]) => (
-              <FundGroup key={fund} fund={fund} depts={ds} activeColumn={activeColumn} showHistory={showHistory} onEdit={onEdit} />
+              <FundGroup key={fund} fund={fund} depts={ds} activeColumn={activeColumn} showHistory={showHistory} onEdit={onEdit} coaAccounts={coaAccounts} />
             ))}
             {/* Grand total */}
             <tr className="bg-slate-900 text-white border-t-2 border-slate-700">
