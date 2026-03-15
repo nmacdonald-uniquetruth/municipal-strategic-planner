@@ -141,6 +141,21 @@ export default function WarrantBuilder() {
   const [activeTab, setActiveTab] = useState('articles');
   const [historyTitle, setHistoryTitle] = useState(null);
 
+  // Mapping state
+  const [lineItems] = useState(() => buildDefaultLineItems(settings));
+  const [mappings, setMappings] = useState(() => applyAllSuggestedMappings(buildDefaultLineItems(settings)));
+
+  const handleMappingChange = useCallback((lineId, mapping) => {
+    setMappings(prev => ({ ...prev, [lineId]: mapping }));
+  }, []);
+
+  const handleAutoMap = useCallback(() => {
+    setMappings(applyAllSuggestedMappings(lineItems));
+  }, [lineItems]);
+
+  const beteRollup = useMemo(() => rollupByBeteLine(lineItems, mappings), [lineItems, mappings]);
+  const mappingReadiness = useMemo(() => checkAdoptionReadiness(lineItems, mappings), [lineItems, mappings]);
+
   const allYearArticles = useMemo(() => Object.values(articlesByYear).flat(), [articlesByYear]);
 
   const calc = useMemo(() => calculateTaxCommitment({
