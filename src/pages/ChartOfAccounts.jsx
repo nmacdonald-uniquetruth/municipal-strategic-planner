@@ -46,14 +46,16 @@ const SEED_ACCOUNTS = [
 ];
 
 const TABS = [
-  { id: 'crosswalk',    label: 'Crosswalk',      icon: Table },
-  { id: 'oldnew',       label: 'Old → New',       icon: ArrowRight },
-  { id: 'dept',         label: 'By Department',  icon: Building2 },
-  { id: 'revenue',      label: 'Revenue',        icon: TrendingUp },
-  { id: 'expenditure',  label: 'Expenditures',   icon: TrendingDown },
-  { id: 'exceptions',   label: 'Exceptions',     icon: AlertTriangle },
-  { id: 'validation',   label: 'Validation',     icon: CheckCircle },
-  { id: 'import',       label: 'Import',         icon: Upload },
+  { id: 'crosswalk',    label: 'Crosswalk',        icon: Table },
+  { id: 'oldnew',       label: 'Old → New',         icon: ArrowRight },
+  { id: 'dept',         label: 'By Department',    icon: Building2 },
+  { id: 'revenue',      label: 'Revenue',          icon: TrendingUp },
+  { id: 'expenditure',  label: 'Expenditures',     icon: TrendingDown },
+  { id: 'exceptions',   label: 'Exceptions',       icon: AlertTriangle },
+  { id: 'validation',   label: 'Validation',       icon: CheckCircle },
+  { id: 'governance',   label: 'Governance',       icon: Shield },
+  { id: 'audit',        label: 'Audit Log',        icon: Clock },
+  { id: 'import',       label: 'Import',           icon: Upload },
 ];
 
 // ── Import panel ──────────────────────────────────────────────────────────────
