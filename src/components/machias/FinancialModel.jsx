@@ -1,51 +1,23 @@
-// Core financial model calculations based on Machias restructuring data
-export const HEALTH_TIERS = {
-  individual: { monthly: 1476.73, annual: 17721 },
-  employee_spouse: { monthly: 2578.20, annual: 30938 },
-  employee_children: { monthly: 2036.45, annual: 24437 },
-  family: { monthly: 2578.21, annual: 30938 },
-};
+/**
+ * FinancialModel.jsx — LEGACY SHIM
+ *
+ * runProForma() with hardcoded params is preserved only for ScenarioModeler's
+ * slider-based what-if view. All other pages must use runProFormaFromSettings()
+ * (FinancialModelV2) driven by ModelContext live settings.
+ *
+ * Do NOT add new calculations here. Centralise in FinancialModelV2 + ModelContext.
+ */
 
-export const BASE_DATA = {
-  sa_base: 65000,
-  bs_base: 55000,
-  ga_stipend: 10000,
-  fica_rate: 0.0765,
-  pers_rate: 0.085,
-  wc_rate: 0.025,
-  wage_growth: 0.04,
-  ems_transports: 1648,
-  avg_revenue_per_transport: 659,
-  comstar_fee_rate: 0.0522,
-  comstar_collection_rate: 0.874,
-  inhouse_y1_rate: 0.855,
-  inhouse_steady_rate: 0.90,
-  transport_growth: 0.02,
-  enterprise_transfers: {
-    ambulance: 45000,
-    sewer: 21110,
-    transfer_station: 21000,
-    telebusiness: 18525,
-    court_st: 15600,
-  },
-  enterprise_growth: 0.03,
-  stipend_elimination: 26000,
-  airport_savings: 2527,
-  control_risk_exposure: 56000,
-  fd_loaded: 86824,
-  tm_loaded: 96013,
-  implementation_y1: 20000,
-  implementation_ongoing: 5000,
-};
+// Re-export the canonical fully-loaded helper from ModelContext so nothing
+// imports its own copy.
+export { calculateFullyLoadedCost as calculateFullyLoaded } from './modelUtils';
 
-export function calculateFullyLoaded(baseSalary, healthTier = 'family') {
-  const fica = baseSalary * 0.0765;
-  const pers = baseSalary * 0.085;
-  const wc = baseSalary * 0.025;
-  const health = HEALTH_TIERS[healthTier]?.annual || HEALTH_TIERS.family.annual;
-  return baseSalary + fica + pers + wc + health;
-}
+// Kept only for ScenarioModeler slider overrides — merges overrides onto
+// canonical defaults before calling FinancialModelV2.
+import { DEFAULT_SETTINGS } from './ModelContext';
+import { runProFormaFromSettings } from './FinancialModelV2';
 
+/** @deprecated Use runProFormaFromSettings(settings) with ModelContext instead */
 export function runProForma(params = {}) {
   const {
     saBase = 65000,
