@@ -23,6 +23,7 @@ import COAGovernancePanel from '../components/coa/COAGovernancePanel';
 import COAAuditLogPanel from '../components/coa/COAAuditLogPanel';
 import COAExceptionWorkflows from '../components/coa/COAExceptionWorkflows';
 import COAImportWorkbook from '../components/coa/COAImportWorkbook';
+import { BridgeReportByDepartment, BridgeReportByFund, BridgeReportByType, BridgeSummaryTable } from '../components/coa/bridgeReport';
 import { OldToNewView, DepartmentView, RevenueView, ExpenditureView, ExceptionsReport } from '../components/coa/COAReportingViews';
 import { validateCrosswall, buildSummaryStats, buildExceptionsReport } from '../components/coa/coaEngine';
 import {
