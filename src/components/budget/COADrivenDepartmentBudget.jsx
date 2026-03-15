@@ -84,7 +84,8 @@ export default function COADrivenDepartmentBudget({
         </td>
       )}
     </tr>
-  );
+    );
+  };
 
   return (
     <div className="space-y-4">
