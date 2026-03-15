@@ -1,8 +1,10 @@
 /**
  * DepartmentBudgetForm — create/edit a single department budget record
+ * Now driven by approved COA accounts
  */
 import React, { useState } from 'react';
 import { JUSTIFICATION_TAGS, FUND_LABELS, BETE_FIELDS, getColumnLabel } from './budgetProcessEngine';
+import TraceabilityPanel from '../budget/TraceabilityPanel';
 
 const inputCls = "w-full text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 bg-white";
 const textareaCls = `${inputCls} resize-none`;
