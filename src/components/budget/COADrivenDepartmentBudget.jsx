@@ -40,7 +40,8 @@ export default function COADrivenDepartmentBudget({
   const totalActual = deptLines.reduce((s, l) => s + (l.ytdActual || 0), 0);
 
   // Line item detail row
-  const LineRow = ({ line }) => (
+  const LineRow = ({ line }) => {
+    return (
     <tr className="border-b border-slate-100 hover:bg-slate-50">
       <td className="px-3 py-2 font-mono text-[10px] text-slate-700">{line.accountNumber}</td>
       <td className="px-3 py-2 text-xs font-medium text-slate-900 max-w-xs truncate" title={line.accountTitle}>
