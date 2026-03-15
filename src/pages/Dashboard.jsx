@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [showFilters, setShowFilters] = useState(false);
 
   const projections = useMemo(() => {
-    try { return runFinancialModel(settings); } catch { return []; }
+    try { return runProFormaFromSettings(settings); } catch { return []; }
   }, [settings]);
 
   const handleExport = () => {
