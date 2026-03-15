@@ -49,6 +49,7 @@ const SEED_ACCOUNTS = [
 const TABS = [
   { id: 'crosswalk',    label: 'Crosswalk',        icon: Table },
   { id: 'oldnew',       label: 'Old → New',         icon: ArrowRight },
+  { id: 'bridge',       label: 'Bridge Report',     icon: GitMerge },
   { id: 'dept',         label: 'By Department',    icon: Building2 },
   { id: 'revenue',      label: 'Revenue',          icon: TrendingUp },
   { id: 'expenditure',  label: 'Expenditures',     icon: TrendingDown },
