@@ -55,14 +55,6 @@ export const DEFAULT_SETTINGS = {
   annual_tax_levy: 2871000,
 };
 
-// Calculate fully loaded costs from base salaries
-function calculateFullyLoaded(baseSalary, healthTier, healthAnnual, ficaRate, persRate, wcRate) {
-  const fica = baseSalary * ficaRate;
-  const pers = baseSalary * persRate;
-  const wc = baseSalary * wcRate;
-  return baseSalary + fica + pers + wc + healthAnnual;
-}
-
 const ModelContext = createContext(null);
 
 export function ModelProvider({ children }) {
