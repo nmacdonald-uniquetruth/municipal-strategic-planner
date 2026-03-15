@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { MapPin, Layers, Map, ChevronDown, ChevronRight, Info, BarChart3, Network } from 'lucide-react';
+import { MapPin, Layers, Map, ChevronDown, ChevronRight, Info, BarChart3, Network, Sliders } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
@@ -9,6 +9,8 @@ import TownInfoPanel from '../components/map/TownInfoPanel';
 import ComparisonView from '../components/map/ComparisonView';
 import RelationshipPlanningPanel from '../components/regionalmap/RelationshipPlanningPanel';
 import { TOWN_PROFILES, TOWN_FILL_COLORS, ARCGIS_URL } from '../components/map/TownProfiles';
+import CoverageMapLayer, { SERVICE_FILL_COLORS, buildCoverageMap } from '../components/regional/CoverageMapLayer';
+import RegionalOptimizerPanel from '../components/regional/RegionalOptimizerPanel';
 import { findLabelCenter, estimateFontSize, isTooCloseToBoundary, getLabelAnchor, getWrappedTownName } from '../components/map/LabelPlacementEngine';
 
 // ─── Basemap options ───────────────────────────────────────────────────────────
@@ -265,6 +267,9 @@ export default function RegionalMap() {
   const [labelMode, setLabelMode] = useState('map');
   const [showRelationshipPanel, setShowRelationshipPanel] = useState(false);
   const [selectedRelationshipTypes, setSelectedRelationshipTypes] = useState([]);
+  const [showOptimizerPanel, setShowOptimizerPanel] = useState(false);
+  const [coverageSelectedServices, setCoverageSelectedServices] = useState([]);
+  const [coverageMap, setCoverageMap] = useState({});
   const [layers, setLayers] = useState([
     { id: 'boundaries', label: 'Municipal Boundaries', color: '#1a3a5c', visible: true, available: true },
     { id: 'roads', label: 'Roads', color: '#7a5c1a', visible: false, available: false },
@@ -325,19 +330,20 @@ export default function RegionalMap() {
   const showMapLabels = labelMode === 'map';
   const showLegendList = labelMode === 'legend';
 
-  // GeoJSON style function
+  // GeoJSON style function — respects coverage overlay if optimizer is active
   const styleFeature = useCallback((feature) => {
     const town = feature?.properties?.TOWN;
     const isHovered = town === hoveredTown;
     const isSelected = town === selectedTown?.town_name;
-    const fillColor = TOWN_FILL_COLORS[town] || '#344A60';
+    const coverage = coverageMap[town];
+    const fillColor = coverage ? coverage.primaryColor : (TOWN_FILL_COLORS[town] || '#344A60');
     return {
-      fillColor: fillColor,
-      fillOpacity: isSelected ? 0.75 : isHovered ? 0.65 : 0.45,
+      fillColor,
+      fillOpacity: isSelected ? 0.82 : isHovered ? 0.70 : coverage ? 0.55 : 0.45,
       color: isSelected ? '#ffffff' : isHovered ? fillColor : '#ffffff',
-      weight: isSelected ? 3 : isHovered ? 2.5 : 1.5,
+      weight: isSelected ? 3 : isHovered ? 2.5 : coverage ? 2 : 1.5,
     };
-  }, [hoveredTown, selectedTown]);
+  }, [hoveredTown, selectedTown, coverageMap]);
 
   const onEachFeature = useCallback((feature, layer) => {
     const town = feature?.properties?.TOWN;
@@ -427,6 +433,7 @@ export default function RegionalMap() {
               )}
               {geojson && showMapLabels && <TownLabels geojson={geojson} hoveredTown={hoveredTown} selectedTown={selectedTown} />}
               {geojson && <FitBounds geojson={geojson} />}
+              <CoverageMapLayer selectedServices={coverageSelectedServices} onCoverageUpdate={setCoverageMap} />
             </MapContainer>
           )}
 
@@ -538,6 +545,13 @@ export default function RegionalMap() {
                 ))}
               </div>
             </div>
+          ) : showOptimizerPanel ? (
+            <div className="flex-1 overflow-y-auto">
+              <div className="flex justify-end mb-2">
+                <button onClick={() => setShowOptimizerPanel(false)} className="text-[10px] text-slate-400 hover:text-slate-700 px-2 py-1 rounded hover:bg-slate-100">✕ Close</button>
+              </div>
+              <RegionalOptimizerPanel compact />
+            </div>
           ) : showRelationshipPanel ? (
             <RelationshipPlanningPanel
               relationships={allRelationships}
@@ -550,7 +564,22 @@ export default function RegionalMap() {
             /* Map Labels Mode */
             <div className="flex flex-col gap-3 overflow-y-auto">
               <button
-                onClick={() => setShowRelationshipPanel(true)}
+                onClick={() => { setShowOptimizerPanel(true); setShowRelationshipPanel(false); }}
+                className="rounded-lg border border-slate-200 bg-white p-3 hover:bg-slate-50 transition-colors text-left group"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-1.5 rounded bg-emerald-50 group-hover:bg-emerald-100 transition-colors">
+                    <Sliders className="h-4 w-4 text-emerald-700" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-slate-900">Service Optimizer</p>
+                    <p className="text-[10px] text-slate-500">Model regionalization scenarios</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-600">Select towns + services to see coverage, revenue & staffing impact</p>
+              </button>
+              <button
+                onClick={() => { setShowRelationshipPanel(true); setShowOptimizerPanel(false); }}
                 className="rounded-lg border border-slate-200 bg-white p-3 hover:bg-slate-50 transition-colors text-left group"
               >
                 <div className="flex items-center gap-2 mb-2">
