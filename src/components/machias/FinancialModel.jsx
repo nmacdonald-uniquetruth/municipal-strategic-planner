@@ -20,21 +20,21 @@ import { runProFormaFromSettings } from './FinancialModelV2';
 /** @deprecated Use runProFormaFromSettings(settings) with ModelContext instead */
 export function runProForma(params = {}) {
   const {
-    saBase = 65000,
-    bsBase = 55000,
-    gaStipend = 10000,
-    wageGrowth = 0.04,
-    healthTier = 'family',
-    regionalEnabled = true,
-    tsExpansion = true,
-    emsExternal = true,
-    erpEnabled = true,
-    erpY1Cost = 47000,
-    erpOngoing = 5000,
-    erpValue = 21000,
-    comstarRate = 0.0522,
-    transportGrowth = 0.02,
-    inhouseRate = 0.90,
+    saBase,
+    bsBase,
+    gaStipend,
+    wageGrowth,
+    healthTier,
+    regionalEnabled,
+    tsExpansion,
+    emsExternal,
+    erpEnabled,
+    erpY1Cost,
+    erpOngoing,
+    erpValue,
+    comstarRate,
+    transportGrowth,
+    inhouseRate,
   } = params;
 
   const saFL = calculateFullyLoaded(saBase, healthTier);
