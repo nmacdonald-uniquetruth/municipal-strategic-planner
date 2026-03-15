@@ -294,9 +294,13 @@ export default function BudgetEngine() {
           </div>
 
           {/* Tab content */}
-          {activeTab === 'bete' && (
-            <BETEFormView calc={calc} warnings={warnings} priorYear={inputs} />
-          )}
+           {activeTab === 'summary' && (
+             <COADrivenBudgetSummary accounts={accounts} budgetLines={lines} departmentBudgets={[]} articles={[]} />
+           )}
+
+           {activeTab === 'bete' && (
+             <BETEFormView calc={calc} warnings={warnings} priorYear={inputs} />
+           )}
 
           {activeTab === 'millrate' && (
             <div className="space-y-4">
