@@ -124,6 +124,38 @@ const TABS = [
   { id: 'history',    label: 'History',      icon: Clock },
 ];
 
+// ── Mapping sub-tabs (Table + Exceptions) ─────────────────────────────────────
+function MappingSubTabs({ lineItems, mappings, articles, onMappingChange, onAutoMap, beteRollup, calc, readiness }) {
+  const [sub, setSub] = useState('table');
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-1 border-b border-slate-200">
+        {[['table','Mapping Table'],['exceptions','Exceptions & Readiness']].map(([id, label]) => (
+          <button key={id} onClick={() => setSub(id)}
+            className={`px-3 py-1.5 text-xs font-semibold border-b-2 transition-colors ${sub === id ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-700'}`}>
+            {label}
+            {id === 'exceptions' && !readiness.ready && (
+              <span className="ml-1 text-[9px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 font-bold">{readiness.blockers.length}</span>
+            )}
+          </button>
+        ))}
+      </div>
+      {sub === 'table' && (
+        <ArticleMappingTable
+          lineItems={lineItems}
+          mappings={mappings}
+          articles={articles}
+          onMappingChange={onMappingChange}
+          onAutoMap={onAutoMap}
+        />
+      )}
+      {sub === 'exceptions' && (
+        <MappingExceptionsReport readiness={readiness} beteRollup={beteRollup} budgetCalc={calc} />
+      )}
+    </div>
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function WarrantBuilder() {
   const { settings } = useModel();
