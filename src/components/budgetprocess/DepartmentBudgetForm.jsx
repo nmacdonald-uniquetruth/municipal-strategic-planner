@@ -163,6 +163,32 @@ export default function DepartmentBudgetForm({ dept, fiscalYear, coaAccounts, on
         </div>
       </div>
 
+      {/* Traceability — if account linked to COA */}
+      {form.department && coaAccounts?.length > 0 && (
+        <div>
+          <button onClick={() => setShowTrace(!showTrace)} 
+            className="text-xs font-semibold text-slate-600 hover:text-slate-900 mb-2 py-1 px-2 rounded hover:bg-slate-100 transition-colors">
+            {showTrace ? '▼' : '▶'} COA Mapping & Traceability
+          </button>
+          {showTrace && (
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+              <p className="text-[9px] text-slate-500 mb-2">Link to Chart of Accounts:</p>
+              <div className="space-y-2">
+                {coaAccounts
+                  .filter(a => a.department === form.department && a.validation_status === 'approved')
+                  .slice(0, 3)
+                  .map(coa => (
+                    <TraceabilityPanel key={coa.id} newAccountNumber={coa.new_account_number} coaAccounts={coaAccounts} budgetValue={form.adopted_budget} />
+                  ))}
+                {coaAccounts.filter(a => a.department === form.department && a.validation_status === 'approved').length === 0 && (
+                  <p className="text-[9px] text-slate-400 italic">No approved COA accounts for this department</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
         <button onClick={onCancel} className="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">Cancel</button>
         <button onClick={() => onSave(form)} className="text-xs bg-slate-900 text-white px-4 py-1.5 rounded-lg font-semibold hover:bg-slate-700 transition-colors">Save Department</button>
