@@ -155,7 +155,7 @@ function FundGroup({ fund, depts, activeColumn, showHistory, onEdit, coaAccounts
         </td>
       </tr>
       {open && depts.map(d => (
-        <DeptRow key={d.id || d.department} dept={d} activeColumn={activeColumn} showHistory={showHistory} onEdit={onEdit} />
+        <DeptRow key={d.id || d.department} dept={d} activeColumn={activeColumn} showHistory={showHistory} onEdit={onEdit} coaAccounts={coaAccounts} />
       ))}
     </>
   );
