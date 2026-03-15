@@ -181,17 +181,8 @@ export function calculateAdoptionScenarios(contract) {
   };
 }
 
-/**
- * Format currency for display
- */
-export function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+// Re-exported from canonical source — import from there directly in new code
+export { formatCurrency } from '../machias/modelUtils';
 
 /**
  * Format service type for display
