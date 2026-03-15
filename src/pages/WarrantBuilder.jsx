@@ -21,9 +21,15 @@ import ArticleRollupPanel from '../components/warrant/ArticleRollupPanel';
 import WarrantValidationPanel from '../components/warrant/WarrantValidationPanel';
 import ArticleHistoryPanel from '../components/warrant/ArticleHistoryPanel';
 import SectionHeader from '../components/machias/SectionHeader';
+import ArticleMappingTable from '../components/warrant/ArticleMappingTable';
+import MappingExceptionsReport from '../components/warrant/MappingExceptionsReport';
+import {
+  buildDefaultLineItems, applyAllSuggestedMappings,
+  rollupByBeteLine, findMappingExceptions, checkAdoptionReadiness,
+} from '../components/warrant/articleMappingEngine';
 import {
   FileText, Plus, AlertTriangle, BarChart2, Clock, ChevronUp, ChevronDown,
-  Trash2, Pencil, Copy, Scroll, CheckCircle,
+  Trash2, Pencil, Copy, Scroll, CheckCircle, GitMerge,
 } from 'lucide-react';
 
 const fmt = n => `$${Math.round(Math.abs(n || 0)).toLocaleString()}`;
