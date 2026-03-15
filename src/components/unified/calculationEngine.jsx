@@ -104,15 +104,12 @@ export const calculateStaffingCost = (staffingImpact, sharedAssumptions) => {
 };
 
 /**
- * Tax impact calculation
+ * Tax impact calculation — delegates to canonical mill-rate formula.
+ * A positive total_annual_benefit reduces levy; negate before passing.
  */
 export const calculateTaxImpact = (proposal, sharedAssumptions) => {
   const financial = calculateFinancialImpact(proposal, sharedAssumptions);
-  
-  return calculateTaxImpactFromAssumptions(
-    financial.total_annual_benefit,
-    sharedAssumptions
-  );
+  return calculateMillRateImpact(-financial.total_annual_benefit, sharedAssumptions);
 };
 
 /**
