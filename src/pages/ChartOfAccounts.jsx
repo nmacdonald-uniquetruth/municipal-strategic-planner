@@ -105,8 +105,10 @@ export default function ChartOfAccounts() {
 
   const handleSave = useCallback(async (form) => {
     const { id, ...data } = form;
-    if (editingAccount?.id && !editingAccount.id.startsWith('seed_')) {
+    const isEdit = editingAccount?.id && !editingAccount.id.startsWith('seed_');
+    if (isEdit) {
       await updateMutation.mutateAsync({ id: editingAccount.id, data });
+      writeAuditLog({ event_type: 'account_updated', account_id: editingAccount.id, account_number: form.new_account_number, trio_account: form.trio_account, description: `Account ${form.new_account_number} updated` });
     } else {
       if (localAccounts) {
         const newId = `local_${Date.now()}`;
@@ -117,25 +119,55 @@ export default function ChartOfAccounts() {
       } else {
         await createMutation.mutateAsync(data);
       }
+      writeAuditLog({ event_type: 'account_created', account_number: form.new_account_number, trio_account: form.trio_account, description: `Account ${form.new_account_number} created` });
     }
     setEditingAccount(null);
     setIsAdding(false);
   }, [editingAccount, localAccounts, updateMutation, createMutation]);
 
   const handleEdit = useCallback(a => { setEditingAccount(a); setIsAdding(false); }, []);
+
   const handleDelete = useCallback(async a => {
+    // Deletion protection: block if account has historical actuals or article mapping
+    if ((a.trio_historical_actual > 0 || a.budget_article_mapping) && a.status !== 'inactive') {
+      const proceed = window.confirm(
+        `⚠ Deletion Protected\n\nAccount "${a.new_account_number || a.trio_account}" has historical data or is referenced in warrant articles.\n\nMark as Inactive instead of deleting? Click OK to mark inactive, Cancel to abort.`
+      );
+      if (proceed) {
+        if (a.id && !a.id.startsWith('seed_') && !a.id.startsWith('local_')) {
+          await updateMutation.mutateAsync({ id: a.id, data: { status: 'inactive' } });
+        } else {
+          setLocalAccounts(prev => (prev || accounts).map(x => x.id === a.id ? { ...x, status: 'inactive' } : x));
+        }
+        writeAuditLog({ event_type: 'deletion_blocked', account_id: a.id, account_number: a.new_account_number, trio_account: a.trio_account, description: `Deletion blocked — ${a.new_account_number} marked inactive instead (historical data or article reference present)` });
+      }
+      return;
+    }
     if (!window.confirm(`Delete account ${a.new_account_number || a.trio_account}?`)) return;
     if (a.id && !a.id.startsWith('seed_') && !a.id.startsWith('local_')) {
       await deleteMutation.mutateAsync(a.id);
     } else {
       setLocalAccounts(prev => (prev || accounts).filter(x => x.id !== a.id));
     }
-  }, [accounts, deleteMutation]);
+    writeAuditLog({ event_type: 'account_deleted', account_id: a.id, account_number: a.new_account_number, trio_account: a.trio_account, description: `Account ${a.new_account_number} deleted` });
+  }, [accounts, deleteMutation, updateMutation]);
 
-  const handleImport = useCallback(parsed => {
+  const handleImport = useCallback((parsed, mergeMode = 'append') => {
     const withIds = parsed.map((a, i) => ({ ...a, id: `import_${Date.now()}_${i}` }));
-    setLocalAccounts(prev => [...(prev || accounts), ...withIds]);
+    if (mergeMode === 'replace') {
+      setLocalAccounts(withIds);
+    } else {
+      setLocalAccounts(prev => [...(prev || accounts), ...withIds]);
+    }
     setActiveTab('crosswalk');
+  }, [accounts]);
+
+  const handleExceptionResolve = useCallback((account, action, note) => {
+    const newStatus = action.includes('Approv') ? 'approved' : action.includes('Review') ? 'needs_review' : action.includes('Inactive') ? 'inactive' : 'mapped';
+    setLocalAccounts(prev => (prev || accounts).map(a =>
+      a.id === account.id ? { ...a, validation_status: newStatus, transition_notes: note ? `${a.transition_notes || ''} [${action}: ${note}]`.trim() : a.transition_notes } : a
+    ));
+    writeAuditLog({ event_type: 'exception_resolved', account_id: account.id, account_number: account.new_account_number, trio_account: account.trio_account, description: `Exception resolved via "${action}"${note ? `: ${note}` : ''}` });
   }, [accounts]);
 
   const handleCancelForm = () => { setEditingAccount(null); setIsAdding(false); };
