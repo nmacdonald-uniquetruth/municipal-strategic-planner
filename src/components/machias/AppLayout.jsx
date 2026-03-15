@@ -75,6 +75,7 @@ const NAV_GROUPS = [
       { path: '/BudgetEngine',        label: 'Budget Engine',       icon: Calculator },
       { path: '/WarrantManager',      label: 'Warrant Manager',     icon: FileText },
       { path: '/ComplianceSettings',  label: 'Compliance Settings', icon: ShieldCheck },
+      { path: '/ChartOfAccounts',     label: 'COA Crosswalk',       icon: GitMerge },
       { path: '/AIPlanner',           label: 'AI Planner',          icon: MessageSquare },
       { path: '/ReferencesAndResearch',label: 'References',         icon: BookMarked },
     ],
