@@ -7,15 +7,19 @@ import SectionHeader from '../components/machias/SectionHeader';
 import InfoTooltip from '../components/machias/InfoTooltip';
 import { Link } from 'react-router-dom';
 import { TrendingUp, BookOpen } from 'lucide-react';
+import ComplianceViolationBanner from '@/components/compliance/ComplianceViolationBanner';
+import { useComplianceValidation } from '@/components/compliance/useComplianceValidation';
 
 const fmt = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
 
 export default function ProForma() {
   const { settings } = useModel();
   const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
+  const { violations } = useComplianceValidation();
 
   return (
     <div className="space-y-8">
+      <ComplianceViolationBanner violations={violations} filterSeverity={null} />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SectionHeader
