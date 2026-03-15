@@ -10,14 +10,18 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { useModel } from '../components/machias/ModelContext';
 import SectionHeader from '../components/machias/SectionHeader';
 import BudgetInputsPanel from '../components/budget/BudgetInputsPanel';
 import BETEFormView from '../components/budget/BETEFormView';
 import MillRateScenarioTable from '../components/budget/MillRateScenarioTable';
 import BudgetWorksheetTable from '../components/budget/BudgetWorksheetTable';
+import COADrivenBudgetSummary from '../components/budget/COADrivenBudgetSummary';
+import COADrivenDepartmentBudget from '../components/budget/COADrivenDepartmentBudget';
 import { calculateTaxCommitment, reconcile, compareToPriorYear, groupByDepartment } from '../components/budget/budgetEngine';
-import { Calculator, FileText, Table, BarChart2, GitCompare, AlertTriangle } from 'lucide-react';
+import { Calculator, FileText, Table, BarChart2, GitCompare, AlertTriangle, GitMerge } from 'lucide-react';
 
 const fmt = n => `$${Math.round(Math.abs(n || 0)).toLocaleString()}`;
 const mr = n => (n || 0).toFixed(3);
