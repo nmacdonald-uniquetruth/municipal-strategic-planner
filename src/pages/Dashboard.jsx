@@ -44,16 +44,17 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Machias Bay Region Strategic Planning</h1>
-          <p className="text-sm text-slate-500 mt-1">Regional service consolidation, fiscal simulation, and leadership planning platform</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Machias Bay Region Strategic Planning</h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">Regional service consolidation, fiscal simulation, and leadership planning platform</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <ExportExecSummary />
           <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all">
             <BookOpen className="h-3.5 w-3.5" />
-            Full Narrative
+            <span className="hidden sm:inline">Full Narrative</span>
+            <span className="sm:hidden">Narrative</span>
           </Link>
         </div>
       </div>
