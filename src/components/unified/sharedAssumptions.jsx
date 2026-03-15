@@ -124,47 +124,7 @@ const normalizeAssumptions = (dbRecord) => {
   };
 };
 
-/**
- * Calculate health insurance cost for a position
- */
-export const calculateHealthInsuranceCost = (tier, sharedAssumptions) => {
-  const tierMap = {
-    individual: sharedAssumptions.health_individual_annual,
-    employee_spouse: sharedAssumptions.health_individual_annual * 1.5,
-    employee_children: sharedAssumptions.health_individual_annual * 1.3,
-    family: sharedAssumptions.health_family_annual,
-    none: 0
-  };
-  
-  return tierMap[tier] || 0;
-};
-
-/**
- * Calculate fully-loaded cost for a position
- */
-export const calculateFullyLoadedCost = (
-  baseSalary,
-  tier = 'family',
-  sharedAssumptions,
-  includeICMA = true,
-  includeWC = true
-) => {
-  const healthCost = calculateHealthInsuranceCost(tier, sharedAssumptions);
-  const ficaCost = baseSalary * sharedAssumptions.fica_rate;
-  const pensionCost = baseSalary * sharedAssumptions.pers_rate;
-  const icmaCost = includeICMA ? baseSalary * sharedAssumptions.icma_403b_match_rate : 0;
-  const wcCost = includeWC ? baseSalary * sharedAssumptions.workers_comp_rate : 0;
-  
-  return {
-    base_salary: baseSalary,
-    health_insurance: healthCost,
-    fica: ficaCost,
-    pension: pensionCost,
-    icma: icmaCost,
-    workers_comp: wcCost,
-    total: baseSalary + healthCost + ficaCost + pensionCost + icmaCost + wcCost
-  };
-};
+// (calculateHealthInsuranceCost and calculateFullyLoadedCost defined above via imports)
 
 /**
  * Project salary over N years with growth
