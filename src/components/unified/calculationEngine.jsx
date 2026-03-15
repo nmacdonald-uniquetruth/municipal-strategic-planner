@@ -114,17 +114,19 @@ export const calculateTaxImpact = (proposal, sharedAssumptions) => {
 };
 
 /**
- * Staffing impact calculation
+ * Staffing impact calculation — uses canonical fully-loaded cost.
  */
 export const calculateStaffingImpact = (proposal, sharedAssumptions) => {
   const { staffingImpact = {} } = proposal;
+  const avgAdminBase = 65000;
+  const flc = calculateFullyLoadedCost(avgAdminBase, sharedAssumptions);
 
   return {
     ...staffingImpact,
-    fully_loaded_cost_per_fte: 85000, // Average
-    total_annual_cost: (staffingImpact.fteChange || 0) * 85000,
+    fully_loaded_cost_per_fte: flc,
+    total_annual_cost: (staffingImpact.fteChange || 0) * flc,
     positions_modified: (staffingImpact.positionsAdded?.length || 0) +
-                       (staffingImpact.positionsEliminated?.length || 0)
+                        (staffingImpact.positionsEliminated?.length || 0),
   };
 };
 
