@@ -97,6 +97,7 @@ export default function ChartOfAccounts() {
   const [activeTab, setActiveTab] = useState('crosswalk');
   const [editingAccount, setEditingAccount] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [bridgeView, setBridgeView] = useState('summary');
 
   const validation = useMemo(() => validateCrosswall(accounts), [accounts]);
   const stats      = useMemo(() => buildSummaryStats(accounts), [accounts]);
