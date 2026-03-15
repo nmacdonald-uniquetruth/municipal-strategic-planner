@@ -45,8 +45,9 @@ const EMPTY = {
   manager_approved: false, budget_committee_approved: false, select_board_approved: false,
 };
 
-export default function DepartmentBudgetForm({ dept, fiscalYear, onSave, onCancel }) {
+export default function DepartmentBudgetForm({ dept, fiscalYear, coaAccounts, onSave, onCancel }) {
   const [form, setForm] = useState(dept ? { ...EMPTY, ...dept } : { ...EMPTY, fiscal_year: fiscalYear || 'FY2027' });
+  const [showTrace, setShowTrace] = useState(false);
 
   const set = k => e => setForm(p => ({ ...p, [k]: e.target.value }));
   const setN = k => v => setForm(p => ({ ...p, [k]: v }));
