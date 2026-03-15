@@ -65,6 +65,7 @@ const NAV_GROUPS = [
       { path: '/AssumptionsManager', label: 'Assumptions', icon: Settings },
       { path: '/RegionalParticipationSettings', label: 'Participation', icon: Settings },
       { path: '/AIPlanner', label: 'AI Planner', icon: MessageSquare },
+      { path: '/ComplianceSettings', label: 'Compliance', icon: ShieldCheck },
     ],
   },
 ];
