@@ -6,14 +6,14 @@
  * redefine them here.
  */
 
-import { calculateFullyLoadedCost as _calcFLC, calculateMillRateImpact } from '../machias/modelUtils';
+import { calculateMillRateImpact, healthCostForTier } from '../machias/modelUtils';
 
-// Re-export so existing callers that import from here still work
+// Re-export canonical helpers so callers that import from here still compile
 export { calculateFullyLoadedCost } from '../machias/modelUtils';
-// Alias for back-compat
+
+/** Health cost by tier — thin wrapper around canonical helper */
 export function calculateHealthInsuranceCost(tier, assumptions) {
-  return _calcFLC(0, assumptions, { healthTier: tier }); // returns health portion via dummy base
-  // Actually just map tier directly:
+  return healthCostForTier(tier, assumptions);
 }
 
 /**
