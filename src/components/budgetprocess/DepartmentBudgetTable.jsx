@@ -3,8 +3,9 @@
  * Shows all budget stages side-by-side with variance and approval status.
  */
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, CheckCircle, Circle, AlertTriangle, Pencil } from 'lucide-react';
+import { ChevronDown, ChevronRight, CheckCircle, Circle, AlertTriangle, Pencil, Link2 } from 'lucide-react';
 import { FUND_LABELS, JUSTIFICATION_TAGS, resolveActiveColumn, getColumnLabel, groupDeptsByFund, computeVariance } from './budgetProcessEngine';
+import TraceabilityPanel from '../budget/TraceabilityPanel';
 
 const fmt = n => n == null || n === 0 ? '—' : `$${Math.round(Math.abs(n)).toLocaleString()}`;
 const diff = (a, b) => {
