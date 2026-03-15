@@ -8,14 +8,11 @@
  * Do NOT add new calculations here. Centralise in FinancialModelV2 + ModelContext.
  */
 
-// Re-export the canonical fully-loaded helper from ModelContext so nothing
-// imports its own copy.
-export { calculateFullyLoadedCost as calculateFullyLoaded } from './modelUtils.js';
-
-// Kept only for ScenarioModeler slider overrides — merges overrides onto
-// canonical defaults before calling FinancialModelV2.
 import { DEFAULT_SETTINGS } from './ModelContext';
 import { runProFormaFromSettings } from './FinancialModelV2';
+import { calculateFullyLoadedCost } from './modelUtils';
+
+export { calculateFullyLoadedCost as calculateFullyLoaded };
 
 /** @deprecated Use runProFormaFromSettings(settings) with ModelContext instead */
 export function runProForma(params = {}) {
