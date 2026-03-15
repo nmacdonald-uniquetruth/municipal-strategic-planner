@@ -338,6 +338,28 @@ export default function BudgetEngine() {
                 fiscalYear={inputs.fiscalYear}
                 groupBy={worksheetGroupBy}
               />
+              {accounts.length > 0 && (
+                <div className="space-y-3 mt-6">
+                  <p className="text-xs font-bold text-slate-600">COA-Sourced Department Budget</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {[...new Set(accounts.map(a => a.department).filter(Boolean))].sort().map(dept => (
+                      <button key={dept} onClick={() => setSelectedDept(dept)}
+                        className={`text-xs px-3 py-1 rounded-full font-medium transition-colors ${selectedDept === dept ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                        {dept}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedDept && (
+                    <COADrivenDepartmentBudget
+                      accounts={accounts}
+                      departmentName={selectedDept}
+                      budgetLines={lines}
+                      departmentBudgets={[]}
+                      articles={[]}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
 
