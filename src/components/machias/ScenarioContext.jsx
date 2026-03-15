@@ -86,6 +86,33 @@ export function ScenarioProvider({ children }) {
     }
   }, [allScenarios, activeScenario]);
 
+  /**
+   * Flattened settings overrides from the active scenario's assumption blocks.
+   * Merge this on top of ModelContext settings to drive scenario-specific calculations.
+   *
+   * Usage in components:
+   *   const { settings } = useModel();
+   *   const { scenarioSettingsOverrides } = useScenario();
+   *   const effectiveSettings = { ...settings, ...scenarioSettingsOverrides };
+   */
+  const scenarioSettingsOverrides = useMemo(() => {
+    if (!activeScenario) return {};
+    const fin = activeScenario.financial_assumptions ?? {};
+    const stf = activeScenario.staffing_assumptions  ?? {};
+    const ops = activeScenario.operational_assumptions ?? {};
+    return {
+      ...(fin.wage_growth_rate    != null && { wage_growth_rate:      fin.wage_growth_rate }),
+      ...(fin.health_tier         != null && { health_tier:           fin.health_tier }),
+      ...(fin.transport_growth_rate != null && { transport_growth_rate: fin.transport_growth_rate }),
+      ...(fin.inhouse_collection_rate != null && { inhouse_steady_rate:  fin.inhouse_collection_rate }),
+      ...(stf.y1_staffing_model   != null && { y1_staffing_model:     stf.y1_staffing_model }),
+      ...(stf.y5_senior_hire      != null && { y5_senior_hire:        stf.y5_senior_hire }),
+      ...(ops.erp_implementation  != null && { erp_implementation:    ops.erp_implementation }),
+      ...(ops.transfer_station_expansion != null && { transfer_station_expansion: ops.transfer_station_expansion }),
+      ...(ops.ems_external_billing != null && { ems_external_billing:  ops.ems_external_billing }),
+    };
+  }, [activeScenario]);
+
   return (
     <ScenarioContext.Provider
       value={{
@@ -97,6 +124,7 @@ export function ScenarioProvider({ children }) {
         updateScenario,
         deleteScenario,
         loadScenarios,
+        scenarioSettingsOverrides,
       }}
     >
       {children}
