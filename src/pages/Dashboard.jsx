@@ -95,8 +95,8 @@ export default function Dashboard() {
       </div>
 
       {/* Key insight banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-4 sm:p-6 text-white">
+        <div className="flex flex-col gap-4">
           <div>
             <div className="flex items-center gap-1.5">
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Core Finding</p>
@@ -107,27 +107,27 @@ export default function Dashboard() {
                 <p className="text-slate-500 text-xs">See the <strong>Full Narrative → Section 2</strong> for the complete problem statement.</p>
               </InfoTooltip>
             </div>
-            <p className="text-lg font-bold mt-1">$229,000+ in annual structural inefficiency</p>
-            <p className="text-xs text-slate-400 mt-1 max-w-xl">
+            <p className="text-base sm:text-lg font-bold mt-1">$229,000+ in annual structural inefficiency</p>
+            <p className="text-xs text-slate-400 mt-1">
               Executive compensation on transactional work, outsourced billing fees, informal stipends, and airport inspection overage.
               This plan formalizes that expenditure into 3 dedicated positions — zero tax increase required.
             </p>
           </div>
-          <div className="flex gap-4 flex-wrap justify-end">
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-4 sm:justify-end border-t border-white/10 pt-4 sm:border-0 sm:pt-0">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnlyNet)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnlyNet)}</p>
               <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Cash Net</p>
-              <p className="text-[9px] text-slate-500">actual dollars only</p>
+              <p className="text-[9px] text-slate-500 hidden sm:block">actual dollars only</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-300">{formatShortCurrency(cumulativeValue)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-300">{formatShortCurrency(cumulativeValue)}</p>
               <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Total Value</p>
-              <p className="text-[9px] text-slate-500">incl. capacity + risk value</p>
+              <p className="text-[9px] text-slate-500 hidden sm:block">incl. capacity + risk value</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-400">~Y2</p>
-              <p className="text-[10px] text-slate-400">Cash Break-Even</p>
-              <p className="text-[9px] text-slate-500">actual dollars</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-400">~Y2</p>
+              <p className="text-[10px] text-slate-400">Break-Even</p>
+              <p className="text-[9px] text-slate-500 hidden sm:block">actual dollars</p>
             </div>
           </div>
         </div>
