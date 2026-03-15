@@ -10,7 +10,7 @@
 
 // Re-export the canonical fully-loaded helper from ModelContext so nothing
 // imports its own copy.
-export { calculateFullyLoadedCost as calculateFullyLoaded } from './modelUtils';
+export { calculateFullyLoadedCost as calculateFullyLoaded } from './modelUtils.js';
 
 // Kept only for ScenarioModeler slider overrides — merges overrides onto
 // canonical defaults before calling FinancialModelV2.
