@@ -63,8 +63,9 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
         </td>
       </tr>
 
-      {/* Expanded detail */}
+      {/* Expanded detail and COA traceability */}
       {expanded && (
+        <>
         <tr>
           <td colSpan={99} className="bg-slate-50/60 px-4 py-3 border-t border-slate-100">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-[10px]">
