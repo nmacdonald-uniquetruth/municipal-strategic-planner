@@ -37,105 +37,28 @@ export function runProForma(params = {}) {
     inhouseRate,
   } = params;
 
-  const saFL = calculateFullyLoaded(saBase, healthTier);
-  const bsFL = calculateFullyLoaded(bsBase, healthTier);
-  const years = [1, 2, 3, 4, 5];
+  // Map legacy slider param names → ModelContext setting names, then delegate
+  // to the canonical function. Only defined overrides are applied.
+  const overrides = {};
+  if (saBase          != null) overrides.sa_base_salary        = saBase;
+  if (bsBase          != null) overrides.bs_base_salary        = bsBase;
+  if (gaStipend       != null) overrides.ga_stipend            = gaStipend;
+  if (wageGrowth      != null) overrides.wage_growth_rate      = wageGrowth;
+  if (healthTier      != null) overrides.health_tier           = healthTier;
+  if (comstarRate     != null) overrides.comstar_fee_rate      = comstarRate;
+  if (transportGrowth != null) overrides.transport_growth_rate = transportGrowth;
+  if (inhouseRate     != null) overrides.inhouse_steady_rate   = inhouseRate;
+  if (erpY1Cost       != null) overrides.erp_y1_cost           = erpY1Cost;
+  if (erpOngoing      != null) overrides.erp_ongoing_cost      = erpOngoing;
+  if (erpValue        != null) overrides.erp_annual_value      = erpValue;
 
-  return years.map((yr) => {
-    const escalator = Math.pow(1 + wageGrowth, yr - 1);
-    const entEscalator = Math.pow(1 + BASE_DATA.enterprise_growth, yr - 1);
+  // Boolean toggles
+  if (regionalEnabled != null) overrides.regional_services_enabled    = regionalEnabled;
+  if (tsExpansion     != null) overrides.transfer_station_expansion   = tsExpansion;
+  if (emsExternal     != null) overrides.ems_external_billing         = emsExternal;
+  if (erpEnabled      != null) overrides.erp_implementation           = erpEnabled;
 
-    // Position costs
-    const saCost = yr === 1 ? saFL : saFL * escalator;
-    const bsCost = yr === 1 ? bsFL * (6 / 12) : bsFL * escalator;
-    const gaCost = yr === 1 ? gaStipend * (4 / 12) : gaStipend * Math.pow(1 + wageGrowth, yr - 1);
-    const rcCost = yr >= 3 ? 39000 * Math.pow(1 + wageGrowth, yr - 3) : 0;
-    const controllerCost = yr >= 5 ? 111375 * 0.5 : 0;
-    const airportStipend = 2750;
-    const implCost = yr === 1 ? 20000 : 5000;
-    const totalCosts = saCost + bsCost + gaCost + rcCost + controllerCost + airportStipend + implCost;
-
-    // Enterprise overhead
-    const entTotal = Object.values(BASE_DATA.enterprise_transfers).reduce((s, v) => s + v, 0) * entEscalator;
-
-    // FD/TM capacity
-    const fdPct = yr === 1 ? 0.45 : yr === 2 ? 0.55 : 0.60;
-    const tmPct = yr === 1 ? 0.18 : 0.22;
-    const fdCapacity = BASE_DATA.fd_loaded * fdPct;
-    const tmCapacity = BASE_DATA.tm_loaded * tmPct;
-
-    // EMS
-    const transports = BASE_DATA.ems_transports * Math.pow(1 + transportGrowth, yr - 1);
-    const grossEms = transports * BASE_DATA.avg_revenue_per_transport;
-    const comstarFeeAvoided = grossEms * BASE_DATA.comstar_collection_rate * comstarRate;
-    const collectionImprovement = yr === 1 ? 0 : grossEms * (inhouseRate - BASE_DATA.comstar_collection_rate);
-
-    // Stipends & control
-    const stipendSavings = BASE_DATA.stipend_elimination;
-    const airportSavings = BASE_DATA.airport_savings;
-    const controlMit = yr === 1 ? BASE_DATA.control_risk_exposure * 0.5 : BASE_DATA.control_risk_exposure * 0.75;
-
-    // Regional services
-    let regionalRevenue = 0;
-    if (regionalEnabled) {
-      const rb = yr === 1 ? 19000 * (4 / 12) : 19000 * Math.pow(1.04, yr - 1);
-      const mac = yr === 1 ? 20000 * (4 / 12) : 20000 * Math.pow(1.04, yr - 1);
-      const marsh = yr >= 2 ? 15000 * Math.pow(1.04, yr - 2) : 0;
-      const whit = yr >= 3 ? 11000 * Math.pow(1.04, yr - 3) : 0;
-      const north = yr >= 3 ? 12000 * Math.pow(1.04, yr - 3) : 0;
-      regionalRevenue = rb + mac + marsh + whit + north;
-    }
-
-    // EMS external billing
-    const emsExternalRev = emsExternal ? [0, 15000, 30000, 45000, 55000][yr - 1] : 0;
-
-    // Transfer station
-    const tsRevenue = tsExpansion ? [8190, 52554, 109551, 74282, 131000][yr - 1] : 0;
-
-    // ERP
-    const erpCost = erpEnabled ? (yr === 1 ? erpY1Cost : erpOngoing) : 0;
-    const erpVal = erpEnabled && yr >= 2 ? erpValue : 0;
-
-    const structuralValue = entTotal + fdCapacity + tmCapacity + comstarFeeAvoided + collectionImprovement + stipendSavings + airportSavings + controlMit;
-    const regionalTotal = regionalRevenue + emsExternalRev + tsRevenue;
-    const totalValue = structuralValue + regionalTotal + erpVal;
-    const totalAllCosts = totalCosts + erpCost;
-    const netValue = totalValue - totalAllCosts;
-
-    return {
-      year: yr,
-      fiscalYear: `FY${2026 + yr}`,
-      costs: {
-        staffAccountant: Math.round(saCost),
-        billingSpecialist: Math.round(bsCost),
-        gaCoordinator: Math.round(gaCost),
-        revenueCoordinator: Math.round(rcCost),
-        controller: Math.round(controllerCost),
-        airportStipend,
-        implementation: implCost,
-        erp: erpCost,
-        total: Math.round(totalAllCosts),
-      },
-      value: {
-        enterpriseOverhead: Math.round(entTotal),
-        fdCapacity: Math.round(fdCapacity),
-        tmCapacity: Math.round(tmCapacity),
-        comstarAvoided: Math.round(comstarFeeAvoided),
-        collectionImprovement: Math.round(collectionImprovement),
-        stipendSavings,
-        airportSavings,
-        controlRisk: Math.round(controlMit),
-        regionalServices: Math.round(regionalRevenue),
-        emsExternal: emsExternalRev,
-        transferStation: tsRevenue,
-        erpValue: erpVal,
-        structuralTotal: Math.round(structuralValue),
-        regionalTotal: Math.round(regionalTotal),
-        total: Math.round(totalValue),
-      },
-      net: Math.round(netValue),
-    };
-  });
+  return runProFormaFromSettings({ ...DEFAULT_SETTINGS, ...overrides });
 }
 
 export const PAYBACK_DATA = [
