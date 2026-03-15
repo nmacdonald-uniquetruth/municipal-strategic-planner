@@ -55,6 +55,7 @@ import LeadershipCapacityModeling from './pages/LeadershipCapacityModeling';
 import RestructuringProposalLibrary from './pages/RestructuringProposalLibrary';
 import ComplianceSettings from './pages/ComplianceSettings';
 import BudgetEngine from './pages/BudgetEngine';
+import WarrantManager from './pages/WarrantManager';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -125,6 +126,7 @@ const AuthenticatedApp = () => {
           <Route path="/RestructuringProposalLibrary" element={<RestructuringProposalLibrary />} />
           <Route path="/ComplianceSettings" element={<ComplianceSettings />} />
           <Route path="/BudgetEngine" element={<BudgetEngine />} />
+          <Route path="/WarrantManager" element={<WarrantManager />} />
           </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
