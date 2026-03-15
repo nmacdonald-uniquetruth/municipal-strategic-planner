@@ -219,20 +219,13 @@ export const calculateRegionalServicesRevenue = (
 };
 
 /**
- * Calculate tax impact from financial impact
+ * Calculate tax impact from financial impact.
+ * Delegates to the canonical calculateMillRateImpact() in modelUtils.
+ * annualImpact is negative when it's a net benefit (saves money / reduces levy).
  */
-export const calculateTaxImpactFromAssumptions = (
-  annualImpact,
-  sharedAssumptions
-) => {
-  const millRateChange = (annualImpact / sharedAssumptions.total_assessed_value) * 1000;
-  
-  return {
-    annual_impact: annualImpact,
-    mill_rate_change: -millRateChange,
-    tax_levy_change: annualImpact,
-    new_mill_rate: sharedAssumptions.current_mill_rate - millRateChange
-  };
+export const calculateTaxImpactFromAssumptions = (annualImpact, sharedAssumptions) => {
+  // Invert sign: a positive benefit reduces levy pressure
+  return calculateMillRateImpact(-annualImpact, sharedAssumptions);
 };
 
 /**
