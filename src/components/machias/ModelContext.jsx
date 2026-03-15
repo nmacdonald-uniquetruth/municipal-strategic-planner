@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { calculateFullyLoadedCost } from './modelUtils';
 
-const DEFAULT_SETTINGS = {
+// Exported so FinancialModel shim and tests can reference canonical defaults
+export const DEFAULT_SETTINGS = {
   start_date: '2026-07-01',
   fd_base_salary: 68000,
   tm_base_salary: 75000,
