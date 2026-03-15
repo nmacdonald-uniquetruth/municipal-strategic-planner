@@ -114,8 +114,8 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
               </div>
             </div>
           </td>
-        </tr>
-        {linkedCoaAccounts.length > 0 && (
+          </tr>
+          {linkedCoaAccounts.length > 0 && (
           <tr>
             <td colSpan={99} className="bg-white px-4 py-3 border-t border-slate-100">
               <button onClick={() => setShowCOA(!showCOA)} className="text-[9px] font-semibold text-slate-600 hover:text-slate-900 py-1 px-2 rounded hover:bg-slate-100 flex items-center gap-1">
@@ -130,9 +130,12 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
               )}
             </td>
           </tr>
-        )}
-        </>
-      )}
+          )}
+          </>
+          )}
+          </>
+          );
+          }
     </>
   );
 }
