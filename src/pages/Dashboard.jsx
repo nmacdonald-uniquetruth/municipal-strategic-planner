@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useModel } from '@/components/machias/ModelContext';
-import { runFinancialModel } from '@/components/machias/FinancialModelV2';
+import { runProFormaFromSettings } from '@/components/machias/FinancialModelV2';
 import DashboardKPIRow from '@/components/dashboard/DashboardKPIRow';
 import DashboardERPTimeline from '@/components/dashboard/DashboardERPTimeline';
 import DashboardAlertsPanel from '@/components/dashboard/DashboardAlertsPanel';
