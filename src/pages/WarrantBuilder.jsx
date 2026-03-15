@@ -272,6 +272,9 @@ export default function WarrantBuilder() {
             {id === 'validation' && issueCount > 0 && (
               <span className={`ml-1 text-[9px] px-1.5 py-0.5 rounded-full font-bold ${errorCount > 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>{issueCount}</span>
             )}
+            {id === 'mapping' && !mappingReadiness.ready && (
+              <span className="ml-1 text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-red-100 text-red-700">{mappingReadiness.blockers.length}</span>
+            )}
           </button>
         ))}
       </div>
