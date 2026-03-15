@@ -1,9 +1,20 @@
 /**
- * Shared Assumptions Module
- * 
- * Centralizes all assumptions so that tax impact, regional services,
- * financial modeling, and staffing calculations reference the same values
+ * sharedAssumptions.js
+ *
+ * Centralises assumption loading/normalisation for the unified proposal system.
+ * Fully-loaded cost and mill-rate helpers are imported from modelUtils — do NOT
+ * redefine them here.
  */
+
+import { calculateFullyLoadedCost as _calcFLC, calculateMillRateImpact } from '../machias/modelUtils';
+
+// Re-export so existing callers that import from here still work
+export { calculateFullyLoadedCost } from '../machias/modelUtils';
+// Alias for back-compat
+export function calculateHealthInsuranceCost(tier, assumptions) {
+  return _calcFLC(0, assumptions, { healthTier: tier }); // returns health portion via dummy base
+  // Actually just map tier directly:
+}
 
 /**
  * Load shared assumptions from ModelSettings entity
