@@ -261,14 +261,14 @@ export default function BudgetEngine() {
         <div className="flex-1 min-w-0 space-y-4">
           {/* Tabs */}
           <div className="flex gap-1 border-b border-slate-200 overflow-x-auto">
-            {TABS.map(({ id, label, icon: Icon }) => {
+            {TABS.map(({ id, label, icon: TabIcon }) => {
               const hasIssue = id === 'reconcile' && warnCount > 0;
               return (
                 <button key={id} onClick={() => setActiveTab(id)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === id ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-700'
                   }`}>
-                  <Icon className="h-3.5 w-3.5 flex-shrink-0" />
+                  <TabIcon className="h-3.5 w-3.5 flex-shrink-0" />
                   {label}
                   {hasIssue && (
                     <span className={`ml-1 text-[9px] px-1.5 py-0.5 rounded-full font-bold ${errorCount > 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
