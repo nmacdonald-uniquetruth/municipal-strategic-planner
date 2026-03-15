@@ -1,253 +1,251 @@
-import React, { useMemo } from 'react';
-import { ENTERPRISE_FUNDS } from '../components/machias/FinancialModel';
-import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
-import { useModel } from '../components/machias/ModelContext';
-import { useDepartment, DEPARTMENTS } from '../components/machias/DepartmentContext';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
-import StatCard from '../components/machias/StatCard';
-import SectionHeader from '../components/machias/SectionHeader';
-import ProFormaChart from '../components/machias/ProFormaChart';
-import PaybackChart from '../components/machias/PaybackChart';
-import InfoTooltip from '../components/machias/InfoTooltip';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, DollarSign, TrendingUp, Users, AlertTriangle, Clock, Target, ShieldCheck, BookOpen } from 'lucide-react';
-import ExportExecSummary from '../components/machias/ExportExecSummary';
-import PlanningHorizonToggle from '../components/machias/PlanningHorizonToggle';
+import { useModel } from '@/components/machias/ModelContext';
+import { runFinancialModel } from '@/components/machias/FinancialModelV2';
+import DashboardKPIRow from '@/components/dashboard/DashboardKPIRow';
+import DashboardERPTimeline from '@/components/dashboard/DashboardERPTimeline';
+import DashboardAlertsPanel from '@/components/dashboard/DashboardAlertsPanel';
+import DashboardProjectCards from '@/components/dashboard/DashboardProjectCards';
+import { Download, SlidersHorizontal, RefreshCw } from 'lucide-react';
 
-const formatShortCurrency = (value) => {
-  if (value >= 1000000) return `$${(value / 1000000).toFixed(2)}M`;
-  if (value >= 1000) return `$${(value / 1000).toFixed(0)}K`;
-  return `$${value.toLocaleString()}`;
-};
+const DEPT_OPTIONS = ['All Departments', 'Finance', 'Ambulance/EMS', 'Transfer Station', 'Administration', 'Public Works'];
+const RANGE_OPTIONS = ['FY2027', 'FY2027–28', 'FY2027–31 (5-Year)'];
 
 export default function Dashboard() {
-  const { settings, planningHorizon } = useModel();
-  const { selectedDepartments, toggleDepartment, DEPARTMENTS } = useDepartment();
-  const [deptDropdownOpen, setDeptDropdownOpen] = useState(false);
-  const data = useMemo(() => runProFormaFromSettings(settings), [settings]);
-  
-  // Slice data based on planning horizon
-  const horizonData = planningHorizon === 5 ? data.slice(0, 5) : data;
-  const cumulativeValue = horizonData.reduce((s, d) => s + d.net, 0);
-  const y1Net = horizonData[0]?.net || 0;
-  const finalYearValue = horizonData[horizonData.length - 1]?.value.total || 0;
+  const { settings } = useModel();
+  const [dept, setDept] = useState('All Departments');
+  const [range, setRange] = useState('FY2027–31 (5-Year)');
+  const [showFilters, setShowFilters] = useState(false);
 
-  // Cash-only net (excludes FD/TM capacity, control risk, ERP value, enterprise overhead)
-  const cashOnlyNet = horizonData.reduce((s, d) => {
-    const cashRev = d.value.comstarAvoided + d.value.collectionImprovement +
-      d.value.stipendSavings + d.value.airportSavings +
-      d.value.regionalServices + d.value.emsExternal + d.value.transferStation;
-    return s + cashRev - d.costs.total;
-  }, 0);
+  const projections = useMemo(() => {
+    try { return runFinancialModel(settings); } catch { return []; }
+  }, [settings]);
+
+  const handleExport = () => {
+    const rows = [
+      ['Year', 'Total Cost', 'Total Revenue', 'Net Impact'],
+      ...(projections || []).map(y => [
+        `Year ${y.year}`,
+        y.totalCost ?? '',
+        y.totalRevenue ?? '',
+        y.netImpact ?? '',
+      ]),
+    ];
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'machias_financial_model.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div className="space-y-6">
+
+      {/* ── Page Header ───────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Machias Bay Region Strategic Planning</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">Regional service consolidation, fiscal simulation, and leadership planning platform</p>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: '#2F2F30' }}>
+            Financial Model Dashboard
+          </h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Live projections · restructuring metrics · compliance signals — Town of Machias FY2027–31
+          </p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <ExportExecSummary />
-          <Link to="/Narrative" className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-400 rounded-lg px-3 py-1.5 transition-all">
-            <BookOpen className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Full Narrative</span>
-            <span className="sm:hidden">Narrative</span>
+          <button
+            onClick={() => setShowFilters(v => !v)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            aria-label="Toggle global filters"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            Filters
+          </button>
+          <button
+            onClick={handleExport}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            aria-label="Export financial model as CSV"
+            title="Download the current model projections as a CSV file"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Export CSV
+          </button>
+          <Link
+            to="/ComplianceSettings"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            style={{ background: '#344A60' }}
+            title="Open Audit Log and Compliance Settings"
+          >
+            Open Audit Log
           </Link>
         </div>
       </div>
 
-      {/* Planning Horizon Toggle */}
-      <PlanningHorizonToggle />
-
-      {/* Department filter */}
-      <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Departments Being Evaluated</label>
-        <div className="relative w-full md:w-96">
-          <button
-            onClick={() => setDeptDropdownOpen(!deptDropdownOpen)}
-            className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-0 flex items-center justify-between"
-          >
-            <span>{selectedDepartments.length === 0 ? 'Select departments...' : selectedDepartments.includes('all') ? 'All Departments' : `${selectedDepartments.length} selected`}</span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${deptDropdownOpen ? 'rotate-180' : ''}`} />
-          </button>
-          {deptDropdownOpen && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
-              {DEPARTMENTS.map(dept => (
-                <label
-                  key={dept.id}
-                  className="flex items-center gap-2 px-3 py-2.5 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-b-0"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedDepartments.includes('all') || selectedDepartments.includes(dept.id)}
-                    onChange={() => toggleDepartment(dept.id)}
-                    className="w-4 h-4 rounded border-slate-300"
-                  />
-                  <span className="text-sm text-slate-700">{dept.label}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Key insight banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-4 sm:p-6 text-white">
-        <div className="flex flex-col gap-4">
+      {/* ── Global Filters ────────────────────────────────────────── */}
+      {showFilters && (
+        <div className="rounded-xl border border-slate-200 bg-white p-4 flex flex-wrap gap-4 items-end animate-in slide-in-from-top-1 duration-150">
           <div>
-            <div className="flex items-center gap-1.5">
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Core Finding</p>
-              <InfoTooltip title="Why $229,000+ in structural inefficiency?">
-                <p>The Finance Director's fully loaded cost is <strong>${settings.fd_loaded_cost?.toLocaleString()}/yr</strong>. At current utilization, 45–60% of FD time is spent on transactional tasks (AP, payroll, EMS billing oversight) that don't require a Finance Director's expertise.</p>
-                <p>Comstar currently charges <strong>{(settings.comstar_fee_rate * 100).toFixed(2)}%</strong> of gross EMS collections — approximately <strong>${data[0]?.value?.comstarAvoided?.toLocaleString()}/yr</strong> — to manage billing that an in-house Billing Specialist can handle.</p>
-                <p>Informal stipend arrangements of <strong>${settings.stipend_elimination?.toLocaleString()}/yr</strong> exist for work that should be consolidated into formal roles.</p>
-                <p className="text-slate-500 text-xs">See the <strong>Full Narrative → Section 2</strong> for the complete problem statement.</p>
-              </InfoTooltip>
-            </div>
-            <p className="text-base sm:text-lg font-bold mt-1">$229,000+ in annual structural inefficiency</p>
-            <p className="text-xs text-slate-400 mt-1">
-              Executive compensation on transactional work, outsourced billing fees, informal stipends, and airport inspection overage.
-              This plan formalizes that expenditure into 3 dedicated positions — zero tax increase required.
-            </p>
+            <label className="block text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Date Range
+            </label>
+            <select
+              value={range}
+              onChange={e => setRange(e.target.value)}
+              className="text-xs border border-slate-200 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {RANGE_OPTIONS.map(o => <option key={o}>{o}</option>)}
+            </select>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-4 sm:justify-end border-t border-white/10 pt-4 sm:border-0 sm:pt-0">
-            <div className="text-center">
-              <p className="text-xl sm:text-2xl font-bold text-emerald-400">{formatShortCurrency(cashOnlyNet)}</p>
-              <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Cash Net</p>
-              <p className="text-[9px] text-slate-500 hidden sm:block">actual dollars only</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl sm:text-2xl font-bold text-slate-300">{formatShortCurrency(cumulativeValue)}</p>
-              <p className="text-[10px] text-slate-400">{planningHorizon}-Yr Total Value</p>
-              <p className="text-[9px] text-slate-500 hidden sm:block">incl. capacity + risk value</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl sm:text-2xl font-bold text-blue-400">~Y2</p>
-              <p className="text-[10px] text-slate-400">Break-Even</p>
-              <p className="text-[9px] text-slate-500 hidden sm:block">actual dollars</p>
-            </div>
+          <div>
+            <label className="block text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Department
+            </label>
+            <select
+              value={dept}
+              onChange={e => setDept(e.target.value)}
+              className="text-xs border border-slate-200 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              {DEPT_OPTIONS.map(o => <option key={o}>{o}</option>)}
+            </select>
           </div>
-        </div>
-      </div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="relative">
-           <StatCard label="Year 1 Net" value={formatShortCurrency(y1Net)} icon={DollarSign} sub="Base case, all 3 positions" />
-           <div className="absolute top-2 right-2">
-             <InfoTooltip title="Year 1 Net Value">
-              <p>This is the net of all projected value (structural savings, regional revenue, EMS improvement, capacity) minus the total cost of all new positions and ERP implementation in Year 1.</p>
-              <p>It includes both cash and non-cash value categories. For a cash-only view, see the "5-Yr Cash Net" figure on the banner above.</p>
-            </InfoTooltip>
-          </div>
-        </div>
-        <div className="relative">
-           <StatCard label={`Year ${planningHorizon} Gross Value`} value={formatShortCurrency(finalYearValue)} icon={TrendingUp} sub="Structural + regional" />
-          <div className="absolute top-2 right-2">
-            <InfoTooltip title={`Year ${planningHorizon} Gross Value`}>
-              <p>The total projected annual value of the restructuring by Year {planningHorizon}, including all three categories: non-tax revenue (regional contracts, EMS), budget impact (avoided fees, stipend savings, enterprise overhead), and capacity value (FD/TM time recovered, control risk mitigation).</p>
-            </InfoTooltip>
-          </div>
-        </div>
-        <div className="relative">
-          <StatCard
-            label="Tax Levy"
-            value={`$${(settings.annual_tax_levy / 1000000).toFixed(2)}M`}
-            icon={ShieldCheck}
-            sub="Annual GF levy"
-          />
-          <div className="absolute top-2 right-2">
-            <InfoTooltip title="General Fund Levy Impact">
-              <p>This measures whether the restructuring requires a property tax increase. The calculation compares GF-funded position costs (Staff Accountant, GA Coordinator, ERP, airport stipend) against GF cash offsets (regional contracts, Comstar savings, stipend elimination, enterprise overhead).</p>
-              <p><strong>The Billing Specialist is excluded</strong> — that position is funded entirely by the Ambulance Fund.</p>
-              <p>A surplus means cash offsets exceed costs — no tax increase needed.</p>
-            </InfoTooltip>
-          </div>
-        </div>
-        <div className="relative">
-           <StatCard label="Undesignated Draw Y1" value={horizonData[0]?.gf?.undesignatedDraw === 0 ? 'None' : `$${horizonData[0]?.gf?.undesignatedDraw.toLocaleString()}`} icon={AlertTriangle} sub={horizonData[0]?.gf?.undesignatedDraw === 0 ? 'Cash offsets cover all GF costs' : 'Fund draw required'} />
-          <div className="absolute top-2 right-2">
-            <InfoTooltip title="Undesignated Fund Draw">
-              <p>If GF-funded costs exceed GF cash offsets in Year 1, the gap would need to be covered by a draw from the undesignated fund balance (currently ~${settings.gf_undesignated_balance?.toLocaleString()}).</p>
-              <p>The plan is designed to avoid any undesignated fund draw. If this shows "None," the restructuring is fully covered by operating cash offsets.</p>
-            </InfoTooltip>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts */}
-      <div className="flex items-center gap-2">
-        <SectionHeader title={`${planningHorizon}-Year Financial Pro Forma`} subtitle="Base case: all revenue streams active" icon={TrendingUp} />
-        <InfoTooltip title="How to read the Pro Forma chart">
-          <p>The stacked bars show three value categories: <strong>Structural</strong> (avoided costs, enterprise overhead, capacity), <strong>Regional</strong> (contracts + EMS external + Transfer Station), and <strong>ERP</strong> (starting Year 2).</p>
-          <p>The orange line shows total costs. When stacked bars exceed the line, the restructuring is net-positive for that year.</p>
-          <p>Note: the chart includes all value categories including non-cash items. See "{planningHorizon}-Yr Cash Net" for actual dollars only.</p>
-        </InfoTooltip>
-      </div>
-      <ProFormaChart data={horizonData} />
-
-      <div className="flex items-center gap-2">
-        <SectionHeader title="Payback Timeline" subtitle="Quarterly cost-value analysis through 24 months" icon={Clock} />
-        <InfoTooltip title="Payback Timeline">
-          <p>This chart tracks the cash-only cumulative net — actual dollars deposited or saved, minus actual costs — quarter by quarter through the first two fiscal years.</p>
-          <p>Cash break-even is projected around Year 2, when cumulative cash offsets exceed cumulative costs. Non-cash value (FD/TM capacity, control risk) is excluded here intentionally.</p>
-        </InfoTooltip>
-      </div>
-      <PaybackChart />
-
-      {/* Three pillars summary */}
-      <div className="flex items-center gap-2">
-        <SectionHeader title="Value Categories" subtitle="Understanding what the numbers measure" icon={Target} />
-        <InfoTooltip title="Why three value categories?">
-          <p>Not all financial value is cash. To give an honest picture, the model separates value into three distinct categories so stakeholders can decide which they find credible.</p>
-          <p><strong>Category 1 (Non-Tax Revenue)</strong> — actual dollars deposited. Most conservative. Use this for budget planning.</p>
-          <p><strong>Category 2 (Budget Impact)</strong> — real cost reductions and avoided expenditures. Directly reduces the levy, but some items are opportunity costs.</p>
-          <p><strong>Category 3 (Capacity Value)</strong> — time redirected from the FD and TM to higher-value work. Real but hardest to quantify. The model uses conservative hourly values.</p>
-        </InfoTooltip>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <DollarSign className="h-4 w-4 text-emerald-700" />
-            <h3 className="text-sm font-semibold text-emerald-800">Category 1: Non-Tax Revenue</h3>
-          </div>
-          <p className="text-xs text-emerald-700 leading-relaxed">
-            Actual cash deposited to the General Fund. Regional services contracts, EMS collection improvement,
-            Transfer Station member fees, and external EMS billing revenue.
+          <button
+            onClick={() => { setDept('All Departments'); setRange('FY2027–31 (5-Year)'); }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 text-slate-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Reset
+          </button>
+          <p className="text-[10px] text-slate-400 self-end pb-1">
+            Filters apply to KPI row, project cards, and alerts.
           </p>
-          <p className="mt-3 text-lg font-bold text-emerald-800">~${(planningHorizon === 5 ? 900 : 1800)}K over {planningHorizon} years</p>
-          <Link to="/Narrative" className="mt-2 text-[10px] text-emerald-600 hover:underline block">Read full narrative →</Link>
         </div>
+      )}
 
-        <div className="rounded-2xl border border-amber-200 bg-amber-50/30 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <ShieldCheck className="h-4 w-4 text-amber-700" />
-            <h3 className="text-sm font-semibold text-amber-800">Category 2: Budget Impact</h3>
-          </div>
-          <p className="text-xs text-amber-700 leading-relaxed">
-            Real cost reductions. Comstar fee avoided (${horizonData[0]?.value?.comstarAvoided?.toLocaleString()}+ and growing), stipend elimination (${settings.stipend_elimination?.toLocaleString()}/yr),
-            airport inspection savings, enterprise overhead allocation.
-          </p>
-          <p className="mt-3 text-lg font-bold text-amber-800">Direct GF reductions</p>
-          <Link to="/Narrative" className="mt-2 text-[10px] text-amber-600 hover:underline block">Read full narrative →</Link>
-        </div>
+      {/* ── KPI Row ───────────────────────────────────────────────── */}
+      <DashboardKPIRow projections={projections} settings={settings} dept={dept} />
 
-        <div className="rounded-2xl border border-blue-200 bg-blue-50/30 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Users className="h-4 w-4 text-blue-700" />
-            <h3 className="text-sm font-semibold text-blue-800">Category 3: Capacity Value</h3>
-          </div>
-          <p className="text-xs text-blue-700 leading-relaxed">
-            Time redirected to strategic work. FD: 45-60% capacity recovered. TM: 18-22% recovered.
-            Control risk mitigation ${horizonData[0]?.value?.controlRisk?.toLocaleString()}–${horizonData[1]?.value?.controlRisk?.toLocaleString()}/yr. Enables economic development.
-          </p>
-          <p className="mt-3 text-lg font-bold text-blue-800">~${(planningHorizon === 5 ? 700 : 1400)}K time value</p>
-          <Link to="/Narrative" className="mt-2 text-[10px] text-blue-600 hover:underline block">Read full narrative →</Link>
+      {/* ── Bento Grid: Timeline + Alerts ────────────────────────── */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <div className="xl:col-span-2">
+          <DashboardERPTimeline settings={settings} />
         </div>
+        <div className="xl:col-span-1">
+          <DashboardAlertsPanel projections={projections} settings={settings} />
+        </div>
+      </div>
+
+      {/* ── Project Cards ─────────────────────────────────────────── */}
+      <DashboardProjectCards projections={projections} settings={settings} dept={dept} />
+
+      {/* ── Recent Transactions / Model Changes ───────────────────── */}
+      <RecentTransactionsTable projections={projections} />
+
+      {/* ── Footer note ───────────────────────────────────────────── */}
+      <div className="rounded-lg border border-slate-200 bg-white/60 p-3 text-[10px] text-slate-500 flex items-start gap-2">
+        <span>ⓘ</span>
+        <span>
+          All figures are model projections based on current <Link to="/ModelSettings" className="underline hover:text-slate-700">Model Settings</Link>.
+          Changes must be approved per the <Link to="/ComplianceSettings" className="underline hover:text-slate-700">Compliance workflow</Link>.
+          Last model sync: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}.
+        </span>
       </div>
     </div>
   );
 }
+
+// ── Inline Recent Transactions Table (self-contained, lightweight) ──────────
+function RecentTransactionsTable({ projections }) {
+  const rows = useMemo(() => {
+    if (!projections || projections.length === 0) return MOCK_TRANSACTIONS;
+    return projections.slice(0, 5).map((y, i) => ({
+      id: `proj-y${y.year}`,
+      description: `Year ${y.year} Projection Snapshot`,
+      category: 'Financial Model',
+      amount: y.netImpact ?? 0,
+      status: (y.netImpact ?? 0) >= 0 ? 'positive' : 'negative',
+      date: `FY20${26 + y.year}`,
+    }));
+  }, [projections]);
+
+  const handleExportTable = () => {
+    const headers = 'ID,Description,Category,Amount,Status,Period\n';
+    const csv = headers + rows.map(r =>
+      `${r.id},"${r.description}",${r.category},${r.amount},${r.status},${r.date}`
+    ).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'machias_transactions.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <div>
+          <h3 className="text-sm font-bold text-slate-800">Recent Model Activity</h3>
+          <p className="text-[10px] text-slate-500 mt-0.5">Year-by-year projection snapshots from the active financial model</p>
+        </div>
+        <div className="flex gap-2">
+          <Link
+            to="/ModelSettings"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+            title="Open Model Settings to record a manual adjustment"
+          >
+            Record Adjustment
+          </Link>
+          <button
+            onClick={handleExportTable}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+            title="Download this table as CSV"
+          >
+            <Download className="h-3 w-3" />
+            Export
+          </button>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="border-b border-slate-100" style={{ background: '#F3EAD6' }}>
+              <th className="text-left px-5 py-2.5 font-bold text-slate-600 text-[10px] uppercase tracking-wide">Description</th>
+              <th className="text-left px-4 py-2.5 font-bold text-slate-600 text-[10px] uppercase tracking-wide hidden sm:table-cell">Category</th>
+              <th className="text-right px-4 py-2.5 font-bold text-slate-600 text-[10px] uppercase tracking-wide">Net Impact</th>
+              <th className="text-center px-4 py-2.5 font-bold text-slate-600 text-[10px] uppercase tracking-wide hidden md:table-cell">Period</th>
+              <th className="text-center px-4 py-2.5 font-bold text-slate-600 text-[10px] uppercase tracking-wide">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50">
+            {rows.map(row => (
+              <tr key={row.id} className="hover:bg-slate-50 transition-colors group">
+                <td className="px-5 py-3 font-medium text-slate-800">{row.description}</td>
+                <td className="px-4 py-3 text-slate-500 hidden sm:table-cell">{row.category}</td>
+                <td className={`px-4 py-3 text-right font-bold tabular-nums ${row.status === 'positive' ? 'text-emerald-700' : 'text-red-600'}`}>
+                  {row.status === 'positive' ? '+' : '-'}${Math.abs(row.amount).toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-center text-slate-500 hidden md:table-cell">{row.date}</td>
+                <td className="px-4 py-3 text-center">
+                  <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                    row.status === 'positive'
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {row.status === 'positive' ? 'Benefit' : 'Cost'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+const MOCK_TRANSACTIONS = [
+  { id: 't1', description: 'Staff Accountant Hire (Year 1)', category: 'Staffing', amount: -68000, status: 'negative', date: 'FY2027' },
+  { id: 't2', description: 'EMS In-House Billing Recovery', category: 'Revenue', amount: 42000, status: 'positive', date: 'FY2027' },
+  { id: 't3', description: 'ERP Implementation (Y1)', category: 'Capital', amount: -47000, status: 'negative', date: 'FY2027' },
+  { id: 't4', description: 'R/B Interlocal Contract', category: 'Regional Revenue', amount: 19000, status: 'positive', date: 'FY2027' },
+  { id: 't5', description: 'Stipend Elimination Savings', category: 'Savings', amount: 26000, status: 'positive', date: 'FY2027' },
+];
