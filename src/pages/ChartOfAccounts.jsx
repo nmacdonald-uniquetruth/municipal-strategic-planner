@@ -19,11 +19,16 @@ import SectionHeader from '../components/machias/SectionHeader';
 import COACrossWalkTable from '../components/coa/COACrossWalkTable';
 import COAAccountForm from '../components/coa/COAAccountForm';
 import COAValidationPanel from '../components/coa/COAValidationPanel';
+import COAGovernancePanel from '../components/coa/COAGovernancePanel';
+import COAAuditLogPanel from '../components/coa/COAAuditLogPanel';
+import COAExceptionWorkflows from '../components/coa/COAExceptionWorkflows';
+import COAImportWorkbook from '../components/coa/COAImportWorkbook';
 import { OldToNewView, DepartmentView, RevenueView, ExpenditureView, ExceptionsReport } from '../components/coa/COAReportingViews';
-import { validateCrosswall, buildSummaryStats, buildExceptionsReport, parseCOAImport } from '../components/coa/coaEngine';
+import { validateCrosswall, buildSummaryStats, buildExceptionsReport } from '../components/coa/coaEngine';
 import {
-  GitMerge, Plus, AlertTriangle, FileText, BarChart2, Upload,
-  Table, ArrowRight, Building2, TrendingDown, TrendingUp, CheckCircle
+  GitMerge, Plus, AlertTriangle, FileText, Upload,
+  Table, ArrowRight, Building2, TrendingDown, TrendingUp, CheckCircle,
+  Shield, Clock
 } from 'lucide-react';
 
 // ── Seed data ─────────────────────────────────────────────────────────────────
