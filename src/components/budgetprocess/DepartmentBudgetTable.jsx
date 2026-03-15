@@ -161,7 +161,7 @@ function FundGroup({ fund, depts, activeColumn, showHistory, onEdit, coaAccounts
   );
 }
 
-export default function DepartmentBudgetTable({ depts, activePhase, showHistory = true, onEdit }) {
+export default function DepartmentBudgetTable({ depts, activePhase, showHistory = true, onEdit, coaAccounts }) {
   const activeColumn = resolveActiveColumn(activePhase);
   const grouped = groupDeptsByFund(depts);
   const grandTotal = depts.reduce((s, d) => s + (d[activeColumn] || 0), 0);
