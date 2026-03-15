@@ -319,6 +319,36 @@ export default function WarrantBuilder() {
         </div>
       )}
 
+      {/* ── Mapping ── */}
+      {activeTab === 'mapping' && (
+        <div className="space-y-4">
+          {/* Adoption readiness banner */}
+          <div className={`rounded-xl border px-4 py-2.5 flex items-center gap-3 ${mappingReadiness.ready ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}`}>
+            {mappingReadiness.ready
+              ? <CheckCircle className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+              : <AlertTriangle className="h-4 w-4 text-red-600 flex-shrink-0" />}
+            <p className={`text-xs font-semibold ${mappingReadiness.ready ? 'text-emerald-800' : 'text-red-800'}`}>
+              {mappingReadiness.ready
+                ? `All ${mappingReadiness.totalLines} line items fully mapped — adoption outputs enabled.`
+                : `${mappingReadiness.blockers.length} mapping error${mappingReadiness.blockers.length !== 1 ? 's' : ''} block adoption. ${mappingReadiness.unmappedCount} line${mappingReadiness.unmappedCount !== 1 ? 's' : ''} unassigned.`}
+            </p>
+            <span className="ml-auto text-[10px] text-slate-500 font-mono">{mappingReadiness.mappingCompletePct}% complete</span>
+          </div>
+
+          {/* Sub-tabs for mapping vs exceptions */}
+          <MappingSubTabs
+            lineItems={lineItems}
+            mappings={mappings}
+            articles={sorted}
+            onMappingChange={handleMappingChange}
+            onAutoMap={handleAutoMap}
+            beteRollup={beteRollup}
+            calc={calc}
+            readiness={mappingReadiness}
+          />
+        </div>
+      )}
+
       {/* ── Draft Packet ── */}
       {activeTab === 'packet' && (
         <WarrantPacketGenerator articles={articles} fiscalYear={fiscalYear} calc={calc} />
