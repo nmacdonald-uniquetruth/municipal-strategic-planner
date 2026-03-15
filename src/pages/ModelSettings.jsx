@@ -1,5 +1,4 @@
 import React from 'react';
-import React from 'react';
 import ModelSettingsEditor from '../components/machias/ModelSettingsEditor';
 import ComplianceViolationBanner from '@/components/compliance/ComplianceViolationBanner';
 import { useComplianceValidation } from '@/components/compliance/useComplianceValidation';
