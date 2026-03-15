@@ -23,12 +23,14 @@ function ApprovalBadge({ approved, label }) {
     : <span className="flex items-center gap-0.5 text-[9px] text-slate-400"><Circle className="h-2.5 w-2.5" />{label}</span>;
 }
 
-function DeptRow({ dept, activeColumn, showHistory, onEdit }) {
+function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
   const [expanded, setExpanded] = useState(false);
+  const [showCOA, setShowCOA] = useState(false);
   const activeVal = dept[activeColumn] || 0;
   const priorVal  = dept.prior_year_budget || 0;
   const chg = diff(activeVal, priorVal);
   const varianceData = dept.adopted_budget ? diff(dept.projected_year_end, dept.adopted_budget) : null;
+  const linkedCoaAccounts = coaAccounts?.filter(a => a.department === dept.department && a.validation_status === 'approved') || [];
 
   return (
     <>
