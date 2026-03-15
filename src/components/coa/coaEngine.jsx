@@ -214,6 +214,170 @@ export function findWarrantMatches(account, articles) {
   return articles.filter(a => a.article_number === account.budget_article_mapping);
 }
 
+/**
+ * ─── Old-to-New Bridge Reconciliation ──────────────────────────────────────
+ * Calculates mappings between TRIO (legacy) and new account structures.
+ * Supports aggregation (many old → one new) and disaggregation (one old → many new).
+ */
+
+export function buildBridgeMapping(accounts) {
+  const trioToNew = {};  // TRIO account → [new accounts]
+  const newToTrio = {};  // new account → [TRIO accounts]
+
+  accounts.forEach(a => {
+    if (!a.trio_account || !a.new_account_number) return;
+    if (!trioToNew[a.trio_account]) trioToNew[a.trio_account] = [];
+    if (!newToTrio[a.new_account_number]) newToTrio[a.new_account_number] = [];
+    trioToNew[a.trio_account].push(a);
+    newToTrio[a.new_account_number].push(a);
+  });
+
+  return { trioToNew, newToTrio };
+}
+
+/**
+ * Confidence flag for a mapping relationship.
+ * Returns: { level: 'exact' | 'estimated' | 'ambiguous', reason: string }
+ */
+export function getMappingConfidence(mappedAccounts) {
+  if (!mappedAccounts || mappedAccounts.length === 0) {
+    return { level: 'estimated', reason: 'No mapping found' };
+  }
+  if (mappedAccounts.length === 1) {
+    const m = mappedAccounts[0];
+    if (m.mapping_type === 'one_to_one') {
+      return { level: 'exact', reason: 'One-to-one mapping' };
+    } else if (m.mapping_type === 'split' && m.mapping_split_percent === 100) {
+      return { level: 'exact', reason: '100% split allocation' };
+    } else if (m.mapping_type === 'split') {
+      return { level: 'estimated', reason: `Split ${m.mapping_split_percent}%` };
+    }
+  }
+  if (mappedAccounts.length > 1) {
+    const allHavePercent = mappedAccounts.every(m => m.mapping_split_percent);
+    const totalPercent = mappedAccounts.reduce((s, m) => s + (m.mapping_split_percent || 0), 0);
+    if (allHavePercent && Math.abs(totalPercent - 100) < 0.1) {
+      return { level: 'exact', reason: `Many-to-one aggregation (${mappedAccounts.length} accounts)` };
+    }
+  }
+  return { level: 'ambiguous', reason: 'Complex or incomplete mapping' };
+}
+
+/**
+ * Bridge row reconciliation: given a TRIO account and historical data, allocate to new accounts.
+ * Returns: { trioAccount, trioDesc, trioHistBudget, trioHistActual, newMappings: [...], confidence }
+ */
+export function buildBridgeRow(trioAcct, mappedAccounts, trioHistBudget = 0, trioHistActual = 0) {
+  const confidence = getMappingConfidence(mappedAccounts);
+  const newMappings = (mappedAccounts || []).map(m => {
+    const pct = (m.mapping_split_percent || 100) / 100;
+    return {
+      newAccountNumber: m.new_account_number,
+      newTitle: m.new_account_title,
+      allocatedBudget: Math.round(trioHistBudget * pct),
+      allocatedActual: Math.round(trioHistActual * pct),
+      splitPercent: m.mapping_split_percent || 100,
+      mappingType: m.mapping_type,
+    };
+  });
+
+  return {
+    trioAccount: trioAcct.trio_account || trioAcct,
+    trioDescription: trioAcct.trio_description || '',
+    trioHistBudget,
+    trioHistActual,
+    newMappings,
+    confidence,
+    totalMapped: newMappings.reduce((s, nm) => s + nm.allocatedBudget, 0),
+    totalActual: newMappings.reduce((s, nm) => s + nm.allocatedActual, 0),
+  };
+}
+
+/**
+ * Bridge report by department: show TRIO data aggregated under new department grouping.
+ */
+export function buildDepartmentBridge(accounts) {
+  const { trioToNew } = buildBridgeMapping(accounts);
+  const byDept = {};
+
+  accounts.forEach(a => {
+    if (!a.department) return;
+    const key = a.department;
+    if (!byDept[key]) {
+      byDept[key] = {
+        department: key,
+        newAccounts: [],
+        trioHistBudgetTotal: 0,
+        trioHistActualTotal: 0,
+        bridges: [],
+      };
+    }
+    byDept[key].newAccounts.push(a);
+  });
+
+  Object.entries(trioToNew).forEach(([trioNum, newAccts]) => {
+    const budget = newAccts[0]?.trio_historical_budget || 0;
+    const actual = newAccts[0]?.trio_historical_actual || 0;
+    const primaryNewAcct = newAccts[0];
+    const deptKey = primaryNewAcct?.department || 'Unknown';
+
+    if (byDept[deptKey]) {
+      byDept[deptKey].trioHistBudgetTotal += budget;
+      byDept[deptKey].trioHistActualTotal += actual;
+      byDept[deptKey].bridges.push(buildBridgeRow({ trio_account: trioNum }, newAccts, budget, actual));
+    }
+  });
+
+  return Object.values(byDept).sort((a, b) => a.department.localeCompare(b.department));
+}
+
+/**
+ * Bridge report by fund: TRIO accounts mapped to new fund structure.
+ */
+export function buildFundBridge(accounts) {
+  const { trioToNew } = buildBridgeMapping(accounts);
+  const byFund = {};
+
+  accounts.forEach(a => {
+    if (!a.fund) return;
+    if (!byFund[a.fund]) {
+      byFund[a.fund] = {
+        fund: a.fund,
+        fundType: a.fund_type,
+        newAccounts: [],
+        trioHistBudgetTotal: 0,
+        trioHistActualTotal: 0,
+        bridges: [],
+      };
+    }
+    byFund[a.fund].newAccounts.push(a);
+  });
+
+  Object.entries(trioToNew).forEach(([trioNum, newAccts]) => {
+    const budget = newAccts[0]?.trio_historical_budget || 0;
+    const actual = newAccts[0]?.trio_historical_actual || 0;
+    const fundKey = newAccts[0]?.fund || 'general_fund';
+
+    if (byFund[fundKey]) {
+      byFund[fundKey].trioHistBudgetTotal += budget;
+      byFund[fundKey].trioHistActualTotal += actual;
+      byFund[fundKey].bridges.push(buildBridgeRow({ trio_account: trioNum }, newAccts, budget, actual));
+    }
+  });
+
+  return Object.values(byFund).sort((a, b) => a.fund.localeCompare(b.fund));
+}
+
+/**
+ * Bridge reconciliation: sum all new accounts and verify they match TRIO total.
+ */
+export function bridgeReconciliation(bridgeRows) {
+  const trioTotal = bridgeRows.reduce((s, r) => s + r.trioHistBudget, 0);
+  const newTotal = bridgeRows.reduce((s, r) => s + r.totalMapped, 0);
+  const difference = Math.abs(trioTotal - newTotal);
+  return { trioTotal, newTotal, difference, reconciled: difference < 100 };
+}
+
 // ─── CSV / import parser ───────────────────────────────────────────────────────
 
 /**
