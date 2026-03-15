@@ -115,10 +115,9 @@ export function ModelProvider({ children }) {
     yearEndProcedures: addMonths(startDate, 5),
   };
 
-  // Compute FD and TM fully loaded costs
-  const healthAnnual = settings.health_tier === 'individual' ? settings.health_individual_annual : settings.health_family_annual;
-  const fd_loaded_cost = calculateFullyLoaded(settings.fd_base_salary, settings.health_tier, healthAnnual, settings.fica_rate, settings.pers_rate, settings.wc_rate);
-  const tm_loaded_cost = calculateFullyLoaded(settings.tm_base_salary, settings.health_tier, healthAnnual, settings.fica_rate, settings.pers_rate, settings.wc_rate);
+  // Compute FD and TM fully loaded costs via canonical helper
+  const fd_loaded_cost = calculateFullyLoadedCost(settings.fd_base_salary, settings, { icmaInstead: false });
+  const tm_loaded_cost = calculateFullyLoadedCost(settings.tm_base_salary, settings, { icmaInstead: false });
 
   const computedSettings = {
     ...settings,
