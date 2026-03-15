@@ -137,7 +137,7 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
   );
 }
 
-function FundGroup({ fund, depts, activeColumn, showHistory, onEdit }) {
+function FundGroup({ fund, depts, activeColumn, showHistory, onEdit, coaAccounts }) {
   const [open, setOpen] = useState(true);
   const total = depts.reduce((s, d) => s + (d[activeColumn] || 0), 0);
   const priorTotal = depts.reduce((s, d) => s + (d.prior_year_budget || 0), 0);
