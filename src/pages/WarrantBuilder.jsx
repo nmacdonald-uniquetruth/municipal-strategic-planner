@@ -117,6 +117,7 @@ function ArticleRow({ article, onEdit, onDelete, onReorder, errors, isFirst, isL
 
 const TABS = [
   { id: 'articles',   label: 'Articles',     icon: Scroll },
+  { id: 'mapping',    label: 'Mapping',      icon: GitMerge },
   { id: 'packet',     label: 'Draft Packet', icon: FileText },
   { id: 'rollup',     label: 'Rollup / BETE',icon: BarChart2 },
   { id: 'validation', label: 'Validation',   icon: AlertTriangle },
