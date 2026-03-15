@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { useModel } from '../components/machias/ModelContext';
 import { runProFormaFromSettings } from '../components/machias/FinancialModelV2';
 import SectionHeader from '../components/machias/SectionHeader';
-import { Target, DollarSign, MapPin, Users, ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { Target, DollarSign, MapPin, Users, ChevronDown, ChevronUp, Settings, Sliders } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import RegionalOptimizerPanel from '../components/regional/RegionalOptimizerPanel';
 
 const fmt  = (n) => n == null ? '—' : `$${Math.abs(Math.round(n)).toLocaleString()}`;
 const fmtK = (n) => `$${Math.round(Math.abs(n) / 1000)}K`;
@@ -222,7 +223,7 @@ export default function RegionalServices() {
 
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap">
-        {[['towns','Town Profiles'],['phases','Phase Timeline'],['pricing','Pricing Model'],['emsext','EMS External Billing'],['legal','Legal Framework']].map(([id, label]) => (
+        {[['towns','Town Profiles'],['phases','Phase Timeline'],['pricing','Pricing Model'],['emsext','EMS External Billing'],['optimizer','Optimizer'],['legal','Legal Framework']].map(([id, label]) => (
           <button key={id} onClick={() => setActiveTab(id)}
             className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${activeTab === id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
             {label}
@@ -527,6 +528,11 @@ export default function RegionalServices() {
             <strong>Payment Plan Opportunity:</strong> The 159 self-pay patients (insured + uninsured) collected only $19,833 of $141,303 allowable (14%). An in-house billing specialist with direct patient contact can implement flexible payment plans — even recovering 25% of currently written-off self-pay would add ~$30,000/year in collections. This increases billing specialist workload moderately but reduces write-offs meaningfully.
           </div>
         </div>
+      )}
+
+      {/* Optimizer */}
+      {activeTab === 'optimizer' && (
+        <RegionalOptimizerPanel />
       )}
 
       {/* Legal Framework */}
