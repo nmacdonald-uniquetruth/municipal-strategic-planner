@@ -92,15 +92,16 @@ export const calculateFinancialImpact = (proposal, sharedAssumptions) => {
 };
 
 /**
- * Calculate staffing cost impact
+ * Calculate net staffing cost from FTE change.
+ * Uses the canonical fully-loaded cost helper with shared assumptions.
+ * Average admin FTE base salary ≈ $65k; fully-loaded ≈ $108k.
  */
 export const calculateStaffingCost = (staffingImpact, sharedAssumptions) => {
-  const { fteChange = 0, positionsAdded = [], positionsEliminated = [] } = staffingImpact;
-
-  // This would need position detail data to calculate actual costs
-  // For now, use average cost per FTE
-  const averageCostPerFTE = 85000;
-  return fteChange * averageCostPerFTE * sharedAssumptions.wage_growth_rate;
+  const { fteChange = 0 } = staffingImpact;
+  // Use a representative admin salary as the base; fully loaded via canonical helper
+  const avgAdminBase = 65000;
+  const fullyLoaded = calculateFullyLoadedCost(avgAdminBase, sharedAssumptions);
+  return fteChange * fullyLoaded;
 };
 
 /**
