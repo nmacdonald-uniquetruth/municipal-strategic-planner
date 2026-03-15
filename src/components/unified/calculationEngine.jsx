@@ -1,11 +1,12 @@
 /**
- * Unified Calculation Engine
- * 
- * All financial, tax, staffing, and impact calculations reference
- * shared assumptions and proposal data to ensure consistency
+ * calculationEngine.js
+ *
+ * All financial, tax, staffing, and impact calculations.
+ * Tax/mill-rate math delegates to calculateMillRateImpact() in modelUtils —
+ * do NOT inline mill-rate formulas here.
  */
 
-import { calculateTaxImpactFromAssumptions } from './sharedAssumptions';
+import { calculateMillRateImpact, calculateFullyLoadedCost } from '../machias/modelUtils';
 
 /**
  * Calculate all impacts for a proposal
