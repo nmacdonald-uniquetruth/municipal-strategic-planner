@@ -54,6 +54,7 @@ import ServiceTerritoryAnalysis from './pages/ServiceTerritoryAnalysis';
 import LeadershipCapacityModeling from './pages/LeadershipCapacityModeling';
 import RestructuringProposalLibrary from './pages/RestructuringProposalLibrary';
 import ComplianceSettings from './pages/ComplianceSettings';
+import BudgetEngine from './pages/BudgetEngine';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -123,6 +124,7 @@ const AuthenticatedApp = () => {
           <Route path="/LeadershipCapacityModeling" element={<LeadershipCapacityModeling />} />
           <Route path="/RestructuringProposalLibrary" element={<RestructuringProposalLibrary />} />
           <Route path="/ComplianceSettings" element={<ComplianceSettings />} />
+          <Route path="/BudgetEngine" element={<BudgetEngine />} />
           </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
