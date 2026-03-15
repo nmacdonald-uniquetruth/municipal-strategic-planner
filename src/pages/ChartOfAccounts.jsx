@@ -253,6 +253,23 @@ export default function ChartOfAccounts() {
       {/* Tab content */}
       {activeTab === 'crosswalk'   && <COACrossWalkTable accounts={accounts} onEdit={handleEdit} onDelete={handleDelete} />}
       {activeTab === 'oldnew'      && <OldToNewView accounts={accounts} />}
+      {activeTab === 'bridge'      && (
+        <div className="space-y-3">
+          <div className="flex gap-1.5 flex-wrap">
+            {['summary', 'department', 'fund', 'revenue', 'expenditure'].map(view => (
+              <button key={view} onClick={() => setBridgeView(view)}
+                className={`text-xs px-3 py-1.5 rounded-full font-semibold border transition-colors ${bridgeView === view ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'}`}>
+                {view === 'summary' ? 'Summary Table' : view === 'department' ? 'By Department' : view === 'fund' ? 'By Fund' : view === 'revenue' ? 'Revenue Accounts' : 'Expenditure Accounts'}
+              </button>
+            ))}
+          </div>
+          {bridgeView === 'summary' && <BridgeSummaryTable accounts={accounts} />}
+          {bridgeView === 'department' && <BridgeReportByDepartment accounts={accounts} />}
+          {bridgeView === 'fund' && <BridgeReportByFund accounts={accounts} />}
+          {bridgeView === 'revenue' && <BridgeReportByType accounts={accounts} accountType="revenue" />}
+          {bridgeView === 'expenditure' && <BridgeReportByType accounts={accounts} accountType="expenditure" />}
+        </div>
+      )}
       {activeTab === 'dept'        && <DepartmentView accounts={accounts} />}
       {activeTab === 'revenue'     && <RevenueView accounts={accounts} />}
       {activeTab === 'expenditure' && <ExpenditureView accounts={accounts} />}
