@@ -166,7 +166,7 @@ export default function AppLayout() {
           <div />
           <FeedbackDialog />
         </div>
-        <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+        <div className="p-3 sm:p-5 lg:p-8 max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
