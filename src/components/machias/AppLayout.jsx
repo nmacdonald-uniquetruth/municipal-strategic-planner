@@ -4,7 +4,7 @@ import {
   LayoutDashboard, TrendingUp, Users, Monitor, Landmark, Target,
   ClipboardList, ChevronLeft, Menu, Settings, Calculator, MessageSquare, BookOpen,
   Truck, BarChart2, FileText, HelpCircle, Megaphone, BookMarked, Activity,
-  Scale, Network, MapPin, Zap, AlertTriangle, ShieldCheck, ChevronDown, UserCircle, GitMerge
+  Scale, Network, MapPin, Zap, AlertTriangle, ShieldCheck, ChevronDown, UserCircle, GitMerge, ClipboardList
 } from 'lucide-react';
 import FeedbackDialog from './FeedbackDialog';
 import { RoleProvider, useRole, useCanAccess, ROLES } from './RoleContext';
@@ -72,6 +72,7 @@ const NAV_GROUPS = [
   {
     label: 'Compliance',
     items: [
+      { path: '/AnnualBudgetProcess',  label: 'Budget Process',      icon: ClipboardList },
       { path: '/BudgetEngine',        label: 'Budget Engine',       icon: Calculator },
       { path: '/WarrantManager',      label: 'Warrant Manager',     icon: FileText },
       { path: '/ComplianceSettings',  label: 'Compliance Settings', icon: ShieldCheck },

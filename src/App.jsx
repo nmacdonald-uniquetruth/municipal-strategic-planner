@@ -57,6 +57,7 @@ import ComplianceSettings from './pages/ComplianceSettings';
 import BudgetEngine from './pages/BudgetEngine';
 import WarrantManager from './pages/WarrantManager';
 import ChartOfAccounts from './pages/ChartOfAccounts';
+import AnnualBudgetProcess from './pages/AnnualBudgetProcess';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -129,6 +130,7 @@ const AuthenticatedApp = () => {
           <Route path="/BudgetEngine" element={<BudgetEngine />} />
           <Route path="/WarrantManager" element={<WarrantManager />} />
           <Route path="/ChartOfAccounts" element={<ChartOfAccounts />} />
+          <Route path="/AnnualBudgetProcess" element={<AnnualBudgetProcess />} />
           </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
