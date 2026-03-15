@@ -253,9 +253,11 @@ export default function ChartOfAccounts() {
       {activeTab === 'dept'        && <DepartmentView accounts={accounts} />}
       {activeTab === 'revenue'     && <RevenueView accounts={accounts} />}
       {activeTab === 'expenditure' && <ExpenditureView accounts={accounts} />}
-      {activeTab === 'exceptions'  && <ExceptionsReport accounts={accounts} />}
+      {activeTab === 'exceptions'  && <COAExceptionWorkflows accounts={accounts} onResolve={handleExceptionResolve} />}
       {activeTab === 'validation'  && <COAValidationPanel validation={validation} />}
-      {activeTab === 'import'      && <ImportPanel onImport={handleImport} />}
+      {activeTab === 'governance'  && <COAGovernancePanel accounts={accounts} onLogEvent={e => writeAuditLog(e)} />}
+      {activeTab === 'audit'       && <COAAuditLogPanel />}
+      {activeTab === 'import'      && <COAImportWorkbook accounts={accounts} onImport={handleImport} onLogEvent={e => writeAuditLog(e)} />}
     </div>
   );
 }
