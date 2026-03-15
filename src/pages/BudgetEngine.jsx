@@ -189,6 +189,7 @@ function ReconciliationView({ calc, warnings, lines }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 const TABS = [
+  { id: 'summary', label: 'COA Summary', icon: GitMerge },
   { id: 'bete', label: 'BETE Form', icon: FileText },
   { id: 'millrate', label: 'Mill Rate What-If', icon: Calculator },
   { id: 'worksheet', label: 'Worksheet', icon: Table },
@@ -201,8 +202,16 @@ export default function BudgetEngine() {
   const [inputs, setInputs] = useState(() => seedInputs(settings));
   const [selectedMillRate, setSelectedMillRate] = useState(null);
   const [lines, setLines] = useState(SEED_LINES);
-  const [activeTab, setActiveTab] = useState('bete');
+  const [activeTab, setActiveTab] = useState('summary');
   const [worksheetGroupBy, setWorksheetGroupBy] = useState('department');
+  const [selectedDept, setSelectedDept] = useState('Administration');
+
+  // Fetch COA accounts (approved only)
+  const { data: accounts = [] } = useQuery({
+    queryKey: ['coa'],
+    queryFn: () => base44.entities.ChartOfAccounts.filter({ validation_status: 'approved' }, 500),
+    initialData: [],
+  });
 
   const calc = useMemo(() => calculateTaxCommitment({
     ...inputs,
