@@ -394,7 +394,13 @@ export default function LegislativeTracking() {
 
       {/* ── SETTINGS ── */}
       {activeNav === 'settings' && (
-        <div className="max-w-3xl">
+        <div className="space-y-6 max-w-4xl">
+          {/* Live Data Sources panel */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <DataSourceAdminPanel profile={profile} />
+          </div>
+
+          {/* Municipality Profile */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <MunicipalityProfilePanel
               profile={profile}
