@@ -21,6 +21,7 @@ import OfficialCard from '../components/policy/OfficialCard';
 import PolicyCalendarView from '../components/policy/PolicyCalendarView';
 import MunicipalityProfilePanel from '../components/policy/MunicipalityProfilePanel';
 import { calcRelevanceScore, filterItems, sortByRelevance, fmt, fmtDate, TOPIC_CATEGORIES, DEFAULT_DEPARTMENTS } from '../components/policy/policyEngine';
+import { usePolicyIntelligence } from '../components/policy/usePolicyIntelligence';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ImpactBadge, ActionBadge, RelevanceScore } from '../components/policy/PolicyBadges';
 import {
   Landmark, LayoutDashboard, List, Users, Calendar, DollarSign, Settings,
@@ -177,12 +178,23 @@ export default function LegislativeTracking() {
   const [editing, setEditing] = useState(null);
   const [filters, setFilters] = useState({ jurisdiction: 'all', priority: 'all', status: 'all', category: 'all', department: 'all', search: '', watched: false, urgent: false });
 
-  // Computed items with relevance scores
+  // Intelligence engine
+  const {
+    scoredItems: intelligenceScoredItems,
+    impactMap,
+    generateAIInsights,
+    aiLoading,
+    saveManualImpact,
+    executiveBrief,
+    pendingAlerts,
+  } = usePolicyIntelligence(items, profile, events);
+
+  // Merge engine-scored with any pre-existing relevance scores
   const scoredItems = useMemo(() =>
-    items.map(item => ({
+    intelligenceScoredItems.map(item => ({
       ...item,
       relevance_score: item.relevance_score ?? calcRelevanceScore(item, profile),
-    })), [items, profile]);
+    })), [intelligenceScoredItems, profile]);
 
   const filtered = useMemo(() => filterItems(scoredItems, filters), [scoredItems, filters]);
   const sorted = useMemo(() => sortByRelevance(filtered), [filtered]);
@@ -304,7 +316,17 @@ export default function LegislativeTracking() {
                   <p className="text-sm font-medium">No items match your filters.</p>
                 </div>
               ) : sorted.map(item => (
-                <LegislationCard key={item.id} item={item} profile={profile} onEdit={setEditing} onFlag={handleFlag} />
+                <LegislationCard
+                key={item.id}
+                item={item}
+                profile={profile}
+                onEdit={setEditing}
+                onFlag={handleFlag}
+                impactRecord={impactMap[item.id]}
+                onGenerateAI={generateAIInsights}
+                aiLoading={aiLoading}
+                onSaveOverride={saveManualImpact}
+              />
               ))}
             </div>
           )}
