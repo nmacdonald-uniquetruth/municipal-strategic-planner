@@ -84,6 +84,12 @@ const NAV_GROUPS = [
     ],
   },
   {
+    label: 'Legislative & Policy',
+    items: [
+      { path: '/LegislativeTracking', label: 'Legislative Tracking', icon: Landmark },
+    ],
+  },
+  {
     label: 'Reports',
     items: [
       { path: '/Narrative',               label: 'Narrative Report',    icon: BookOpen },
