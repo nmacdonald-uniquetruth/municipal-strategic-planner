@@ -367,20 +367,57 @@ export function scoreGeographicApplicability(item, profile) {
 /**
  * Full municipality-aware relevance scoring engine.
  * Returns a MunicipalImpactRecord-shaped object (not persisted — caller decides).
+ * Uses governance_type from the profile to suppress non-applicable items
+ * and apply entity-type-specific jurisdiction and topic multipliers.
  */
 export function scoreItemForMunicipality(item, profile) {
   const now = new Date();
+  const govProfile = getGovernanceProfile(profile);
 
-  // 1. Geographic applicability
+  // Early exit: item is not applicable to this governance type/geography
+  // Return a minimal record with score 0 so it can be filtered by callers
+  if (!isItemApplicable(item, profile)) {
+    return {
+      policy_item_id:          item.id,
+      municipality_name:       profile?.name || '',
+      overall_relevance_score: 0,
+      priority_level:          'watch',
+      urgency_score:           0,
+      confidence_score:        0,
+      budget_impact_score:     0,
+      operations_impact_score: 0,
+      hr_impact_score:         0,
+      compliance_impact_score: 0,
+      capital_impact_score:    0,
+      funding_opportunity_score: 0,
+      geographic_applicability_score: 0,
+      department_matches:      [],
+      strategic_goal_matches:  [],
+      topic_tags:              [],
+      recommended_owner_role:  '',
+      scoring_version:         SCORING_VERSION,
+      generated_at:            now.toISOString(),
+      generation_method:       'rule_based',
+      _suppressed:             true,
+    };
+  }
+
+  // 1. Geographic applicability (governance-type-aware)
   const geoScore = scoreGeographicApplicability(item, profile);
 
-  // 2. Topic classification
+  // 2. Topic classification with governance-type boosts
   const topicTags = classifyTopics(item);
+  const topicIds = TOPIC_TAXONOMY.filter(t => topicTags.includes(t.label)).map(t => t.id);
   const profileFocusAreas = profile?.policy_focus_areas || [];
   const topicOverlap = topicTags.filter(t =>
     profileFocusAreas.some(fa => fa.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(fa.toLowerCase()))
   ).length;
-  const topicScore = Math.min(topicOverlap * 12, 36);
+  // Apply governance-type topic boosts
+  const topicBoostMultiplier = topicIds.reduce((max, tid) => {
+    const boost = govProfile.topicBoosts?.[tid] || 1.0;
+    return Math.max(max, boost);
+  }, 1.0);
+  const topicScore = Math.min(Math.round(topicOverlap * 12 * topicBoostMultiplier), 36);
 
   // 3. Department impact
   const detectedDepts = mapDepartmentImpacts(item, profile?.departments);
