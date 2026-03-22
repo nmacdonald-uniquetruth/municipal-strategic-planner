@@ -22,6 +22,7 @@ import MunicipalityProfilePanel from '../components/policy/MunicipalityProfilePa
 import PolicyWatchlistsView from '../components/policy/PolicyWatchlistsView';
 import PolicyReportsView from '../components/policy/PolicyReportsView';
 import PolicyItemDetailDrawer from '../components/policy/PolicyItemDetailDrawer';
+import DataSourceAdminPanel from '../components/policy/DataSourceAdminPanel';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ActionBadge, RelevanceScore, ImpactBadge } from '../components/policy/PolicyBadges';
 
 import {
