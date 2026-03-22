@@ -23,6 +23,7 @@ import PolicyWatchlistsView from '../components/policy/PolicyWatchlistsView';
 import PolicyReportsView from '../components/policy/PolicyReportsView';
 import PolicyItemDetailDrawer from '../components/policy/PolicyItemDetailDrawer';
 import DataSourceAdminPanel from '../components/policy/DataSourceAdminPanel';
+import FiscalImpactModeler from '../components/policy/FiscalImpactModeler';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ActionBadge, RelevanceScore, ImpactBadge } from '../components/policy/PolicyBadges';
 
 import {
@@ -63,13 +64,14 @@ const SEED_PROFILE = { name: 'Machias', state: 'ME', county: 'Washington', popul
 
 // ── Module navigation ──────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: 'dashboard',   label: 'Dashboard',             icon: LayoutDashboard },
-  { id: 'tracker',     label: 'Bills & Policy Items',  icon: List },
-  { id: 'officials',   label: 'Officials',             icon: Users },
-  { id: 'calendar',    label: 'Calendar & Deadlines',  icon: Calendar },
-  { id: 'watchlists',  label: 'Watchlists & Alerts',   icon: Bell },
-  { id: 'reports',     label: 'Reports',               icon: FileText },
-  { id: 'settings',    label: 'Settings',              icon: Settings },
+  { id: 'dashboard',    label: 'Dashboard',             icon: LayoutDashboard },
+  { id: 'tracker',      label: 'Bills & Policy Items',  icon: List },
+  { id: 'officials',    label: 'Officials',             icon: Users },
+  { id: 'calendar',     label: 'Calendar & Deadlines',  icon: Calendar },
+  { id: 'fiscal',       label: 'Fiscal Impact Model',   icon: DollarSign },
+  { id: 'watchlists',   label: 'Watchlists & Alerts',   icon: Bell },
+  { id: 'reports',      label: 'Reports',               icon: FileText },
+  { id: 'settings',     label: 'Settings',              icon: Settings },
 ];
 
 export default function LegislativeTracking() {
@@ -380,6 +382,13 @@ export default function LegislativeTracking() {
       {/* ── CALENDAR ── */}
       {activeNav === 'calendar' && (
         <PolicyCalendarView events={events} items={scoredItems} />
+      )}
+
+      {/* ── FISCAL IMPACT MODEL ── */}
+      {activeNav === 'fiscal' && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <FiscalImpactModeler profileId={dbProfiles?.[0]?.id || null} />
+        </div>
       )}
 
       {/* ── WATCHLISTS & ALERTS ── */}
