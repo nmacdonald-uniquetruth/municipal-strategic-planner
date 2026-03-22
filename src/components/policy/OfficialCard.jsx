@@ -49,15 +49,37 @@ export default function OfficialCard({ official, onEdit, profile }) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100">
+        {/* Outreach action buttons */}
+        <div className="flex items-center gap-1.5 mt-3 flex-wrap">
+          <button
+            onClick={() => setShowOutreach(true)}
+            className="flex items-center gap-1.5 text-[11px] font-bold bg-blue-700 text-white px-2.5 py-1.5 rounded-lg hover:bg-blue-800 transition-colors"
+          >
+            <Mail className="h-3 w-3" /> Email
+          </button>
+          <button
+            onClick={() => setShowOutreach(true)}
+            className="flex items-center gap-1.5 text-[11px] font-bold bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg hover:bg-emerald-800 transition-colors"
+          >
+            <Phone className="h-3 w-3" /> Call
+          </button>
+          <button
+            onClick={() => setShowOutreach(true)}
+            className="flex items-center gap-1.5 text-[11px] font-bold bg-purple-700 text-white px-2.5 py-1.5 rounded-lg hover:bg-purple-800 transition-colors"
+          >
+            <MessageSquare className="h-3 w-3" /> Letter
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2">
             {official.contact_email && (
-              <a href={`mailto:${official.contact_email}`} className="p-1 text-slate-400 hover:text-blue-600 transition-colors" title="Email">
+              <a href={`mailto:${official.contact_email}`} className="p-1 text-slate-400 hover:text-blue-600 transition-colors" title={official.contact_email}>
                 <Mail className="h-3.5 w-3.5" />
               </a>
             )}
             {official.contact_phone && (
-              <a href={`tel:${official.contact_phone}`} className="p-1 text-slate-400 hover:text-green-600 transition-colors" title="Phone">
+              <a href={`tel:${official.contact_phone}`} className="p-1 text-slate-400 hover:text-green-600 transition-colors" title={official.contact_phone}>
                 <Phone className="h-3.5 w-3.5" />
               </a>
             )}
@@ -78,6 +100,10 @@ export default function OfficialCard({ official, onEdit, profile }) {
             </button>
           </div>
         </div>
+
+        {showOutreach && (
+          <OutreachModal official={official} profile={profile} onClose={() => setShowOutreach(false)} />
+        )}
       </div>
 
       {expanded && (
