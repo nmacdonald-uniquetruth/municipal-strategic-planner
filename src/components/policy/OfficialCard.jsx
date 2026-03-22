@@ -2,12 +2,14 @@
  * OfficialCard — directory card for a tracked elected official
  */
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Mail, Phone, Globe, Users } from 'lucide-react';
+import { ChevronDown, ChevronRight, Mail, Phone, Globe, Users, MessageSquare } from 'lucide-react';
 import { JURISDICTION_COLORS } from './policyEngine';
 import { RelevanceScore } from './PolicyBadges';
+import OutreachModal from './OutreachModal';
 
-export default function OfficialCard({ official, onEdit }) {
+export default function OfficialCard({ official, onEdit, profile }) {
   const [expanded, setExpanded] = useState(false);
+  const [showOutreach, setShowOutreach] = useState(false);
   const jc = JURISDICTION_COLORS[official.jurisdiction_level] || { bg: 'bg-slate-100', text: 'text-slate-600' };
 
   return (
