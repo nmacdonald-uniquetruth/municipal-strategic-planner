@@ -177,6 +177,15 @@ export default function LegislativeTracking() {
           </div>
           <div className="flex items-center gap-2">
             <button
+              onClick={handleLiveSync}
+              disabled={syncing}
+              title="Sync live data from Congress.gov, Federal Register, Grants.gov, and state legislature"
+              className="flex items-center gap-1.5 text-xs font-semibold border border-slate-200 bg-white text-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin text-blue-600' : ''}`} />
+              {syncing ? 'Syncing...' : 'Sync Live Data'}
+            </button>
+            <button
               onClick={() => { setIsAdding(true); setEditing(null); setActiveNav('tracker'); }}
               className="flex items-center gap-1.5 text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-lg hover:bg-slate-700 transition-colors"
             >
