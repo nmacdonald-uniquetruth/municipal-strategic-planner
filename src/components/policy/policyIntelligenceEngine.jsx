@@ -1088,12 +1088,16 @@ export function buildMonthlyMemo(items, impactRecords, profile, month = null) {
 
 /**
  * Score a collection of items against a municipality profile.
+ * Items suppressed by governance-type rules receive score 0 and are
+ * flagged with _suppressed=true so callers can filter them out of
+ * executive views while still allowing manual watchlist overrides.
  * Returns array of MunicipalImpactRecord objects.
  */
 export function batchScoreItems(items, profile) {
   return items.map(item => {
     const impactRecord = scoreItemForMunicipality(item, profile);
-    const insights     = generateRuleBasedInsights(item, impactRecord, profile);
+    if (impactRecord._suppressed) return impactRecord;
+    const insights = generateRuleBasedInsights(item, impactRecord, profile);
     return { ...impactRecord, ...insights };
   });
 }
