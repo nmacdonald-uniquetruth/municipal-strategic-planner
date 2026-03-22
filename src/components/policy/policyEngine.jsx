@@ -105,8 +105,33 @@ export const EVENT_TYPE_COLORS = {
   custom: { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200' },
 };
 
-/** Calculate a 0-100 Municipal Relevance Score */
+// Governance type → jurisdiction weight map (mirrors policyIntelligenceEngine)
+const GOV_GEO_BOOST = {
+  town_meeting:   { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.95 },
+  select_board:   { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.95 },
+  council_manager:{ state: 1.0, federal: 0.90, county: 0.75, regional: 0.70, local: 1.0  },
+  mayor_council:  { state: 1.0, federal: 0.90, county: 0.70, regional: 0.70, local: 1.0  },
+  commission:     { state: 1.0, federal: 0.85, county: 0.90, regional: 0.75, local: 0.80 },
+  other:          { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.85 },
+};
+
+/** Calculate a 0-100 Municipal Relevance Score, governance-type-aware */
 export function calcRelevanceScore(item, profile) {
+  // Suppress items from wrong state/county entirely (return 0)
+  const profState  = (profile?.state  || '').toUpperCase();
+  const itemState  = (item.state || '').toUpperCase();
+  const profCounty = (profile?.county || '').toLowerCase();
+  const itemCounty = (item.county || '').toLowerCase();
+  if (item.jurisdiction === 'state'  && itemState  && profState  && itemState  !== profState)  return 0;
+  if (item.jurisdiction === 'county' && itemCounty && profCounty && itemCounty !== profCounty) return 0;
+  // Suppress failed/vetoed (not manually watched)
+  if (['failed', 'vetoed'].includes(item.status) && !item.is_watched && !item.is_flagged_urgent) return 0;
+
+  // Governance-type jurisdiction boost
+  const govType = profile?.governance_type || 'other';
+  const geoBoosts = GOV_GEO_BOOST[govType] || GOV_GEO_BOOST.other;
+  const jBoost = geoBoosts[item.jurisdiction] ?? 1.0;
+
   let score = 0;
   // Fiscal impact
   if (item.impact_level === 'very_high') score += 25;
@@ -135,7 +160,8 @@ export function calcRelevanceScore(item, profile) {
   // Watched / flagged
   if (item.is_flagged_urgent) score += 5;
   if (item.is_flagged_budget) score += 3;
-  return Math.min(score, 100);
+  // Apply jurisdiction multiplier
+  return Math.min(Math.round(score * jBoost), 100);
 }
 
 /** Filter items by multiple criteria */
