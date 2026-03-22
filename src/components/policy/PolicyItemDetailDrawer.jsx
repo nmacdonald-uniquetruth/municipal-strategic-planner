@@ -54,6 +54,14 @@ export default function PolicyItemDetailDrawer({ item, profile, impactRecord, on
             <FlagRow item={item} />
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0 mt-1">
+            {showOutreachActions && (
+              <>
+                <button onClick={() => setShowOutreach(true)} title="Send Email / Call / Draft Letter"
+                  className="flex items-center gap-1 text-[11px] font-bold bg-blue-700 text-white px-2.5 py-1.5 rounded-lg hover:bg-blue-800 transition-colors">
+                  <Mail className="h-3 w-3" /> Outreach
+                </button>
+              </>
+            )}
             <button onClick={copyToClipboard} title="Copy summary" className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded transition-colors">
               <Copy className="h-4 w-4" />
             </button>
@@ -66,6 +74,9 @@ export default function PolicyItemDetailDrawer({ item, profile, impactRecord, on
               <X className="h-4 w-4" />
             </button>
           </div>
+          {showOutreach && (
+            <OutreachModal item={item} profile={profile} onClose={() => setShowOutreach(false)} />
+          )}
         </div>
 
         {/* Scrollable body */}
