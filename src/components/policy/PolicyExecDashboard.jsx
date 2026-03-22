@@ -201,11 +201,11 @@ export default function PolicyExecDashboard({ items, officials, events, funding,
   );
 }
 
-function DashPanel({ title, icon: Icon, iconColor, children }) {
+function DashPanel({ title, icon: IconComponent, iconColor, children }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Icon className={`h-4 w-4 ${iconColor}`} />
+        <IconComponent className={`h-4 w-4 ${iconColor}`} />
         <p className="text-xs font-bold text-slate-700 uppercase tracking-wide">{title}</p>
       </div>
       {children}
