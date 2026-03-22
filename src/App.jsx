@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { ModelProvider } from './components/machias/ModelContext.jsx';
 import { ScenarioProvider } from './components/machias/ScenarioContext.jsx';
+import { WhatIfProvider } from './context/WhatIfContext';
 
 import AppLayout from './components/machias/AppLayout';
 import Layout from './Layout';
@@ -84,6 +85,7 @@ const AuthenticatedApp = () => {
 
   return (
     <ModelProvider>
+      <WhatIfProvider>
       <Layout>
       <Routes>
         <Route path="/" element={<Navigate to="/ExecutiveDashboard" replace />} />
@@ -143,6 +145,7 @@ const AuthenticatedApp = () => {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       </Layout>
+      </WhatIfProvider>
     </ModelProvider>
   );
 };
