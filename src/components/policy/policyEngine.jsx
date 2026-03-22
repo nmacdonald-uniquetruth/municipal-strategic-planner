@@ -117,15 +117,14 @@ const GOV_GEO_BOOST = {
 
 /** Calculate a 0-100 Municipal Relevance Score, governance-type-aware */
 export function calcRelevanceScore(item, profile) {
-  // Suppress items from wrong state/county entirely (return 0)
+  // Federal items always apply — never suppress
+  // Suppress state items from a different known state
   const profState  = (profile?.state  || '').toUpperCase();
   const itemState  = (item.state || '').toUpperCase();
   const profCounty = (profile?.county || '').toLowerCase();
   const itemCounty = (item.county || '').toLowerCase();
   if (item.jurisdiction === 'state'  && itemState  && profState  && itemState  !== profState)  return 0;
   if (item.jurisdiction === 'county' && itemCounty && profCounty && itemCounty !== profCounty) return 0;
-  // Suppress failed/vetoed (not manually watched)
-  if (['failed', 'vetoed'].includes(item.status) && !item.is_watched && !item.is_flagged_urgent) return 0;
 
   // Governance-type jurisdiction boost
   const govType = profile?.governance_type || 'other';
