@@ -90,6 +90,12 @@ const NAV_GROUPS = [
     ],
   },
   {
+    label: 'Infrastructure',
+    items: [
+      { path: '/RoadCIP', label: 'Road CIP', icon: BarChart2 },
+    ],
+  },
+  {
     label: 'Reports',
     items: [
       { path: '/Narrative',               label: 'Narrative Report',    icon: BookOpen },
