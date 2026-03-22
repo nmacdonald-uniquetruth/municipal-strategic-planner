@@ -413,28 +413,33 @@ function normalizeGrantsGovOpp(opp) {
 async function syncMaineLegislature(base44, profile) {
   const results = { ingested: 0, normalized: 0, errors: [], items: [], events: [] };
 
-  // Maine Legislature provides RSS-like XML feeds for bill listings
-  // Current session (132nd Legislature)
-  const billsUrl = `${MAINE_LEGIS_BASE}/bills/bills_current.asp?PaperType=HP&LegSession=132nd`;
+  // Maine Legislature — try multiple known URL patterns in order
+  const MAINE_URLS = [
+    `${MAINE_LEGIS_BASE}/LawMakerWeb/search.asp`,
+    `${MAINE_LEGIS_BASE}/bills/bills_display.asp?LD=1&PaperType=LD&LegSession=132`,
+    `${MAINE_LEGIS_BASE}/LawMakerWeb/bills.asp`,
+    `${MAINE_LEGIS_BASE}/ros/lom/`,
+  ];
 
   let xmlText;
-  try {
-    const res = await safeFetch(billsUrl, {
-      headers: { 'Accept': 'text/html,application/xhtml+xml', 'User-Agent': 'Municipal-Policy-Tracker/1.0' },
-    });
-    xmlText = await res.text();
-    results.ingested++;
-  } catch (err) {
-    results.errors.push(`Maine Legislature fetch failed: ${err.message}`);
-    // Try alternate URL
+  let fetchedUrl = null;
+  for (const url of MAINE_URLS) {
     try {
-      const res2 = await safeFetch(`${MAINE_LEGIS_BASE}/LawMakerWeb/search.asp`);
-      xmlText = await res2.text();
+      const res = await safeFetch(url, {
+        headers: { 'Accept': 'text/html,application/xhtml+xml,text/xml', 'User-Agent': 'Municipal-Policy-Tracker/1.0' },
+      });
+      xmlText = await res.text();
+      fetchedUrl = url;
       results.ingested++;
-    } catch (err2) {
-      results.errors.push(`Maine Legislature fallback failed: ${err2.message}`);
-      return results;
+      break;
+    } catch (err) {
+      results.errors.push(`Maine Legislature URL failed (${url}): ${err.message}`);
     }
+  }
+
+  if (!xmlText) {
+    results.errors.push('All Maine Legislature URL attempts failed. The legislature website may be temporarily unavailable.');
+    return results;
   }
 
   // Parse LD numbers and titles from HTML (stable selectors for maine.gov)
