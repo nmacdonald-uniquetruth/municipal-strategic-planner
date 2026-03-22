@@ -101,6 +101,31 @@ export default function LegislationCard({ item, profile, onEdit, onFlag, compact
           </div>
         )}
 
+        {/* Outreach action buttons — shown for active/in-session items */}
+        {showOutreachActions && !compact && (
+          <div className="flex items-center gap-1.5 mt-3 flex-wrap">
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mr-1">Outreach:</span>
+            <button
+              onClick={e => { e.stopPropagation(); setShowOutreach(true); }}
+              className="flex items-center gap-1 text-[11px] font-bold bg-blue-700 text-white px-2.5 py-1 rounded-lg hover:bg-blue-800 transition-colors"
+            >
+              <Mail className="h-3 w-3" /> Email
+            </button>
+            <button
+              onClick={e => { e.stopPropagation(); setShowOutreach(true); }}
+              className="flex items-center gap-1 text-[11px] font-bold bg-emerald-700 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-800 transition-colors"
+            >
+              <Phone className="h-3 w-3" /> Call
+            </button>
+            <button
+              onClick={e => { e.stopPropagation(); setShowOutreach(true); }}
+              className="flex items-center gap-1 text-[11px] font-bold bg-purple-700 text-white px-2.5 py-1 rounded-lg hover:bg-purple-800 transition-colors"
+            >
+              <MessageSquare className="h-3 w-3" /> Letter
+            </button>
+          </div>
+        )}
+
         {/* Actions row */}
         <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-100">
           <div className="flex items-center gap-2">
@@ -135,6 +160,10 @@ export default function LegislationCard({ item, profile, onEdit, onFlag, compact
             </button>
           </div>
         </div>
+
+        {showOutreach && (
+          <OutreachModal item={item} profile={profile} onClose={() => setShowOutreach(false)} />
+        )}
       </div>
 
       {/* AI Impact Panel */}
