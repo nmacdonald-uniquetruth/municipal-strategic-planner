@@ -8,8 +8,13 @@ import { fmtDate, fmt, daysUntil, buildRelevanceNote } from './policyEngine';
 import PolicyImpactPanel from './PolicyImpactPanel';
 import OutreachModal from './OutreachModal';
 
+// Items worth outreaching on: active, in-session, not archived/failed
+const OUTREACH_STATUSES = ['introduced', 'in_committee', 'passed_chamber', 'passed_both', 'rulemaking', 'watch'];
+
 export default function LegislationCard({ item, profile, onEdit, onFlag, compact = false, impactRecord, onGenerateAI, aiLoading, onSaveOverride }) {
   const [expanded, setExpanded] = useState(false);
+  const [showOutreach, setShowOutreach] = useState(false);
+  const showOutreachActions = OUTREACH_STATUSES.includes(item.status) && !item.is_archived;
   const relevanceNote = buildRelevanceNote(item, profile);
   const deadlines = [
     item.hearing_date && { label: 'Hearing', date: item.hearing_date },
