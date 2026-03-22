@@ -289,7 +289,15 @@ export function getGovernanceProfile(profile) {
 
 /**
  * Determine if an item should be suppressed entirely for this entity type.
- * Returns true if the item is not applicable to this governance structure.
+ * Returns true if the item is applicable and should be scored.
+ *
+ * Rules:
+ * - Federal items are ALWAYS applicable (apply to all municipalities).
+ * - State items from the profile's own state are ALWAYS applicable.
+ * - State items from a DIFFERENT (and known) state are suppressed.
+ * - County items from a different (known) county are suppressed.
+ * - Items from other jurisdictions (local, regional) pass through.
+ * - Topic-based suppression only applies when NO other topic matches exist.
  */
 export function isItemApplicable(item, profile) {
   const govProfile = getGovernanceProfile(profile);
@@ -297,28 +305,31 @@ export function isItemApplicable(item, profile) {
   const profState = (profile?.state || '').toUpperCase();
   const itemState = (item.state || '').toUpperCase();
 
-  // Suppress failed/vetoed/archived items from scoring (still show if manually watched)
-  if (['failed', 'vetoed'].includes(item.status) && !item.is_watched && !item.is_flagged_urgent) return false;
+  // Federal items always apply to all municipalities — never suppress
+  if (jurisdiction === 'federal') return true;
 
-  // Suppress state items from a different state (not unknown)
-  if (jurisdiction === 'state' && itemState && profState && itemState !== profState) return false;
+  // State items: only suppress if we KNOW they're from a different state
+  if (jurisdiction === 'state') {
+    if (itemState && profState && itemState !== profState) return false;
+    return true; // same state, or unknown state — keep
+  }
 
-  // Suppress county items from a different county (not unknown)
+  // County items: only suppress if we KNOW they're from a different county
   if (jurisdiction === 'county') {
     const itemCounty = (item.county || '').toLowerCase();
     const profCounty = (profile?.county || '').toLowerCase();
     if (itemCounty && profCounty && itemCounty !== profCounty) return false;
+    return true;
   }
 
-  // Suppress topics structurally non-applicable to this governance type
+  // Local/regional items: apply topic suppression only if item has ONLY suppressed topics
   const topicTags = classifyTopics(item);
   const topicIds = TOPIC_TAXONOMY
     .filter(t => topicTags.includes(t.label))
     .map(t => t.id);
-  if (govProfile.suppressedTopics?.some(st => topicIds.includes(st))) {
-    // Only suppress if the item has no other relevant topic matches
+  if (govProfile.suppressedTopics?.length && topicIds.length > 0) {
     const nonSuppressedTopics = topicIds.filter(t => !govProfile.suppressedTopics.includes(t));
-    if (nonSuppressedTopics.length === 0 && !item.is_watched) return false;
+    if (nonSuppressedTopics.length === 0 && !item.is_watched && !item.is_flagged_urgent) return false;
   }
 
   return true;
