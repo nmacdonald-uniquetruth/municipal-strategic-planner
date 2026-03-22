@@ -101,6 +101,23 @@ export default function LegislativeTracking() {
   // Intelligence
   const { scoredItems, impactMap, impactRecordsList, generateAIInsights, aiLoading, saveManualImpact } = usePolicyIntelligence(items, profile, events);
 
+  // Live sync state
+  const [syncing, setSyncing]       = useState(false);
+  const [lastSynced, setLastSynced] = useState(null);
+
+  const handleLiveSync = useCallback(async () => {
+    setSyncing(true);
+    try {
+      await base44.functions.invoke('policyDataSync', { sources: ['all'], force: true });
+      setLastSynced(new Date());
+      queryClient.invalidateQueries(['legislation']);
+      queryClient.invalidateQueries(['policy_funding']);
+      queryClient.invalidateQueries(['policy_events']);
+    } finally {
+      setSyncing(false);
+    }
+  }, [queryClient]);
+
   // UI state
   const [activeNav, setActiveNav]   = useState('dashboard');
   const [view, setView]             = useState('cards');
