@@ -88,6 +88,13 @@ const WhatIfContext = createContext(null);
 
 export function WhatIfProvider({ children }) {
   const [activePreset, setActivePreset] = useState('baseline');
+  // External financial inputs fed in from the dashboard (proposals, services, CIP)
+  const [externalInputs, setExternalInputs] = useState({
+    proposalSavings:   0,   // annual net savings from approved proposals
+    proposalCosts:     0,   // annual new costs from approved proposals
+    regionalRevenue:   0,   // annual regional service revenue
+    cipAnnualDraw:     0,   // CIP total annual draw (GF + excise + LRAP) as expenditure
+  });
   const [custom, setCustom] = useState({
     mill_rate_delta:        0,
     budget_growth_override: null,
@@ -125,6 +132,10 @@ export function WhatIfProvider({ children }) {
     }));
   }, []);
 
+  const setFinancialInputs = useCallback((inputs) => {
+    setExternalInputs(prev => ({ ...prev, ...inputs }));
+  }, []);
+
   const reset = useCallback(() => {
     setActivePreset('baseline');
     setCustom({
@@ -136,46 +147,55 @@ export function WhatIfProvider({ children }) {
 
   // ─── Derived outputs ─────────────────────────────────────────────────────────
   const scenario = useMemo(() => {
-    const c = custom;
+    const c   = custom;
+    const ext = externalInputs;
 
     // Tax
     const mill_rate       = BASELINE.mill_rate + (c.mill_rate_delta || 0);
     const annual_tax_levy = (mill_rate / 1000) * BASELINE.assessed_value;
     const levy_delta      = annual_tax_levy - BASELINE.annual_tax_levy;
     const mill_delta_pct  = ((mill_rate - BASELINE.mill_rate) / BASELINE.mill_rate) * 100;
-    // Median home value ~$180K → tax per home
     const median_home_value = 180_000;
     const tax_per_home      = (mill_rate / 1000) * median_home_value;
-    const tax_per_home_delta = (c.mill_rate_delta / 1000) * median_home_value;
+    const tax_per_home_delta = ((c.mill_rate_delta || 0) / 1000) * median_home_value;
 
     // Budget growth
     const growth = c.budget_growth_override ?? BASELINE.budget_growth_rate;
 
-    // 5-year budget projections
-    const years = Array.from({ length: 5 }, (_, i) => {
-      const fy = 2027 + i;
-      const escalation = Math.pow(1 + growth, i);
-      const base_budget = BASELINE.annual_budget * escalation;
-
-      // Dept adjustments
-      const dept_adj = Object.values(c.dept_overrides || {}).reduce((s, d) => s + (d || 0), 0);
-      const total_expenditure = base_budget + dept_adj;
-
-      // Revenue
-      const tax_revenue       = annual_tax_levy * escalation;
-      const state_sharing     = (BASELINE.state_revenue_sharing + (c.revenue_sharing_delta || 0)) * escalation;
-      const non_tax           = BASELINE.non_tax_revenue * escalation;
-      const total_revenue     = tax_revenue + state_sharing + non_tax;
-
-      const surplus_deficit   = total_revenue - total_expenditure;
-      return { fy, base_budget, dept_adj, total_expenditure, tax_revenue, state_sharing, non_tax, total_revenue, surplus_deficit };
-    });
-
-    // CIP assumptions delta
+    // CIP totals (needed in expenditure loop)
     const cip_gf_transfer  = BASELINE.cip_gf_transfer  + (c.cip_gf_transfer_delta  || 0);
     const cip_excise       = BASELINE.cip_excise       + (c.cip_excise_delta       || 0);
     const cip_lrap         = BASELINE.cip_lrap;
     const cip_total_annual = cip_gf_transfer + cip_excise + cip_lrap;
+
+    // 5-year integrated projections — includes proposals, regional revenue, CIP draw, dept overrides
+    const years = Array.from({ length: 5 }, (_, i) => {
+      const fy = 2027 + i;
+      const escalation = Math.pow(1 + growth, i);
+
+      // Expenditures
+      const base_budget   = BASELINE.annual_budget * escalation;
+      const dept_adj      = Object.values(c.dept_overrides || {}).reduce((s, d) => s + (d || 0), 0);
+      const new_costs     = (ext.proposalCosts || 0) * escalation;
+      const cip_draw      = cip_total_annual * escalation;
+      const total_expenditure = base_budget + dept_adj + new_costs + cip_draw;
+
+      // Revenue
+      const tax_revenue     = annual_tax_levy * escalation;
+      const state_sharing   = (BASELINE.state_revenue_sharing + (c.revenue_sharing_delta || 0)) * escalation;
+      const non_tax         = BASELINE.non_tax_revenue * escalation;
+      const proposal_savings = (ext.proposalSavings || 0) * escalation;
+      const regional_rev    = (ext.regionalRevenue || 0) * escalation;
+      const total_revenue   = tax_revenue + state_sharing + non_tax + proposal_savings + regional_rev;
+
+      const surplus_deficit = total_revenue - total_expenditure;
+
+      return {
+        fy, base_budget, dept_adj, new_costs, cip_draw,
+        total_expenditure, tax_revenue, state_sharing, non_tax,
+        proposal_savings, regional_rev, total_revenue, surplus_deficit,
+      };
+    });
 
     // Risk signal
     const yr1 = years[0];
@@ -184,37 +204,35 @@ export function WhatIfProvider({ children }) {
                : 'low';
 
     return {
-      // Inputs
       mill_rate, mill_rate_delta: c.mill_rate_delta || 0,
-      mill_delta_pct, levy_delta,
-      annual_tax_levy,
+      mill_delta_pct, levy_delta, annual_tax_levy,
       tax_per_home, tax_per_home_delta,
-      growth_rate:  growth,
-      // CIP
+      growth_rate: growth,
       cip_gf_transfer, cip_excise, cip_lrap, cip_total_annual,
-      cip_gf_delta:  c.cip_gf_transfer_delta || 0,
+      cip_gf_delta: c.cip_gf_transfer_delta || 0,
       cip_excise_delta: c.cip_excise_delta || 0,
-      // CIP assumptions object (for buildCIPSchedule)
       cipAssumptionsDelta: {
-        gf_annual_transfer:  cip_gf_transfer,
+        gf_annual_transfer:       cip_gf_transfer,
         excise_annual_allocation: cip_excise,
-        lrap_annual_estimate: cip_lrap,
+        lrap_annual_estimate:     cip_lrap,
       },
-      // 5-year outlook
       years,
-      // Meta
       risk,
       dept_overrides: c.dept_overrides,
-      isBaseline: activePreset === 'baseline' && c.mill_rate_delta === 0,
+      isBaseline: activePreset === 'baseline' && (c.mill_rate_delta || 0) === 0,
     };
-  }, [custom, activePreset]);
+  }, [custom, activePreset, externalInputs]);
 
-  const isDirty = activePreset !== 'baseline' || custom.mill_rate_delta !== 0;
+  const isDirty = activePreset !== 'baseline' || (custom.mill_rate_delta || 0) !== 0
+    || (custom.cip_gf_transfer_delta || 0) !== 0 || (custom.cip_excise_delta || 0) !== 0
+    || Object.values(custom.dept_overrides || {}).some(v => v !== 0)
+    || custom.budget_growth_override != null;
 
   return (
     <WhatIfContext.Provider value={{
       scenario, custom, activePreset,
       applyPreset, updateParam, updateDeptOverride, reset,
+      setFinancialInputs,
       isDirty,
       BASELINE, DEPT_DEFAULTS: DEPT_DEFAULTS_LIST,
     }}>
