@@ -244,7 +244,7 @@ export default function OutreachModal({ item, official, profile, onClose }) {
     setEmailBody(buildEmailBody(context));
     setCallScript(buildCallScript(context));
     setLetterText(buildFormalLetter(context));
-  }, [JSON.stringify({ item?.id, official?.id, sender })]);
+  }, [item?.id, official?.id, JSON.stringify(sender)]);
 
   const activeContent = activeTab === 'email' ? emailBody : activeTab === 'call' ? callScript : letterText;
 
