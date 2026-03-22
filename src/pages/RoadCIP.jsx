@@ -194,6 +194,21 @@ export default function RoadCIP() {
       {/* ── DASHBOARD ── */}
       {activeNav === 'dashboard' && (
         <div className="space-y-5">
+          {/* What-If CIP impact banner */}
+          {whatIfActive && (
+            <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 flex items-center gap-3">
+              <Sliders className="h-4 w-4 text-amber-600 flex-shrink-0" />
+              <div className="flex-1 min-w-0 text-xs text-amber-800">
+                <span className="font-bold">What-If Scenario Active — </span>
+                CIP annual sources adjusted to <span className="font-bold">${(whatIfScenario.cip_total_annual / 1000).toFixed(0)}K/yr</span>
+                {whatIfScenario.cip_gf_delta !== 0 && <span> (GF: {whatIfScenario.cip_gf_delta >= 0 ? '+' : ''}${(whatIfScenario.cip_gf_delta / 1000).toFixed(0)}K)</span>}
+                {whatIfScenario.cip_excise_delta !== 0 && <span> · Excise: {whatIfScenario.cip_excise_delta >= 0 ? '+' : ''}${(whatIfScenario.cip_excise_delta / 1000).toFixed(0)}K</span>}
+                . The 15-year reserve projections below reflect this scenario.
+              </div>
+              <button onClick={() => setShowWhatIf(true)} className="text-[11px] font-bold text-amber-700 underline flex-shrink-0">Edit</button>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {kpiCards.map(k => (
               <div key={k.label} className={`rounded-xl border p-3 ${colorMap[k.color]}`}>
