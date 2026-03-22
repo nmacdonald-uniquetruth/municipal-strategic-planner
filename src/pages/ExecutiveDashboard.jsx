@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { TrendingUp, TrendingDown, DollarSign, Users, Briefcase, Zap, AlertCircle, Target } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Users, Briefcase, Zap, AlertCircle, Target, Sliders } from 'lucide-react';
 import SectionHeader from '@/components/machias/SectionHeader';
 import { useModel } from '@/components/machias/ModelContext';
+import { useWhatIf } from '@/context/WhatIfContext';
+import WhatIfPanel from '@/components/whatif/WhatIfPanel';
 
 const MetricCard = ({ title, value, subtitle, trend, icon: Icon, color = 'slate' }) => {
   const colorMap = {
@@ -71,6 +73,8 @@ const OpportunityCard = ({ title, items, icon: Icon, color = 'slate' }) => {
 
 export default function ExecutiveDashboard() {
   const { settings } = useModel();
+  const { scenario, isDirty } = useWhatIf();
+  const [showWhatIf, setShowWhatIf] = useState(false);
   const [summaryMetrics, setSummaryMetrics] = useState({
     netSavings: 0,
     newCosts: 0,
@@ -174,13 +178,66 @@ export default function ExecutiveDashboard() {
       detail: r.relationship_type.replace(/_/g, ' '),
     }));
 
+  // Scenario-adjusted metrics (overlay on top of model metrics)
+  const scenarioTaxLevy  = scenario.annual_tax_levy;
+  const scenarioLevyDelta = scenario.levy_delta;
+  const scenarioYr1      = scenario.years[0];
+  const scenarioRisk     = scenario.risk;
+
   return (
     <div className="space-y-8">
+      {/* What-If side panel */}
+      {showWhatIf && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0 bg-black/20" onClick={() => setShowWhatIf(false)} />
+          <div className="relative z-10 h-full shadow-2xl overflow-y-auto">
+            <WhatIfPanel onClose={() => setShowWhatIf(false)} />
+          </div>
+        </div>
+      )}
+
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Executive Dashboard</h1>
-        <p className="text-sm text-slate-600">Leadership summary of active initiatives and strategic opportunities</p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Executive Dashboard</h1>
+          <p className="text-sm text-slate-600">Leadership summary of active initiatives and strategic opportunities</p>
+        </div>
+        <button
+          onClick={() => setShowWhatIf(true)}
+          className={`flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl border transition-colors ${
+            isDirty
+              ? 'bg-amber-500 text-white border-amber-500 shadow-md'
+              : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-700'
+          }`}
+        >
+          <Sliders className="h-4 w-4" />
+          What-If Engine
+          {isDirty && <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-[10px]">Active</span>}
+        </button>
       </div>
+
+      {/* Scenario alert banner */}
+      {isDirty && (
+        <div className={`rounded-xl border px-4 py-3 flex items-center gap-3 ${
+          scenarioRisk === 'high' ? 'bg-red-50 border-red-300' :
+          scenarioRisk === 'medium' ? 'bg-amber-50 border-amber-200' :
+          'bg-emerald-50 border-emerald-200'
+        }`}>
+          <Sliders className={`h-4 w-4 flex-shrink-0 ${scenarioRisk === 'high' ? 'text-red-600' : scenarioRisk === 'medium' ? 'text-amber-600' : 'text-emerald-600'}`} />
+          <div className="flex-1 min-w-0">
+            <p className={`text-xs font-bold ${scenarioRisk === 'high' ? 'text-red-800' : scenarioRisk === 'medium' ? 'text-amber-800' : 'text-emerald-800'}`}>
+              What-If Scenario Active · Mill Rate: {scenario.mill_rate.toFixed(2)} ({scenario.mill_rate_delta >= 0 ? '+' : ''}{scenario.mill_rate_delta.toFixed(2)}) · 
+              FY2027 Surplus/Deficit: {scenarioYr1?.surplus_deficit >= 0 ? '+' : ''}${Math.round(scenarioYr1?.surplus_deficit || 0).toLocaleString()}
+            </p>
+            <p className={`text-[10px] mt-0.5 ${scenarioRisk === 'high' ? 'text-red-600' : scenarioRisk === 'medium' ? 'text-amber-600' : 'text-emerald-600'}`}>
+              Avg homeowner impact ({`$${scenario.tax_per_home.toFixed(0)}/yr`}, {scenario.tax_per_home_delta >= 0 ? '+' : ''}${scenario.tax_per_home_delta.toFixed(0)}/yr change) · Road CIP: ${(scenario.cip_total_annual / 1000).toFixed(0)}K/yr annual sources
+            </p>
+          </div>
+          <button onClick={() => setShowWhatIf(true)} className={`text-[11px] font-bold underline flex-shrink-0 ${scenarioRisk === 'high' ? 'text-red-700' : 'text-amber-700'}`}>
+            Adjust
+          </button>
+        </div>
+      )}
 
       {/* Key Metrics */}
       <div>
@@ -199,20 +256,42 @@ export default function ExecutiveDashboard() {
             icon={TrendingDown}
           />
           <MetricCard
-            title="Regional Revenue Opportunity"
-            value={`$${(summaryMetrics.regionalRevenue / 1000).toFixed(0)}K`}
-            color="blue"
-            icon={Briefcase}
+            title="Scenario Tax Levy"
+            value={`$${(scenarioTaxLevy / 1000).toFixed(0)}K`}
+            subtitle={scenarioLevyDelta !== 0 ? `${scenarioLevyDelta >= 0 ? '+' : ''}$${Math.round(scenarioLevyDelta).toLocaleString()} vs baseline` : 'No change from baseline'}
+            color={scenarioLevyDelta > 0 ? 'amber' : scenarioLevyDelta < 0 ? 'emerald' : 'slate'}
+            icon={DollarSign}
           />
           <MetricCard
-            title="Projected Tax Effect"
-            value={`${((summaryMetrics.taxImpact / settings.annual_tax_levy) * 100).toFixed(2)}%`}
-            subtitle={`$${(summaryMetrics.taxImpact / 1000).toFixed(0)}K change`}
-            color={summaryMetrics.taxImpact > 0 ? 'red' : 'emerald'}
+            title={isDirty ? 'Scenario Mill Rate' : 'Projected Tax Effect'}
+            value={isDirty ? `${scenario.mill_rate.toFixed(2)} mills` : `${((summaryMetrics.taxImpact / (settings.annual_tax_levy || 1)) * 100).toFixed(2)}%`}
+            subtitle={isDirty
+              ? `${scenario.mill_rate_delta >= 0 ? '+' : ''}${scenario.mill_rate_delta.toFixed(2)} mills · $${scenario.tax_per_home.toFixed(0)}/home`
+              : `$${(summaryMetrics.taxImpact / 1000).toFixed(0)}K change`}
+            color={isDirty ? (scenario.mill_rate_delta > 0 ? 'amber' : 'emerald') : (summaryMetrics.taxImpact > 0 ? 'red' : 'emerald')}
             icon={AlertCircle}
           />
         </div>
       </div>
+
+      {/* 5-Year Scenario Outlook */}
+      {isDirty && (
+        <div>
+          <SectionHeader title="What-If 5-Year Fiscal Outlook" icon={Sliders} />
+          <div className="grid grid-cols-5 gap-2">
+            {scenario.years.map(y => (
+              <div key={y.fy} className={`rounded-xl border p-3 text-center ${y.surplus_deficit >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
+                <p className="text-[10px] font-bold text-slate-500 uppercase">FY{y.fy}</p>
+                <p className={`text-sm font-bold mt-1 ${y.surplus_deficit >= 0 ? 'text-emerald-800' : 'text-red-700'}`}>
+                  {y.surplus_deficit >= 0 ? '+' : ''}${(y.surplus_deficit / 1000).toFixed(0)}K
+                </p>
+                <p className="text-[9px] text-slate-400 mt-1">${(y.total_expenditure / 1000).toFixed(0)}K spend</p>
+                <p className="text-[9px] text-slate-400">${(y.tax_revenue / 1000).toFixed(0)}K levy</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Active Initiatives */}
       <div>
