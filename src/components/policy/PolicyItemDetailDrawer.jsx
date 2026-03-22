@@ -5,8 +5,10 @@ import React, { useState } from 'react';
 import {
   X, ExternalLink, Flag, BookmarkPlus, Users, DollarSign, Shield,
   Wrench, Building2, Target, AlertTriangle, CheckCircle, Clock,
-  ChevronDown, ChevronRight, Edit3, Save, Copy, Archive, Bell, FileText
+  ChevronDown, ChevronRight, Edit3, Save, Copy, Archive, Bell, FileText,
+  Mail, Phone, MessageSquare
 } from 'lucide-react';
+import OutreachModal from './OutreachModal';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ActionBadge, RelevanceScore, ImpactBadge, FlagRow } from './PolicyBadges';
 import { fmtDate, fmt, daysUntil } from './policyEngine';
 
