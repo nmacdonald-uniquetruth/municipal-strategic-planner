@@ -5,8 +5,9 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, ExternalLink, Star, AlertTriangle, Bookmark, DollarSign, Users, Flag } from 'lucide-react';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ActionBadge, RelevanceScore, ImpactBadge, FlagRow } from './PolicyBadges';
 import { fmtDate, fmt, daysUntil, buildRelevanceNote } from './policyEngine';
+import PolicyImpactPanel from './PolicyImpactPanel';
 
-export default function LegislationCard({ item, profile, onEdit, onFlag, compact = false }) {
+export default function LegislationCard({ item, profile, onEdit, onFlag, compact = false, impactRecord, onGenerateAI, aiLoading, onSaveOverride }) {
   const [expanded, setExpanded] = useState(false);
   const relevanceNote = buildRelevanceNote(item, profile);
   const deadlines = [
@@ -129,6 +130,16 @@ export default function LegislationCard({ item, profile, onEdit, onFlag, compact
           </div>
         </div>
       </div>
+
+      {/* AI Impact Panel */}
+      <PolicyImpactPanel
+        item={item}
+        impactRecord={impactRecord || item._impact}
+        profile={profile}
+        onGenerateAI={onGenerateAI}
+        aiLoading={aiLoading}
+        onSaveOverride={onSaveOverride}
+      />
 
       {/* Expanded detail */}
       {expanded && (
