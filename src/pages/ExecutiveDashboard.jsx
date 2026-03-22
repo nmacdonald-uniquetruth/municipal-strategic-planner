@@ -73,7 +73,7 @@ const OpportunityCard = ({ title, items, icon: Icon, color = 'slate' }) => {
 
 export default function ExecutiveDashboard() {
   const { settings } = useModel();
-  const { scenario, isDirty } = useWhatIf();
+  const { scenario, isDirty, setFinancialInputs } = useWhatIf();
   const [showWhatIf, setShowWhatIf] = useState(false);
   const [summaryMetrics, setSummaryMetrics] = useState({
     netSavings: 0,
@@ -126,13 +126,23 @@ export default function ExecutiveDashboard() {
       if (s.service_delivery_cost) revenue += s.service_delivery_cost * 0.5; // rough estimate
     });
 
-    setSummaryMetrics({
-      netSavings: Math.round(savings - costs),
-      newCosts: Math.round(costs),
-      regionalRevenue: Math.round(revenue),
-      taxImpact: Math.round(taxChange),
+    const netSavings     = Math.round(savings - costs);
+    const newCosts       = Math.round(costs);
+    const regionalRevenue = Math.round(revenue);
+    const taxImpact      = Math.round(taxChange);
+
+    setSummaryMetrics({ netSavings, newCosts, regionalRevenue, taxImpact });
+
+    // Feed real financial data into the What-If engine so projections are integrated
+    setFinancialInputs({
+      proposalSavings:  savings,
+      proposalCosts:    costs,
+      regionalRevenue:  revenue,
+      // CIP draw is computed inside the context from the CIP sliders — leave at 0 here
+      // so we don't double-count it with the context's own cip_total_annual calculation
+      cipAnnualDraw: 0,
     });
-  }, [proposals, regionalServices]);
+  }, [proposals, regionalServices, setFinancialInputs]);
 
   const activeScenarios = scenarios.filter((s) => s.is_active || s.is_baseline).slice(0, 3);
   const topProposals = proposals.filter((p) => p.status === 'approved').slice(0, 5);
