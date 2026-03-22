@@ -86,16 +86,23 @@ export function usePolicyIntelligence(items = [], profile = null, events = []) {
   }, [ruleBasedImpacts, persistedImpacts]);
 
   // ── Enrich items with scoring ─────────────────────────────────────────────
+  // Items suppressed by governance-type rules are still included but receive
+  // score 0 and priority 'watch', unless the user has manually watched/flagged them.
   const scoredItems = useMemo(() =>
-    items.map(item => ({
-      ...item,
-      _impact: impactMap[item.id] || null,
-      relevance_score:   impactMap[item.id]?.overall_relevance_score ?? item.relevance_score ?? 0,
-      priority:          impactMap[item.id]?.priority_level ?? item.priority ?? 'watch',
-      departments_affected: impactMap[item.id]?.department_matches?.length
-        ? impactMap[item.id].department_matches
-        : item.departments_affected || [],
-    })),
+    items.map(item => {
+      const impact = impactMap[item.id] || null;
+      const suppressed = impact?._suppressed && !item.is_watched && !item.is_flagged_urgent;
+      return {
+        ...item,
+        _impact: impact,
+        _suppressed: suppressed,
+        relevance_score:   suppressed ? 0 : (impact?.overall_relevance_score ?? item.relevance_score ?? 0),
+        priority:          suppressed ? 'watch' : (impact?.priority_level ?? item.priority ?? 'watch'),
+        departments_affected: impact?.department_matches?.length
+          ? impact.department_matches
+          : item.departments_affected || [],
+      };
+    }),
   [items, impactMap]);
 
   // ── Output objects ────────────────────────────────────────────────────────
