@@ -131,11 +131,8 @@ function DeptRow({ dept, activeColumn, showHistory, onEdit, coaAccounts }) {
             </td>
           </tr>
           )}
-          </>
-          )}
-          </>
-          );
-          }
+        </>
+      )}
     </>
   );
 }
