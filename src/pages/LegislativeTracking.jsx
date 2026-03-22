@@ -369,7 +369,7 @@ export default function LegislativeTracking() {
       {activeNav === 'officials' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {officials.map(o => <OfficialCard key={o.id} official={o} />)}
+            {officials.map(o => <OfficialCard key={o.id} official={o} profile={profile} />)}
             {officials.length === 0 && (
               <EmptyState icon={Users} title="No officials tracked" message="Add federal, state, and local officials relevant to your municipality's policy landscape." />
             )}
