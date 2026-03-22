@@ -284,24 +284,34 @@ export default function ExecutiveDashboard() {
         </div>
       </div>
 
-      {/* 5-Year Scenario Outlook */}
-      {isDirty && (
-        <div>
-          <SectionHeader title="What-If 5-Year Fiscal Outlook" icon={Sliders} />
-          <div className="grid grid-cols-5 gap-2">
-            {scenario.years.map(y => (
-              <div key={y.fy} className={`rounded-xl border p-3 text-center ${y.surplus_deficit >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
-                <p className="text-[10px] font-bold text-slate-500 uppercase">FY{y.fy}</p>
-                <p className={`text-sm font-bold mt-1 ${y.surplus_deficit >= 0 ? 'text-emerald-800' : 'text-red-700'}`}>
-                  {y.surplus_deficit >= 0 ? '+' : ''}${(y.surplus_deficit / 1000).toFixed(0)}K
-                </p>
-                <p className="text-[9px] text-slate-400 mt-1">${(y.total_expenditure / 1000).toFixed(0)}K spend</p>
-                <p className="text-[9px] text-slate-400">${(y.tax_revenue / 1000).toFixed(0)}K levy</p>
-              </div>
-            ))}
-          </div>
+      {/* 5-Year Integrated Outlook — always shown, richer when scenario active */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <SectionHeader title="Integrated 5-Year Fiscal Outlook" icon={isDirty ? Sliders : TrendingUp} />
+          {!isDirty && (
+            <button onClick={() => setShowWhatIf(true)} className="text-[11px] text-slate-500 hover:text-slate-800 border border-slate-200 px-2.5 py-1 rounded-lg font-semibold">
+              Run What-If →
+            </button>
+          )}
         </div>
-      )}
+        <div className="grid grid-cols-5 gap-2">
+          {scenario.years.map(y => (
+            <div key={y.fy} className={`rounded-xl border p-3 ${y.surplus_deficit >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
+              <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">FY{y.fy}</p>
+              <p className={`text-base font-bold ${y.surplus_deficit >= 0 ? 'text-emerald-800' : 'text-red-700'}`}>
+                {y.surplus_deficit >= 0 ? '+' : ''}${(y.surplus_deficit / 1000).toFixed(0)}K
+              </p>
+              <div className="mt-2 space-y-0.5 border-t border-current border-opacity-10 pt-1.5">
+                <p className="text-[9px] text-slate-500 flex justify-between"><span>Levy</span><span className="font-semibold">${(y.tax_revenue / 1000).toFixed(0)}K</span></p>
+                {y.proposal_savings > 0 && <p className="text-[9px] text-emerald-600 flex justify-between"><span>+ Savings</span><span className="font-semibold">+${(y.proposal_savings / 1000).toFixed(0)}K</span></p>}
+                {y.regional_rev > 0     && <p className="text-[9px] text-blue-600 flex justify-between"><span>+ Regional</span><span className="font-semibold">+${(y.regional_rev / 1000).toFixed(0)}K</span></p>}
+                <p className="text-[9px] text-slate-500 flex justify-between"><span>Spend</span><span className="font-semibold text-red-500">-${(y.total_expenditure / 1000).toFixed(0)}K</span></p>
+                {y.cip_draw > 0         && <p className="text-[9px] text-amber-600 flex justify-between"><span>CIP</span><span className="font-semibold">-${(y.cip_draw / 1000).toFixed(0)}K</span></p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Active Initiatives */}
       <div>
