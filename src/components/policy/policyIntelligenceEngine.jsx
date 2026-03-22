@@ -214,33 +214,152 @@ export function mapDepartmentImpacts(item, customDepartments = null) {
   return matched;
 }
 
+// ─── Governance type configuration ───────────────────────────────────────────
+
+/**
+ * Maps governance_type values to their jurisdiction relevance profile.
+ * Defines which jurisdictions are primary, secondary, or suppressed,
+ * and which topic categories are structurally non-applicable.
+ */
+const GOVERNANCE_PROFILES = {
+  town_meeting: {
+    label: 'Town Meeting',
+    primaryJurisdictions:   ['state', 'federal'],
+    secondaryJurisdictions: ['county', 'regional'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.95 },
+    suppressedTopics:       ['county_regional'], // county governance items not directly applicable
+    topicBoosts:            { revenue_sharing: 1.3, audit_compliance: 1.2, labor_hr: 1.1, benefits_retirement: 1.1 },
+  },
+  select_board: {
+    label: 'Select Board',
+    primaryJurisdictions:   ['state', 'federal'],
+    secondaryJurisdictions: ['county', 'regional'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.95 },
+    suppressedTopics:       [],
+    topicBoosts:            { revenue_sharing: 1.3, audit_compliance: 1.2, labor_hr: 1.1 },
+  },
+  council_manager: {
+    label: 'Council-Manager City/Town',
+    primaryJurisdictions:   ['state', 'federal', 'local'],
+    secondaryJurisdictions: ['county', 'regional'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.90, county: 0.75, regional: 0.70, local: 1.0 },
+    suppressedTopics:       [],
+    topicBoosts:            { revenue_sharing: 1.2, audit_compliance: 1.2, economic_development: 1.2, land_use: 1.1 },
+  },
+  mayor_council: {
+    label: 'Mayor-Council City',
+    primaryJurisdictions:   ['state', 'federal', 'local'],
+    secondaryJurisdictions: ['county', 'regional'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.90, county: 0.70, regional: 0.70, local: 1.0 },
+    suppressedTopics:       [],
+    topicBoosts:            { economic_development: 1.3, housing: 1.2, land_use: 1.2, audit_compliance: 1.1 },
+  },
+  commission: {
+    label: 'Commission',
+    primaryJurisdictions:   ['state', 'federal', 'county'],
+    secondaryJurisdictions: ['regional'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.85, county: 0.90, regional: 0.75, local: 0.80 },
+    suppressedTopics:       [],
+    topicBoosts:            { county_regional: 1.4, revenue_sharing: 1.2, audit_compliance: 1.2 },
+  },
+  other: {
+    label: 'Other',
+    primaryJurisdictions:   ['state', 'federal'],
+    secondaryJurisdictions: ['county', 'regional', 'local'],
+    suppressedJurisdictions: [],
+    geoBoost:               { state: 1.0, federal: 0.85, county: 0.70, regional: 0.65, local: 0.85 },
+    suppressedTopics:       [],
+    topicBoosts:            {},
+  },
+};
+
+/**
+ * Get the governance profile for a municipality profile object.
+ * Falls back to 'other' if not configured.
+ */
+export function getGovernanceProfile(profile) {
+  const govType = profile?.governance_type || 'other';
+  return GOVERNANCE_PROFILES[govType] || GOVERNANCE_PROFILES.other;
+}
+
+/**
+ * Determine if an item should be suppressed entirely for this entity type.
+ * Returns true if the item is not applicable to this governance structure.
+ */
+export function isItemApplicable(item, profile) {
+  const govProfile = getGovernanceProfile(profile);
+  const jurisdiction = item.jurisdiction || '';
+  const profState = (profile?.state || '').toUpperCase();
+  const itemState = (item.state || '').toUpperCase();
+
+  // Suppress failed/vetoed/archived items from scoring (still show if manually watched)
+  if (['failed', 'vetoed'].includes(item.status) && !item.is_watched && !item.is_flagged_urgent) return false;
+
+  // Suppress state items from a different state (not unknown)
+  if (jurisdiction === 'state' && itemState && profState && itemState !== profState) return false;
+
+  // Suppress county items from a different county (not unknown)
+  if (jurisdiction === 'county') {
+    const itemCounty = (item.county || '').toLowerCase();
+    const profCounty = (profile?.county || '').toLowerCase();
+    if (itemCounty && profCounty && itemCounty !== profCounty) return false;
+  }
+
+  // Suppress topics structurally non-applicable to this governance type
+  const topicTags = classifyTopics(item);
+  const topicIds = TOPIC_TAXONOMY
+    .filter(t => topicTags.includes(t.label))
+    .map(t => t.id);
+  if (govProfile.suppressedTopics?.some(st => topicIds.includes(st))) {
+    // Only suppress if the item has no other relevant topic matches
+    const nonSuppressedTopics = topicIds.filter(t => !govProfile.suppressedTopics.includes(t));
+    if (nonSuppressedTopics.length === 0 && !item.is_watched) return false;
+  }
+
+  return true;
+}
+
 // ─── Geographic applicability scoring ────────────────────────────────────────
 
 /**
- * Score how geographically applicable an item is to this municipality.
+ * Score how geographically applicable an item is to this municipality,
+ * incorporating governance type boost multipliers.
  * Returns 0–100.
  */
 export function scoreGeographicApplicability(item, profile) {
   const jurisdiction = item.jurisdiction || '';
   const itemState = (item.state || '').toUpperCase();
   const profState = (profile?.state || '').toUpperCase();
+  const govProfile = getGovernanceProfile(profile);
 
-  if (jurisdiction === 'federal') return 75; // Federal applies broadly
-  if (jurisdiction === 'local' && item.municipality === profile?.name) return 100;
-  if (jurisdiction === 'state') {
-    if (itemState && profState && itemState === profState) return 90;
-    if (!itemState) return 60; // Unknown state, still plausible
-    return 5; // Different state
-  }
-  if (jurisdiction === 'county') {
+  let baseScore = 40;
+
+  if (jurisdiction === 'federal') {
+    baseScore = 75;
+  } else if (jurisdiction === 'local' && item.municipality === profile?.name) {
+    baseScore = 100;
+  } else if (jurisdiction === 'state') {
+    if (itemState && profState && itemState === profState) baseScore = 90;
+    else if (!itemState) baseScore = 60;
+    else baseScore = 5;
+  } else if (jurisdiction === 'county') {
     const itemCounty = (item.county || '').toLowerCase();
     const profCounty = (profile?.county || '').toLowerCase();
-    if (itemCounty && profCounty && itemCounty === profCounty) return 85;
-    if (!itemCounty) return 50;
-    return 10;
+    if (itemCounty && profCounty && itemCounty === profCounty) baseScore = 85;
+    else if (!itemCounty) baseScore = 50;
+    else baseScore = 10;
+  } else if (jurisdiction === 'regional') {
+    baseScore = 60;
   }
-  if (jurisdiction === 'regional') return 60;
-  return 40;
+
+  // Apply governance-type jurisdiction boost/penalty
+  const boost = govProfile.geoBoost?.[jurisdiction] ?? 1.0;
+  return Math.min(Math.round(baseScore * boost), 100);
 }
 
 // ─── Main relevance scoring engine ───────────────────────────────────────────
