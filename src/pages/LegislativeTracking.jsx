@@ -160,7 +160,14 @@ export default function LegislativeTracking() {
             </div>
             <div>
               <h1 className="text-sm font-bold text-slate-900 leading-tight">Legislative & Policy Tracking</h1>
-              <p className="text-[10px] text-slate-400">{profile?.name || 'Municipality'} · {profile?.state || ''} · {profile?.fiscal_year || ''}</p>
+              <p className="text-[10px] text-slate-400">
+                {profile?.name || 'Municipality'} · {profile?.state || ''} · {profile?.fiscal_year || ''}
+                {lastSynced && (
+                  <span className="ml-2 text-emerald-600 font-semibold">
+                    · Live data synced {lastSynced.toLocaleTimeString()}
+                  </span>
+                )}
+              </p>
             </div>
             {critical_count > 0 && (
               <span className="flex items-center gap-1 text-[10px] bg-red-100 text-red-800 border border-red-300 px-2 py-0.5 rounded-full font-bold">
