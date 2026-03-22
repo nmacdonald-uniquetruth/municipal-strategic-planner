@@ -8,8 +8,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import {
   BarChart2, List, Settings, AlertTriangle,
-  TrendingUp, DollarSign, RefreshCw, Info, MapPin
+  TrendingUp, DollarSign, RefreshCw, Info, MapPin, Sliders
 } from 'lucide-react';
+import { useWhatIf } from '../context/WhatIfContext';
+import WhatIfPanel from '../components/whatif/WhatIfPanel';
 import {
   buildDefaultRoadRegister, buildDefaultProjectPipeline, buildCIPSchedule,
   buildScheduleSummary, fmt, fmtK, fmtM,
@@ -55,6 +57,8 @@ const NAV = [
 
 export default function RoadCIP() {
   const queryClient = useQueryClient();
+  const { scenario: whatIfScenario, isDirty: whatIfActive } = useWhatIf();
+  const [showWhatIf, setShowWhatIf] = useState(false);
   const [activeNav, setActiveNav]     = useState('dashboard');
   const [selectedRoad, setSelectedRoad] = useState(null);
   const [localAssumptions, setAssumptions] = useState(DEFAULT_ASSUMPTIONS);
@@ -77,7 +81,13 @@ export default function RoadCIP() {
   const roads           = dbRoads.length    ? dbRoads    : defaultRoads;
   const defaultProjects = useMemo(() => buildDefaultProjectPipeline(roads), [roads]);
   const projects        = dbProjects.length ? dbProjects : defaultProjects;
-  const assumptions     = dbAssumptions[0]  || localAssumptions;
+  const baseAssumptions = dbAssumptions[0]  || localAssumptions;
+
+  // Merge What-If scenario CIP overrides on top of saved assumptions
+  const assumptions = useMemo(() => whatIfActive
+    ? { ...baseAssumptions, ...whatIfScenario.cipAssumptionsDelta }
+    : baseAssumptions,
+  [baseAssumptions, whatIfScenario, whatIfActive]);
 
   const schedule = useMemo(() => buildCIPSchedule(assumptions, projects),   [assumptions, projects]);
   const summary  = useMemo(() => buildScheduleSummary(schedule, projects),   [schedule, projects]);
@@ -122,7 +132,17 @@ export default function RoadCIP() {
       {/* Module header */}
       <div className="sticky top-0 z-20 bg-white border-b border-slate-200 -mx-8 px-8 py-3 mb-5">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
+          {/* What-If side panel */}
+        {showWhatIf && (
+          <div className="fixed inset-0 z-50 flex justify-end">
+            <div className="absolute inset-0 bg-black/20" onClick={() => setShowWhatIf(false)} />
+            <div className="relative z-10 h-full shadow-2xl overflow-y-auto">
+              <WhatIfPanel onClose={() => setShowWhatIf(false)} />
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900">
               <BarChart2 className="h-4 w-4 text-white" />
             </div>
@@ -137,7 +157,19 @@ export default function RoadCIP() {
                 <AlertTriangle className="h-3 w-3" /> {criticalRoads} Critical
               </span>
             )}
+            {whatIfActive && (
+              <span className="flex items-center gap-1 text-[10px] bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full font-bold">
+                <Sliders className="h-3 w-3" /> What-If Active
+              </span>
+            )}
           </div>
+          <button
+            onClick={() => setShowWhatIf(true)}
+            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors ${
+              whatIfActive ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+            }`}>
+            <Sliders className="h-3.5 w-3.5" /> What-If
+          </button>
           {!dbRoads.length && (
             <button onClick={handleSeedData}
               disabled={seedRoads.isPending || seedProjects.isPending}
