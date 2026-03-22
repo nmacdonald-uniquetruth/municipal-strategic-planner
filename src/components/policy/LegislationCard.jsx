@@ -2,10 +2,11 @@
  * LegislationCard — compact card view for a single tracked item
  */
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, ExternalLink, Star, AlertTriangle, Bookmark, DollarSign, Users, Flag } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Star, AlertTriangle, Bookmark, DollarSign, Users, Flag, Mail, Phone, MessageSquare } from 'lucide-react';
 import { PriorityBadge, StatusBadge, JurisdictionBadge, ActionBadge, RelevanceScore, ImpactBadge, FlagRow } from './PolicyBadges';
 import { fmtDate, fmt, daysUntil, buildRelevanceNote } from './policyEngine';
 import PolicyImpactPanel from './PolicyImpactPanel';
+import OutreachModal from './OutreachModal';
 
 export default function LegislationCard({ item, profile, onEdit, onFlag, compact = false, impactRecord, onGenerateAI, aiLoading, onSaveOverride }) {
   const [expanded, setExpanded] = useState(false);
