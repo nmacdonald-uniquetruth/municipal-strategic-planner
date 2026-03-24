@@ -87,6 +87,76 @@ function buildExportText(articles, calc, mode, fiscalYear) {
   return lines.join('\n');
 }
 
+// ── Machias-format article renderer (matches the actual warrant layout) ───────
+function MachiasArticleBlock({ article, mode }) {
+  const priorLabel = article.fiscal_year === 'FY2027' ? '2025/2026 Budget' : '2024/2025 Budget';
+  const currentLabel = article.fiscal_year === 'FY2027' ? '2026/2027 Budget' : '2025/2026 Budget';
+
+  return (
+    <div className="mb-8 pb-6 border-b border-slate-200 last:border-0">
+      {/* Article header */}
+      <p className="text-sm font-bold text-slate-900 mb-2">
+        <span className="underline font-bold">{article.article_number.toUpperCase()}:</span>{' '}
+        {article.draft_text || `To see if the Town will vote to raise and appropriate the sum of ${fmt(article.financial_amount)} for the ${article.title}. The Machias Select Board and the Budget Committee recommend.`}
+      </p>
+
+      {/* Line items table (if present) */}
+      {article.line_items && article.line_items.length > 0 && (
+        <div className="mt-3 ml-2">
+          {/* Column headers */}
+          <div className="flex gap-4 mb-1 pb-1 border-b border-slate-200">
+            <div className="flex-1" />
+            <div className="w-32 text-right text-[10px] font-bold text-slate-700">{priorLabel}</div>
+            <div className="w-32 text-right text-[10px] font-bold text-slate-700">{currentLabel}</div>
+          </div>
+          {article.line_items.map((section, si) => (
+            <div key={si} className="mb-3">
+              <p className="text-xs font-bold text-slate-800 mt-2 mb-1">{section.section}</p>
+              {section.items.map((item, ii) => (
+                <div key={ii} className="flex gap-4 text-xs py-0.5">
+                  <div className="flex-1 text-slate-700 pl-2">{item.name}</div>
+                  <div className="w-32 text-right tabular-nums text-slate-600">{item.fy25 != null ? fmt(item.fy25) : '—'}</div>
+                  <div className="w-32 text-right tabular-nums text-slate-600">{item.fy26 != null ? fmt(item.fy26) : '—'}</div>
+                </div>
+              ))}
+              {/* Section total */}
+              <div className="flex gap-4 text-xs border-t border-slate-200 pt-0.5 mt-0.5">
+                <div className="flex-1 text-slate-700 pl-2 font-bold">Ttl: {section.section}</div>
+                <div className="w-32 text-right tabular-nums font-bold text-slate-800">
+                  {fmt(section.items.reduce((s, i) => s + (i.fy25 || 0), 0))}
+                </div>
+                <div className="w-32 text-right tabular-nums font-bold text-slate-800">
+                  {fmt(section.items.reduce((s, i) => s + (i.fy26 || 0), 0))}
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* Department grand total */}
+          <div className="flex gap-4 text-xs border-t-2 border-slate-400 pt-1 mt-1">
+            <div className="flex-1 font-bold text-slate-900 uppercase">TOTAL {article.title.toUpperCase()}</div>
+            <div className="w-32 text-right tabular-nums font-bold text-slate-900">{fmt(article.prior_year_amount)}</div>
+            <div className="w-32 text-right tabular-nums font-bold text-slate-900">{fmt(article.financial_amount)}</div>
+          </div>
+        </div>
+      )}
+
+      {/* Board/public supplemental info */}
+      {mode === 'board' && article.explanatory_notes && (
+        <div className="mt-2 ml-2 text-[10px] text-slate-500 italic border-l-2 border-slate-200 pl-2">
+          {article.explanatory_notes}
+        </div>
+      )}
+      {(mode === 'public' || mode === 'hearing') && article.pub_purpose && (
+        <div className="mt-2 ml-2 space-y-0.5">
+          {article.pub_purpose && <p className="text-[10px] text-slate-600"><strong>Purpose:</strong> {article.pub_purpose}</p>}
+          {article.pub_key_change && <p className="text-[10px] text-slate-600"><strong>Key Change:</strong> {article.pub_key_change}</p>}
+          {(article.pub_tax_impact || article.tax_impact_note) && <p className="text-[10px] text-slate-600"><strong>Tax Impact:</strong> {article.pub_tax_impact || article.tax_impact_note}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Cover page ────────────────────────────────────────────────────────────────
 function PacketCover({ mode, fiscalYear, articles, calc }) {
   const modeInfo = MODES.find(m => m.id === mode);
@@ -194,7 +264,9 @@ export default function WarrantPacketGenerator({ articles, fiscalYear, calc }) {
         {view === 'articles' && (
           <div className="space-y-4">
             {sorted.map((a, i) => (
-              <PacketArticleCard key={a.id || i} article={a} mode={mode} index={i} />
+              (mode === 'legal' || mode === 'board')
+                ? <MachiasArticleBlock key={a.id || i} article={a} mode={mode} />
+                : <PacketArticleCard key={a.id || i} article={a} mode={mode} index={i} />
             ))}
 
             {/* Financial footer */}
