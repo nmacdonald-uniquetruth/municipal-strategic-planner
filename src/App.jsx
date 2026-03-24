@@ -63,6 +63,7 @@ import BudgetControl from './pages/BudgetControl';
 import WarrantBuilder from './pages/WarrantBuilder';
 import LegislativeTracking from './pages/LegislativeTracking';
 import RoadCIP from './pages/RoadCIP';
+import BudgetWorkflow from './pages/BudgetWorkflow';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -141,6 +142,7 @@ const AuthenticatedApp = () => {
           <Route path="/WarrantBuilder" element={<WarrantBuilder />} />
           <Route path="/LegislativeTracking" element={<LegislativeTracking />} />
           <Route path="/RoadCIP" element={<RoadCIP />} />
+          <Route path="/BudgetWorkflow" element={<BudgetWorkflow />} />
           </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

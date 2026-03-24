@@ -72,6 +72,7 @@ const NAV_GROUPS = [
   {
     label: 'Compliance',
     items: [
+      { path: '/BudgetWorkflow',       label: 'Budget Workflow',     icon: Users },
       { path: '/AnnualBudgetProcess',  label: 'Budget Process',      icon: ClipboardList },
       { path: '/BudgetControl',        label: 'Budget Control',       icon: ShieldCheck },
       { path: '/BudgetEngine',        label: 'Budget Engine',       icon: Calculator },
