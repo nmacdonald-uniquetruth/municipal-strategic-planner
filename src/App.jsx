@@ -64,6 +64,7 @@ import WarrantBuilder from './pages/WarrantBuilder';
 import LegislativeTracking from './pages/LegislativeTracking';
 import RoadCIP from './pages/RoadCIP';
 import BudgetWorkflow from './pages/BudgetWorkflow';
+import TrialBalance from './pages/TrialBalance.jsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -143,6 +144,7 @@ const AuthenticatedApp = () => {
           <Route path="/LegislativeTracking" element={<LegislativeTracking />} />
           <Route path="/RoadCIP" element={<RoadCIP />} />
           <Route path="/BudgetWorkflow" element={<BudgetWorkflow />} />
+          <Route path="/TrialBalance" element={<TrialBalance />} />
           </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
