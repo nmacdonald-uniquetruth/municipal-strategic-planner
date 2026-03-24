@@ -329,7 +329,7 @@ export default function RoadCIP() {
             <p className="text-sm font-bold text-slate-900">GIS Road Inventory</p>
             <p className="text-[11px] text-slate-400 mt-0.5">{roads.length} roads · {totalMiles.toFixed(2)} centerline miles · click a row for detail</p>
           </div>
-          <RoadInventoryTable roads={roads} onSelect={setSelectedRoad} selectedId={selectedRoad?.road_name} />
+          <RoadInventoryTable roads={roads} onSelect={setSelectedRoad} selectedId={selectedRoad?.road_name} onRefresh={() => queryClient.invalidateQueries(['road_segments'])} />
           {selectedRoad && (
             <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
               <p className="text-xs font-bold text-blue-900 mb-2">{selectedRoad.road_name} — Detail</p>

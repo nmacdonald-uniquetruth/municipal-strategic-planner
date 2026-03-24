@@ -2,13 +2,88 @@
  * RoadInventoryTable.jsx — Road segment inventory with status, treatment plan, and cost estimate.
  */
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronUp, ChevronDown } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, Pencil, Check, X } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 import { STATUS_COLORS, WORK_TYPE_COLORS, fmt } from './roadCIPEngine';
+
+const WORK_TYPES = [
+  'Overlay / shim', 'Reclaim & pave', 'Crack seal', 'Chip seal',
+  'Gravel grading', 'Drainage / culvert', 'Reconstruction', 'Sidewalk', 'None scheduled',
+];
+
+function TreatmentEditor({ road, onSaved }) {
+  const [open, setOpen]       = useState(false);
+  const [workType, setWorkType] = useState(road.planning_work_type || '');
+  const [year, setYear]       = useState(road.next_treatment_year || '');
+  const [cost, setCost]       = useState(road.estimated_project_cost || '');
+  const [saving, setSaving]   = useState(false);
+
+  const handleSave = async (e) => {
+    e.stopPropagation();
+    setSaving(true);
+    await base44.entities.RoadSegment.update(road.id, {
+      planning_work_type:    workType,
+      next_treatment_year:   year ? Number(year) : null,
+      estimated_project_cost: cost ? Number(cost) : null,
+    });
+    setSaving(false);
+    setOpen(false);
+    onSaved?.();
+  };
+
+  const handleOpen = (e) => { e.stopPropagation(); setOpen(true); };
+  const handleCancel = (e) => { e.stopPropagation(); setOpen(false); };
+
+  if (!open) {
+    return (
+      <button onClick={handleOpen} title="Edit treatment"
+        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-slate-200 text-slate-500 flex-shrink-0">
+        <Pencil className="h-3 w-3" />
+      </button>
+    );
+  }
+
+  return (
+    <div className="absolute z-30 left-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl p-3 w-64 space-y-2" onClick={e => e.stopPropagation()}>
+      <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wide">{road.road_name}</p>
+      <div>
+        <label className="text-[10px] text-slate-500 font-semibold">Next Treatment</label>
+        <select value={workType} onChange={e => setWorkType(e.target.value)}
+          className="w-full mt-0.5 text-xs border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 bg-white">
+          <option value="">— Select —</option>
+          {WORK_TYPES.map(t => <option key={t}>{t}</option>)}
+        </select>
+      </div>
+      <div className="flex gap-2">
+        <div className="flex-1">
+          <label className="text-[10px] text-slate-500 font-semibold">Target Year</label>
+          <input type="number" value={year} onChange={e => setYear(e.target.value)}
+            className="w-full mt-0.5 text-xs border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400"
+            placeholder="e.g. 2027" min="2024" max="2045" />
+        </div>
+        <div className="flex-1">
+          <label className="text-[10px] text-slate-500 font-semibold">Est. Cost ($)</label>
+          <input type="number" value={cost} onChange={e => setCost(e.target.value)}
+            className="w-full mt-0.5 text-xs border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400"
+            placeholder="e.g. 25000" />
+        </div>
+      </div>
+      <div className="flex gap-2 pt-1">
+        <button onClick={handleCancel} className="flex-1 flex items-center justify-center gap-1 text-xs border border-slate-200 py-1.5 rounded-lg text-slate-600 hover:bg-slate-50">
+          <X className="h-3 w-3" /> Cancel
+        </button>
+        <button onClick={handleSave} disabled={saving} className="flex-1 flex items-center justify-center gap-1 text-xs bg-slate-900 text-white py-1.5 rounded-lg hover:bg-slate-700 disabled:opacity-50">
+          <Check className="h-3 w-3" /> {saving ? 'Saving…' : 'Save'}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 const JURISDICTIONS = ['All', 'Townway', 'State-aid'];
 const BUCKETS       = ['All', 'Critical', 'Aging', 'Mid-life', 'Good', 'Unknown'];
 
-export default function RoadInventoryTable({ roads, onSelect, selectedId }) {
+export default function RoadInventoryTable({ roads, onSelect, selectedId, onRefresh }) {
   const [search, setSearch]       = useState('');
   const [filterJuris, setJuris]   = useState('All');
   const [filterBucket, setBucket] = useState('All');
@@ -102,7 +177,7 @@ export default function RoadInventoryTable({ roads, onSelect, selectedId }) {
                 return (
                   <tr key={road.id || road.road_name}
                     onClick={() => onSelect?.(road)}
-                    className={`border-t border-slate-100 cursor-pointer transition-colors ${
+                    className={`group border-t border-slate-100 cursor-pointer transition-colors ${
                       isSelected ? 'bg-blue-50' : i % 2 === 0 ? 'bg-white hover:bg-slate-50' : 'bg-slate-50/40 hover:bg-slate-50'
                     }`}>
                     <td className="px-3 py-2.5 font-semibold text-slate-900">{road.road_name}</td>
@@ -115,9 +190,12 @@ export default function RoadInventoryTable({ roads, onSelect, selectedId }) {
                     </td>
                     <td className="px-3 py-2.5 text-slate-500">{road.last_major_work_year || '—'}</td>
                     <td className="px-3 py-2.5">
-                      <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${wc}`}>
-                        {road.planning_work_type || '—'}
-                      </span>
+                      <div className="relative flex items-center gap-1">
+                        <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${wc}`}>
+                          {road.planning_work_type || '—'}
+                        </span>
+                        <TreatmentEditor road={road} onSaved={onRefresh} />
+                      </div>
                     </td>
                     <td className={`px-3 py-2.5 font-bold tabular-nums ${road.next_treatment_year <= 2027 ? 'text-red-700' : 'text-slate-700'}`}>
                       {road.next_treatment_year || '—'}
