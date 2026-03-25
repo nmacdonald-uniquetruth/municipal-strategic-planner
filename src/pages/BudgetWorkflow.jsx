@@ -56,8 +56,9 @@ const SEED_LINES = [
     fy23_budget:10000, fy23_actual:7500, fy24_budget:10000, fy24_actual:7200, fy25_budget:10000, fy25_actual:7500.49, fy26_budget:10000, fy26_ytd:0, manager_amount:10000 },
   { department_code:'01', department_name:'Administration', account_code:'008-01', account_name:'COMPUTER MAINTENANCE', category:'EQUIP MAINT',
     fy23_budget:13000, fy23_actual:16391, fy24_budget:13000, fy24_actual:15000, fy25_budget:13000, fy25_actual:16391.17, fy26_budget:13000, fy26_ytd:1746.35, manager_amount:15000 },
-  { department_code:'01', department_name:'Administration', account_code:'100-00', account_name:'BANK INTEREST', category:'OTHER',
-    fy23_budget:38000, fy23_actual:57795, fy24_budget:40000, fy24_actual:101156, fy25_budget:65000, fy25_actual:141903, fy26_budget:0, fy26_ytd:0, manager_amount:180000 },
+  // NOTE: Bank Interest is a REVENUE line tracked here for reference — budget is actual investment income target
+  { department_code:'01', department_name:'Administration', account_code:'100-00', account_name:'INTEREST ON INVESTMENTS (REVENUE)', category:'OTHER',
+    fy23_budget:38000, fy23_actual:57795, fy24_budget:40000, fy24_actual:101156, fy25_budget:65000, fy25_actual:141903, fy26_budget:180000, fy26_ytd:141903, manager_amount:180000 },
 
   // FIRE DEPARTMENT (02)
   { department_code:'02', department_name:'Fire Department', account_code:'001-02', account_name:'FULL TIME WAGES', category:'WAGES/SALARY',
@@ -73,7 +74,7 @@ const SEED_LINES = [
   { department_code:'02', department_name:'Fire Department', account_code:'010-04', account_name:'TURNOUT GEAR', category:'CLOTHING',
     fy23_budget:10000, fy23_actual:9200, fy24_budget:10000, fy24_actual:12000, fy25_budget:10000, fy25_actual:14649.42, fy26_budget:10000, fy26_ytd:0, manager_amount:22000 },
   { department_code:'02', department_name:'Fire Department', account_code:'200-01', account_name:'CONTRACTS', category:'CONTRACT SERVICES',
-    fy23_budget:14000, fy23_actual:16000, fy24_budget:18000, fy24_actual:18000, fy25_budget:18000, fy25_actual:22000, fy26_budget:0, fy26_ytd:0, manager_amount:22000 },
+    fy23_budget:14000, fy23_actual:16000, fy24_budget:18000, fy24_actual:18000, fy25_budget:18000, fy25_actual:22000, fy26_budget:22000, fy26_ytd:16800, manager_amount:22000 },
 
   // POLICE (03)
   { department_code:'03', department_name:'Police', account_code:'001-01', account_name:'DEPT HEADS', category:'WAGES/SALARY',
@@ -131,13 +132,11 @@ const SEED_LINES = [
   { department_code:'14', department_name:'Solid Waste Facility', account_code:'011-20', account_name:'MSW TIPPING FEES', category:'CONTRACT SERVICES',
     fy23_budget:33000, fy23_actual:18000, fy24_budget:33000, fy24_actual:19000, fy25_budget:33000, fy25_actual:18391.65, fy26_budget:33000, fy26_ytd:18219.37, manager_amount:35000 },
 
-  // GENERAL EDUCATION (29)
+  // GENERAL EDUCATION (29) — FY26 budget confirmed from Trial Balance as $1,751,194
   { department_code:'29', department_name:'General Education', account_code:'300-01', account_name:'GENERAL EDUCATION', category:'GENERAL EDUCATION',
-    fy23_budget:1674791, fy23_actual:1674791, fy24_budget:1674791, fy24_actual:1674791, fy25_budget:1674791, fy25_actual:1674790.64, fy26_budget:1781194, fy26_ytd:875596.80, manager_amount:1781194 },
+    fy23_budget:1674791, fy23_actual:1674791, fy24_budget:1674791, fy24_actual:1674791, fy25_budget:1751194, fy25_actual:1674790.64, fy26_budget:1751194, fy26_ytd:875596.80, manager_amount:1781194 },
 
-  // GOV'T AGENCY (16)
-  { department_code:'16', department_name:"Gov't Agency", account_code:'016-01', account_name:'WASH CTY TAX', category:"GOV'T AGENCY",
-    fy23_budget:315116, fy23_actual:315116, fy24_budget:315116, fy24_actual:315116, fy25_budget:315116, fy25_actual:315116, fy26_budget:389780, fy26_ytd:703932.41, manager_amount:389780 },
+  // GOV'T AGENCY (16) — removed duplicate 016-01 entry; canonical line is 851-01 below
 
   // OTHER MUNICIPAL SERVICES (17)
   { department_code:'17', department_name:'Other Municipal Services', account_code:'004-06', account_name:'FIRE HYDRANT', category:'UTILITIES',
@@ -148,8 +147,7 @@ const SEED_LINES = [
   // MUNICIPALITY DEBT SERVICE (19)
   { department_code:'19', department_name:'Municipality Debt Service', account_code:'019-43', account_name:'PUBLIC WORKS LOAN $530K', category:'LOANS/NOTES',
     fy23_budget:0, fy23_actual:0, fy24_budget:0, fy24_actual:0, fy25_budget:0, fy25_actual:0, fy26_budget:124035, fy26_ytd:124034.93, manager_amount:124035 },
-  { department_code:'19', department_name:'Municipality Debt Service', account_code:'019-56', account_name:'PUBLIC SAFETY BLDG LOAN', category:'LOANS/NOTES',
-    fy23_budget:22890, fy23_actual:22882, fy24_budget:22890, fy24_actual:22882, fy25_budget:22890, fy25_actual:22882.26, fy26_budget:22890, fy26_ytd:22882.26, manager_amount:22890 },
+  // PSB Loan (019-56) is tracked under dept 07; excluded here to avoid double-count
   { department_code:'19', department_name:'Municipality Debt Service', account_code:'019-58', account_name:'ROAD LOAN $231K', category:'LOANS/NOTES',
     fy23_budget:26429, fy23_actual:26429, fy24_budget:26429, fy24_actual:26429, fy25_budget:26429, fy25_actual:26429, fy26_budget:26429, fy26_ytd:26429, manager_amount:26429 },
 
@@ -167,9 +165,9 @@ const SEED_LINES = [
   { department_code:'12', department_name:'Airport', account_code:'005-30', account_name:'AIRPORT OPERATING', category:'OPERATING EXPENSES',
     fy23_budget:15000, fy23_actual:12000, fy24_budget:15000, fy24_actual:13000, fy25_budget:15000, fy25_actual:14000, fy26_budget:15000, fy26_ytd:8000, manager_amount:12473 },
 
-  // PUBLIC SAFETY BUILDING (07)
-  { department_code:'07', department_name:'Public Safety Building', account_code:'001-00', account_name:'PSB DEBT SERVICE', category:'LOANS/NOTES',
-    fy23_budget:36250, fy23_actual:36250, fy24_budget:36250, fy24_actual:36250, fy25_budget:36250, fy25_actual:36250, fy26_budget:36250, fy26_ytd:0, manager_amount:36250 },
+  // PUBLIC SAFETY BUILDING (07) — PSB loan only; PW $530K loan is under dept 19
+  { department_code:'07', department_name:'Public Safety Building', account_code:'019-56', account_name:'PSB DEBT SERVICE', category:'LOANS/NOTES',
+    fy23_budget:22890, fy23_actual:22882, fy24_budget:22890, fy24_actual:22882, fy25_budget:22890, fy25_actual:22882.26, fy26_budget:22890, fy26_ytd:22882.26, manager_amount:22890 },
 
   // COUNTY TAX (851 / 16)
   { department_code:'16', department_name:"Gov't Agency", account_code:'851-01', account_name:'COUNTY TAX ASSESSMENT', category:"GOV'T AGENCY",
