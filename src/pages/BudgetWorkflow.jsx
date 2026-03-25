@@ -259,16 +259,45 @@ export default function BudgetWorkflow() {
         fiscal_year: 'FY2027',
         status: 'draft',
         workflow_stage: 'initial',
-        // Legacy field aliases
         prior_year_actual:   l.fy25_actual,
         prior_year_budget:   l.fy25_budget,
         current_year_budget: l.fy26_budget,
         current_year_ytd:    l.fy26_ytd,
-        // Map manager_amount → tm_amount for legacy compat
         tm_amount: l.manager_amount,
       }));
       await base44.entities.BudgetRequest.bulkCreate(toCreate);
       qc.invalidateQueries(['budget_requests']);
+    } finally {
+      setSeeding(false);
+    }
+  };
+
+  const handleApplyManagerAmounts = async () => {
+    if (!confirm('This will write the Manager FY27 column amounts from the budget spreadsheet into all matching FY2027 budget lines. Continue?')) return;
+    setSeeding(true);
+    try {
+      const existing = await base44.entities.BudgetRequest.filter({ fiscal_year: 'FY2027' });
+      if (existing.length === 0) { alert('No FY2027 lines found. Load budget lines first.'); return; }
+
+      // Build a lookup from account_code → manager_amount from SEED_LINES
+      const seedMap = {};
+      SEED_LINES.forEach(s => { seedMap[s.account_code] = s.manager_amount; });
+
+      let updated = 0;
+      await Promise.all(existing.map(async rec => {
+        const mgr = seedMap[rec.account_code];
+        if (mgr != null) {
+          await base44.entities.BudgetRequest.update(rec.id, {
+            manager_amount: mgr,
+            tm_amount: mgr,
+            manager_reviewed_at: new Date().toISOString(),
+            workflow_stage: 'manager',
+          });
+          updated++;
+        }
+      }));
+      qc.invalidateQueries(['budget_requests']);
+      alert(`Manager amounts applied to ${updated} line items.`);
     } finally {
       setSeeding(false);
     }
@@ -289,6 +318,13 @@ export default function BudgetWorkflow() {
             <button onClick={handleSeedData} disabled={seeding} className="flex items-center gap-2 text-xs font-bold bg-emerald-700 text-white px-3 py-2 rounded-lg hover:bg-emerald-800 disabled:opacity-50">
               <Plus className="h-3.5 w-3.5" />
               {seeding ? 'Seeding...' : 'Load FY27 Budget Lines'}
+            </button>
+          )}
+          {lines.length > 0 && (
+            <button onClick={handleApplyManagerAmounts} disabled={seeding}
+              className="flex items-center gap-2 text-xs font-bold border border-purple-300 bg-purple-50 text-purple-800 px-3 py-2 rounded-lg hover:bg-purple-100 disabled:opacity-50">
+              <RefreshCw className={`h-3.5 w-3.5 ${seeding ? 'animate-spin' : ''}`} />
+              {seeding ? 'Applying...' : 'Apply Manager FY27 Amounts'}
             </button>
           )}
           <button className="flex items-center gap-2 text-xs font-bold border border-slate-200 bg-white text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50">
