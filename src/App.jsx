@@ -64,7 +64,7 @@ import WarrantBuilder from './pages/WarrantBuilder';
 import LegislativeTracking from './pages/LegislativeTracking';
 import RoadCIP from './pages/RoadCIP';
 import BudgetWorkflow from './pages/BudgetWorkflow';
-import TrialBalance from './pages/TrialBalance.jsx';
+import TrialBalance from './pages/TrialBalance';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
