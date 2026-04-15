@@ -162,13 +162,13 @@ export default function DepartmentProposalDisplay({ proposal }) {
               {sections.staffingModel.positions.map((p, i) => (
                 <tr key={i}>
                   <td>{p.title}</td>
-                  <td>${p.baseSalary.toLocaleString()}</td>
-                  <td>${p.fullyLoaded.toLocaleString()}</td>
+                  <td>${(p.baseSalary ?? 0).toLocaleString()}</td>
+                  <td>${(p.fullyLoaded ?? 0).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p className="text-xs font-bold text-slate-900">Total Annual Cost: ${sections.staffingModel.totalAnnualCost.toLocaleString()}</p>
+          <p className="text-xs font-bold text-slate-900">Total Annual Cost: ${(sections.staffingModel.totalAnnualCost ?? 0).toLocaleString()}</p>
         </Section>
 
         {/* Service Delivery Model */}
@@ -187,22 +187,22 @@ export default function DepartmentProposalDisplay({ proposal }) {
             <tbody>
               <tr>
                 <td><strong>Annual Revenue</strong></td>
-                <td className="text-right">${sections.financialModel.annualRevenue.toLocaleString()}</td>
+                <td className="text-right">${(sections.financialModel.annualRevenue ?? 0).toLocaleString()}</td>
               </tr>
               <tr>
                 <td><strong>Annual Operating Cost</strong></td>
-                <td className="text-right">${sections.financialModel.annualOperatingCost.toLocaleString()}</td>
+                <td className="text-right">${(sections.financialModel.annualOperatingCost ?? 0).toLocaleString()}</td>
               </tr>
               <tr className="bg-slate-50">
                 <td><strong>Annual Net Cashflow</strong></td>
-                <td className={`text-right font-bold ${sections.financialModel.annualNetCashflow > 0 ? 'text-emerald-700' : 'text-red-700'}`}>
-                  ${sections.financialModel.annualNetCashflow.toLocaleString()}
+                <td className={`text-right font-bold ${(sections.financialModel.annualNetCashflow ?? 0) > 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                  ${(sections.financialModel.annualNetCashflow ?? 0).toLocaleString()}
                 </td>
               </tr>
               <tr>
                 <td><strong>{sections.financialModel.projectedPeriod} Value</strong></td>
-                <td className={`text-right font-bold ${sections.financialModel.horizonTotalValue > 0 ? 'text-emerald-700' : 'text-red-700'}`}>
-                  ${sections.financialModel.horizonTotalValue.toLocaleString()}
+                <td className={`text-right font-bold ${(sections.financialModel.horizonTotalValue ?? 0) > 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                  ${(sections.financialModel.horizonTotalValue ?? 0).toLocaleString()}
                 </td>
               </tr>
             </tbody>
