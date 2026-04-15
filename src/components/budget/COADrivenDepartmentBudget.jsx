@@ -19,13 +19,13 @@ export default function COADrivenDepartmentBudget({
   const [expandedLineage, setExpandedLineage] = useState(null);
   const rec = useCOABudgetReconciliation(accounts, budgetLines, departmentBudgets, articles);
 
-  if (rec.error) return <div className="p-4 text-red-700">{rec.error}</div>;
-
   // Filter lines for this department
   const deptLines = useMemo(
-    () => rec.coaBudgetLines.filter(l => l.department === departmentName),
+    () => (rec.coaBudgetLines || []).filter(l => l.department === departmentName),
     [rec.coaBudgetLines, departmentName]
   );
+
+  if (rec.error) return <div className="p-4 text-red-700">{rec.error}</div>;
 
   // Group by reporting category
   const byCategory = {};

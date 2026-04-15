@@ -288,9 +288,9 @@ export const generateScenarioSummary = (scenarioData) => {
         .reduce((a, b) => a + b, 0) / 
         proposals.filter(p => evaluations[p.id]?.overall_score).length || 0,
       recommended: proposals.filter(p => {
-        const eval = evaluations[p.id];
-        return eval?.recommendation === 'recommended' ||
-               eval?.recommendation === 'recommended_with_conditions';
+        const evalData = evaluations[p.id];
+        return evalData?.recommendation === 'recommended' ||
+               evalData?.recommendation === 'recommended_with_conditions';
       }).length
     },
 

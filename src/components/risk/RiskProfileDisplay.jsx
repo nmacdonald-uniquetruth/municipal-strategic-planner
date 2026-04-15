@@ -44,6 +44,14 @@ const RiskIndicator = ({ likelihood, severity }) => {
 };
 
 export default function RiskProfileDisplay({ riskProfile, readOnly = true }) {
+  const overallScore = useMemo(() => {
+    if (!riskProfile?.risks || riskProfile.risks.length === 0) return 0;
+    const scores = riskProfile.risks.map((r) => calculateRiskScore(r.likelihood, r.severity));
+    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  }, [riskProfile?.risks]);
+
+  const overallLevel = getRiskLevel(overallScore);
+
   if (!riskProfile || !riskProfile.risks || riskProfile.risks.length === 0) {
     return (
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-center">
@@ -51,14 +59,6 @@ export default function RiskProfileDisplay({ riskProfile, readOnly = true }) {
       </div>
     );
   }
-
-  const overallScore = useMemo(() => {
-    if (!riskProfile.risks || riskProfile.risks.length === 0) return 0;
-    const scores = riskProfile.risks.map((r) => calculateRiskScore(r.likelihood, r.severity));
-    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-  }, [riskProfile.risks]);
-
-  const overallLevel = getRiskLevel(overallScore);
 
   return (
     <div className="space-y-6">

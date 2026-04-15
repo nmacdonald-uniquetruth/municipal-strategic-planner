@@ -49,11 +49,11 @@ export default function RestructuringProposalLibrary() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.RestructuringProposal.delete(id),
-    onSuccess: () => {
+    mutationFn: (deletedId) => base44.entities.RestructuringProposal.delete(deletedId),
+    onSuccess: (_, deletedId) => {
       queryClient.invalidateQueries({ queryKey: ['restructuringProposals'] });
-      if (selectedProposal?.id === id) setSelectedProposal(null);
-      setSelectedForComparison(prev => prev.filter(p => p.id !== id));
+      if (selectedProposal?.id === deletedId) setSelectedProposal(null);
+      setSelectedForComparison(prev => prev.filter(p => p.id !== deletedId));
     }
   });
 

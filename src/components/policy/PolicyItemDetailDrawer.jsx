@@ -15,8 +15,8 @@ import { fmtDate, fmt, daysUntil } from './policyEngine';
 const OUTREACH_STATUSES = ['introduced', 'in_committee', 'passed_chamber', 'passed_both', 'rulemaking', 'watch'];
 
 export default function PolicyItemDetailDrawer({ item, profile, impactRecord, onClose, onEdit, onGenerateAI, aiLoading }) {
-  if (!item) return null;
   const [showOutreach, setShowOutreach] = useState(false);
+  if (!item) return null;
   const showOutreachActions = OUTREACH_STATUSES.includes(item.status) && !item.is_archived;
 
   const deadlines = [
