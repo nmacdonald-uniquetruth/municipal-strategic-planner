@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useModel } from '../components/machias/ModelContext';
 import SectionHeader from '../components/machias/SectionHeader';
 import { Truck, DollarSign, TrendingUp, Settings, Users, BarChart2 } from 'lucide-react';
+import BagProgramAnalysis from '../components/transferstation/BagProgramAnalysis';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, LineChart, Line, ReferenceLine } from 'recharts';
 
@@ -88,7 +89,7 @@ export default function TransferStation() {
 
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap">
-        {[['overview','Overview & Strategy'],['members','Member Towns'],['revenue','Revenue Model'],['admin','Admin Allocation'],['operations','Operations'],['performance','Performance Metrics']].map(([id, label]) => (
+        {[['overview','Overview & Strategy'],['members','Member Towns'],['revenue','Revenue Model'],['bags','Bag Program'],['admin','Admin Allocation'],['operations','Operations'],['performance','Performance Metrics']].map(([id, label]) => (
           <button key={id} onClick={() => setActiveTab(id)}
             className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${activeTab === id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
             {label}
@@ -244,6 +245,9 @@ export default function TransferStation() {
           <p className="text-[10px] text-slate-400">Operating cost estimates are illustrative. TS revenue projections from the financial model — adjust in <Link to="/ModelSettings" className="underline text-slate-700">Model Settings</Link> if needed.</p>
         </div>
       )}
+
+      {/* Bag Program */}
+      {activeTab === 'bags' && <BagProgramAnalysis />}
 
       {/* Admin Allocation */}
       {activeTab === 'admin' && (
