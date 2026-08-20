@@ -1,0 +1,66 @@
+{
+  "name": "OrgScenario",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_baseline": {
+      "type": "boolean",
+      "default": false
+    },
+    "finance_structure": {
+      "type": "string",
+      "enum": [
+        "controller_sa",
+        "controller_2sa",
+        "two_sa",
+        "sa_ptsa",
+        "controller_sa_ptsa"
+      ],
+      "default": "two_sa"
+    },
+    "billing_structure": {
+      "type": "string",
+      "enum": [
+        "one_bs",
+        "two_bs",
+        "bs_rc"
+      ],
+      "default": "one_bs"
+    },
+    "ga_reporting": {
+      "type": "string",
+      "enum": [
+        "finance_director",
+        "town_manager"
+      ],
+      "default": "town_manager"
+    },
+    "show_vacant": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_part_time": {
+      "type": "boolean",
+      "default": true
+    },
+    "enable_regional": {
+      "type": "boolean",
+      "default": false
+    },
+    "color": {
+      "type": "string",
+      "default": "#344A60"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

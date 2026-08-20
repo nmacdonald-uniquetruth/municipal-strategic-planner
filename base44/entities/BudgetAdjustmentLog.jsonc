@@ -1,0 +1,88 @@
+{
+  "name": "BudgetAdjustmentLog",
+  "type": "object",
+  "properties": {
+    "fiscal_year": {
+      "type": "string"
+    },
+    "adjustment_type": {
+      "type": "string",
+      "enum": [
+        "budget_transfer",
+        "supplemental_appropriation",
+        "encumbrance",
+        "ytd_correction",
+        "gaap_adjustment",
+        "projection_update",
+        "revenue_revision",
+        "transfer_in",
+        "transfer_out"
+      ],
+      "description": "Type of adjustment"
+    },
+    "department_from": {
+      "type": "string"
+    },
+    "department_to": {
+      "type": "string"
+    },
+    "fund": {
+      "type": "string"
+    },
+    "article_number": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Adjustment amount (positive)"
+    },
+    "field_changed": {
+      "type": "string",
+      "description": "Which field was modified"
+    },
+    "value_before": {
+      "type": "number"
+    },
+    "value_after": {
+      "type": "number"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason / justification for the adjustment"
+    },
+    "authorized_by": {
+      "type": "string",
+      "description": "Person who authorized"
+    },
+    "requires_vote": {
+      "type": "boolean",
+      "default": false
+    },
+    "vote_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "vote_result": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "denied"
+      ],
+      "default": "pending"
+    },
+    "source_document": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "adjustment_type",
+    "amount",
+    "reason"
+  ]
+}

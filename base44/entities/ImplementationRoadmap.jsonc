@@ -1,0 +1,182 @@
+{
+  "name": "ImplementationRoadmap",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Roadmap title"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "proposal",
+        "scenario",
+        "restructuring"
+      ],
+      "description": "Type of source document"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of source proposal/scenario/restructuring"
+    },
+    "source_title": {
+      "type": "string",
+      "description": "Name of source document"
+    },
+    "department": {
+      "type": "string",
+      "description": "Primary department for this roadmap"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "immediate",
+        "short_term",
+        "medium_term",
+        "long_term"
+      ],
+      "description": "Implementation phase"
+    },
+    "action_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Action item title"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "immediate",
+              "short_term",
+              "medium_term",
+              "long_term"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "description": "Person or role responsible"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "IDs of dependent action items"
+          },
+          "cost_estimate": {
+            "type": "number",
+            "description": "Estimated cost in dollars"
+          },
+          "policy_action_needed": {
+            "type": "boolean",
+            "description": "Requires board/policy action"
+          },
+          "policy_description": {
+            "type": "string",
+            "description": "What policy action is needed"
+          },
+          "communication_need": {
+            "type": "boolean",
+            "description": "Requires stakeholder communication"
+          },
+          "communication_audience": {
+            "type": "string",
+            "description": "Who needs to be communicated with"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "completed",
+              "blocked",
+              "deferred"
+            ],
+            "default": "not_started"
+          },
+          "progress_percent": {
+            "type": "number",
+            "description": "Completion percentage (0-100)"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "phase",
+          "owner"
+        ]
+      }
+    },
+    "total_cost_estimate": {
+      "type": "number",
+      "description": "Sum of all action item costs"
+    },
+    "policy_items_count": {
+      "type": "number",
+      "description": "Number of items requiring policy action"
+    },
+    "communication_items_count": {
+      "type": "number",
+      "description": "Number of items requiring communication"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Overall roadmap start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Overall roadmap completion date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "active",
+        "on_hold",
+        "completed"
+      ],
+      "default": "planning"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "notes": {
+      "type": "string",
+      "description": "General roadmap notes and assumptions"
+    }
+  },
+  "required": [
+    "title",
+    "source_type",
+    "source_id",
+    "action_items"
+  ]
+}

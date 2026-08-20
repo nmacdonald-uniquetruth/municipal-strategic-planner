@@ -1,0 +1,217 @@
+{
+  "name": "LegislationItem",
+  "type": "object",
+  "properties": {
+    "identifier": {
+      "type": "string",
+      "description": "Bill number or policy ID, e.g. HB 1234, S. 456"
+    },
+    "title": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": [
+        "federal",
+        "state",
+        "county",
+        "local",
+        "regional"
+      ]
+    },
+    "category": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "introduced",
+        "in_committee",
+        "passed_chamber",
+        "passed_both",
+        "signed",
+        "vetoed",
+        "enacted",
+        "failed",
+        "rulemaking",
+        "effective",
+        "watch"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "watch"
+      ],
+      "default": "watch"
+    },
+    "impact_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "impact_level": {
+      "type": "string",
+      "enum": [
+        "very_high",
+        "high",
+        "moderate",
+        "low"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "description": "Plain-language summary"
+    },
+    "municipal_relevance": {
+      "type": "string",
+      "description": "Why this matters to this municipality"
+    },
+    "sponsor": {
+      "type": "string"
+    },
+    "committee": {
+      "type": "string"
+    },
+    "last_action": {
+      "type": "string"
+    },
+    "last_action_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "hearing_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "vote_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "comment_deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "departments_affected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategic_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fiscal_impact_note": {
+      "type": "string"
+    },
+    "fiscal_impact_amount": {
+      "type": "number"
+    },
+    "operational_impact": {
+      "type": "string"
+    },
+    "compliance_impact": {
+      "type": "string"
+    },
+    "hr_impact": {
+      "type": "string"
+    },
+    "capital_impact": {
+      "type": "string"
+    },
+    "risk_if_enacted": {
+      "type": "string"
+    },
+    "risk_if_not_enacted": {
+      "type": "string"
+    },
+    "opportunities": {
+      "type": "string"
+    },
+    "recommended_action": {
+      "type": "string",
+      "enum": [
+        "monitor",
+        "advocate",
+        "budget",
+        "prepare",
+        "coordinate",
+        "respond",
+        "none"
+      ]
+    },
+    "recommended_action_note": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "relevance_score": {
+      "type": "number",
+      "description": "0-100 municipal relevance score"
+    },
+    "probability_of_passage": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "confidence_level": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "is_watched": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_flagged_urgent": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_flagged_budget": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_flagged_board": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_flagged_grant": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    },
+    "funding_opportunity_id": {
+      "type": "string"
+    },
+    "official_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "jurisdiction"
+  ]
+}

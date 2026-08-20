@@ -1,0 +1,224 @@
+{
+  "name": "Scenario",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Scenario name (e.g., 'Baseline 2026', 'Conservative Build', 'Aggressive Regional Expansion')"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "conservative",
+        "moderate",
+        "aggressive",
+        "custom"
+      ],
+      "default": "custom",
+      "description": "Scenario classification"
+    },
+    "description": {
+      "type": "string",
+      "description": "Narrative description of the scenario approach and philosophy"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this the currently active scenario for planning?"
+    },
+    "is_baseline": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this the baseline/reference scenario for comparisons?"
+    },
+    "parent_scenario_id": {
+      "type": "string",
+      "description": "If duplicated from another scenario, reference the original ID"
+    },
+    "staffing_assumptions": {
+      "type": "object",
+      "description": "Staffing decisions: hiring year 1, year 5 senior hire type, GA coordinator, police admin enabled, etc.",
+      "properties": {
+        "y1_staffing_model": {
+          "type": "string",
+          "enum": [
+            "fulltime_sa",
+            "parttime_stipend"
+          ],
+          "description": "Year 1 staffing approach"
+        },
+        "y5_senior_hire": {
+          "type": "string",
+          "enum": [
+            "staff_accountant",
+            "controller"
+          ],
+          "description": "Year 5 senior hire: second SA or Controller"
+        },
+        "police_admin_enabled": {
+          "type": "boolean",
+          "description": "Include Police Administrative Coordinator"
+        },
+        "regional_services_enabled": {
+          "type": "boolean",
+          "description": "Pursue regional services revenue"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Staffing rationale and assumptions"
+        }
+      }
+    },
+    "financial_assumptions": {
+      "type": "object",
+      "description": "Financial assumptions driving the scenario",
+      "properties": {
+        "wage_growth_rate": {
+          "type": "number",
+          "default": 0.04,
+          "description": "Annual wage growth assumption"
+        },
+        "health_tier": {
+          "type": "string",
+          "enum": [
+            "individual",
+            "employee_spouse",
+            "employee_children",
+            "family"
+          ],
+          "default": "family",
+          "description": "Health insurance tier assumption"
+        },
+        "transport_growth_rate": {
+          "type": "number",
+          "default": 0.02,
+          "description": "EMS transport volume growth"
+        },
+        "inhouse_collection_rate": {
+          "type": "number",
+          "default": 0.9,
+          "description": "In-house EMS billing collection rate"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Financial assumptions and rationale"
+        }
+      }
+    },
+    "regional_assumptions": {
+      "type": "object",
+      "description": "Regional services expansion assumptions",
+      "properties": {
+        "target_towns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Target towns for regional services"
+        },
+        "conservative_adoption_rate": {
+          "type": "number",
+          "description": "Conservative probability of adoption (0-1)"
+        },
+        "moderate_adoption_rate": {
+          "type": "number",
+          "description": "Moderate probability of adoption (0-1)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Regional strategy and assumptions"
+        }
+      }
+    },
+    "operational_assumptions": {
+      "type": "object",
+      "description": "Operational decisions",
+      "properties": {
+        "erp_implementation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Proceed with ERP implementation"
+        },
+        "transfer_station_expansion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pursue transfer station regional expansion"
+        },
+        "ems_external_billing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Implement in-house EMS billing"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Operational decisions and rationale"
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string",
+            "description": "Risk description"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "description": "Probability of occurrence"
+          },
+          "impact": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "description": "Financial/operational impact if occurs"
+          },
+          "mitigation": {
+            "type": "string",
+            "description": "Mitigation strategy"
+          }
+        }
+      },
+      "description": "Key risks and mitigation strategies"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key recommendations and action steps"
+    },
+    "notes": {
+      "type": "string",
+      "description": "General planning notes and context"
+    },
+    "created_from_template": {
+      "type": "boolean",
+      "default": false,
+      "description": "Was this created from a template (baseline, conservative, etc.)?"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the scenario was created"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modification date"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

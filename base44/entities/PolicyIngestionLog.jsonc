@@ -1,0 +1,76 @@
+{
+  "name": "PolicyIngestionLog",
+  "type": "object",
+  "properties": {
+    "run_type": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "scheduled",
+        "triggered",
+        "import"
+      ],
+      "default": "manual"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "source_name": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "completed",
+        "partial",
+        "failed"
+      ],
+      "default": "running"
+    },
+    "records_ingested": {
+      "type": "number",
+      "default": 0
+    },
+    "records_normalized": {
+      "type": "number",
+      "default": 0
+    },
+    "records_deduplicated": {
+      "type": "number",
+      "default": 0
+    },
+    "records_scored": {
+      "type": "number",
+      "default": 0
+    },
+    "records_errored": {
+      "type": "number",
+      "default": 0
+    },
+    "scoring_version": {
+      "type": "string"
+    },
+    "error_log": {
+      "type": "string"
+    },
+    "triggered_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_type",
+    "started_at"
+  ]
+}

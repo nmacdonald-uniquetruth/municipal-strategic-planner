@@ -1,0 +1,461 @@
+{
+  "name": "ProposalEvaluation",
+  "type": "object",
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "description": "Link to the proposal being evaluated"
+    },
+    "proposal_type": {
+      "type": "string",
+      "enum": [
+        "departmental",
+        "capital_project",
+        "shared_service",
+        "restructuring",
+        "regional_service",
+        "initiative"
+      ],
+      "description": "Type of proposal"
+    },
+    "proposal_name": {
+      "type": "string",
+      "description": "Name/title of the proposal"
+    },
+    "evaluated_by": {
+      "type": "string",
+      "description": "Name/email of evaluator"
+    },
+    "evaluation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of evaluation"
+    },
+    "financial_impact": {
+      "type": "object",
+      "description": "Financial Impact score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "estimated_annual_cost": {
+          "type": "number"
+        },
+        "estimated_annual_benefit": {
+          "type": "number"
+        },
+        "payback_period_years": {
+          "type": "number"
+        }
+      }
+    },
+    "tax_impact": {
+      "type": "object",
+      "description": "Tax Impact score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "mill_rate_change": {
+          "type": "number",
+          "description": "Expected change in mill rate"
+        },
+        "tax_levy_impact": {
+          "type": "number"
+        }
+      }
+    },
+    "service_impact": {
+      "type": "object",
+      "description": "Service Quality Impact score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "service_areas_affected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_improvements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "operational_feasibility": {
+      "type": "object",
+      "description": "Operational Feasibility score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "resource_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "critical_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "staffing_impact": {
+      "type": "object",
+      "description": "Staffing Impact score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "fte_change": {
+          "type": "number"
+        },
+        "skill_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "retention_risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "implementation_complexity": {
+      "type": "object",
+      "description": "Implementation Complexity score (0-10, lower is better)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "estimated_timeline_months": {
+          "type": "number"
+        },
+        "major_milestones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "political_community_feasibility": {
+      "type": "object",
+      "description": "Political/Community Feasibility score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "stakeholder_support_level": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "moderate",
+            "neutral",
+            "opposition"
+          ]
+        },
+        "anticipated_objections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "regional_collaboration_potential": {
+      "type": "object",
+      "description": "Regional Collaboration Potential score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "target_partners": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "shared_benefit_areas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "long_term_sustainability": {
+      "type": "object",
+      "description": "Long-term Sustainability score (0-10)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "sustainability_concerns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "long_term_viability_years": {
+          "type": "number"
+        }
+      }
+    },
+    "risk_level": {
+      "type": "object",
+      "description": "Risk Level Assessment (0-10, lower is better)",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "overall_risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "critical"
+          ]
+        },
+        "key_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "risk": {
+                "type": "string"
+              },
+              "probability": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "impact": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "mitigation": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scoring_weights": {
+      "type": "object",
+      "description": "Weights applied to each criterion (should sum to 100)",
+      "properties": {
+        "financial_impact_weight": {
+          "type": "number",
+          "default": 12
+        },
+        "tax_impact_weight": {
+          "type": "number",
+          "default": 10
+        },
+        "service_impact_weight": {
+          "type": "number",
+          "default": 12
+        },
+        "operational_feasibility_weight": {
+          "type": "number",
+          "default": 10
+        },
+        "staffing_impact_weight": {
+          "type": "number",
+          "default": 10
+        },
+        "implementation_complexity_weight": {
+          "type": "number",
+          "default": 8
+        },
+        "political_community_feasibility_weight": {
+          "type": "number",
+          "default": 12
+        },
+        "regional_collaboration_potential_weight": {
+          "type": "number",
+          "default": 8
+        },
+        "long_term_sustainability_weight": {
+          "type": "number",
+          "default": 12
+        },
+        "risk_level_weight": {
+          "type": "number",
+          "default": 6
+        }
+      }
+    },
+    "overall_score": {
+      "type": "number",
+      "description": "Weighted overall score (0-10)"
+    },
+    "overall_rating": {
+      "type": "string",
+      "enum": [
+        "excellent",
+        "good",
+        "acceptable",
+        "marginal",
+        "poor"
+      ],
+      "description": "Overall rating based on score"
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": [
+        "recommended",
+        "recommended_with_conditions",
+        "further_study_needed",
+        "not_recommended"
+      ],
+      "description": "Final recommendation"
+    },
+    "recommendation_summary": {
+      "type": "string",
+      "description": "Executive summary of recommendation"
+    },
+    "evaluator_comments": {
+      "type": "string",
+      "description": "Additional evaluator commentary"
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key assumptions underlying the evaluation"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Critical dependencies for success"
+    },
+    "mitigation_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "target_risk": {
+            "type": "string"
+          },
+          "responsible_party": {
+            "type": "string"
+          },
+          "timeline": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Proposed mitigation actions for identified risks"
+    },
+    "alternative_approaches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Alternative approaches considered"
+    },
+    "comparison_to_alternatives": {
+      "type": "string",
+      "description": "How this proposal compares to alternatives"
+    },
+    "next_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Recommended next steps if approved"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "approved",
+        "rejected",
+        "pending_decision"
+      ],
+      "default": "draft",
+      "description": "Evaluation status"
+    }
+  },
+  "required": [
+    "proposal_type",
+    "proposal_name"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "name": "Department",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Department name"
+    },
+    "town_id": {
+      "type": "string",
+      "description": "Town this department belongs to (defaults to Machias)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "police",
+        "fire",
+        "ambulance",
+        "public_works",
+        "administration",
+        "finance",
+        "transfer_station",
+        "code_enforcement",
+        "planning",
+        "recreation",
+        "library",
+        "other"
+      ],
+      "description": "Department category"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "proposed",
+        "merged",
+        "dissolved",
+        "contracted_out"
+      ],
+      "default": "active"
+    },
+    "annual_budget": {
+      "type": "number",
+      "description": "Total annual department budget"
+    },
+    "fte_count": {
+      "type": "number",
+      "description": "Full-time equivalent employee count"
+    },
+    "part_time_count": {
+      "type": "number",
+      "description": "Part-time / seasonal employee count"
+    },
+    "volunteer_count": {
+      "type": "number",
+      "description": "Volunteer count (e.g. fire, EMS)"
+    },
+    "director_title": {
+      "type": "string",
+      "description": "Title of department head"
+    },
+    "director_salary": {
+      "type": "number"
+    },
+    "fund_source": {
+      "type": "string",
+      "enum": [
+        "general_fund",
+        "enterprise_fund",
+        "grant",
+        "special_revenue",
+        "mixed"
+      ],
+      "default": "general_fund"
+    },
+    "provides_regional_services": {
+      "type": "boolean",
+      "default": false
+    },
+    "regional_revenue_annual": {
+      "type": "number",
+      "description": "Annual revenue from regional services"
+    },
+    "regional_towns_served": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Towns this department serves regionally"
+    },
+    "key_assets": {
+      "type": "string",
+      "description": "Key equipment, facilities, or infrastructure"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}

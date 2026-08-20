@@ -1,0 +1,67 @@
+{
+  "name": "BudgetPhase",
+  "type": "object",
+  "properties": {
+    "process_id": {
+      "type": "string",
+      "description": "Parent BudgetProcess id"
+    },
+    "fiscal_year": {
+      "type": "string"
+    },
+    "phase_id": {
+      "type": "string",
+      "enum": [
+        "setup",
+        "dept_requests",
+        "finance_review",
+        "manager_recommendation",
+        "budget_committee",
+        "select_board",
+        "warrant_prep",
+        "adopted",
+        "tax_commitment",
+        "budget_control"
+      ],
+      "description": "Phase identifier"
+    },
+    "label": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "complete",
+        "blocked",
+        "skipped"
+      ],
+      "default": "not_started"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Responsible party (e.g. Finance Director, Town Manager)"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "depends_on": {
+      "type": "string",
+      "description": "phase_id this phase depends on"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "phase_id",
+    "label"
+  ]
+}

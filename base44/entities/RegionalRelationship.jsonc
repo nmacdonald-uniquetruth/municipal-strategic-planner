@@ -1,0 +1,107 @@
+{
+  "name": "RegionalRelationship",
+  "type": "object",
+  "properties": {
+    "municipality": {
+      "type": "string",
+      "description": "Town name (e.g., 'Beals', 'Jonesport')"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "ambulance_ems",
+        "fire_mutual_aid",
+        "law_enforcement",
+        "transfer_station",
+        "public_works",
+        "road_maintenance",
+        "dispatch_communications",
+        "animal_control",
+        "general_assistance",
+        "code_enforcement",
+        "planning_economic_dev",
+        "recreation_programming",
+        "school_education",
+        "tax_collection_finance",
+        "shared_staffing",
+        "broadband_technology",
+        "facilities_shared_space",
+        "purchasing_procurement",
+        "harbor_marine",
+        "emergency_management",
+        "other_strategic"
+      ],
+      "description": "Type of interlocal relationship"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "existing",
+        "existing_limited",
+        "candidate_expansion",
+        "prospective",
+        "long_term_strategic",
+        "not_recommended"
+      ],
+      "default": "prospective",
+      "description": "Current or planned status of the relationship"
+    },
+    "machias_role": {
+      "type": "string",
+      "enum": [
+        "direct_provider",
+        "regional_hub",
+        "shared_partner",
+        "contracted_admin",
+        "reciprocal_agreement",
+        "tbd"
+      ],
+      "default": "tbd",
+      "description": "Role Machias plays or could play in this relationship"
+    },
+    "priority_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "exploratory"
+      ],
+      "default": "medium",
+      "description": "Planning priority for this relationship"
+    },
+    "operational_rationale": {
+      "type": "string",
+      "description": "Why this relationship makes operational sense"
+    },
+    "financial_rationale": {
+      "type": "string",
+      "description": "Financial benefits, costs, or impact"
+    },
+    "service_rationale": {
+      "type": "string",
+      "description": "Service delivery advantages or alignment"
+    },
+    "governance_considerations": {
+      "type": "string",
+      "description": "Governance, legal, or policy issues to consider"
+    },
+    "risks_constraints": {
+      "type": "string",
+      "description": "Known risks, constraints, or implementation challenges"
+    },
+    "next_steps": {
+      "type": "string",
+      "description": "Recommended next action or planning step"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional context or planning notes"
+    }
+  },
+  "required": [
+    "municipality",
+    "relationship_type"
+  ]
+}

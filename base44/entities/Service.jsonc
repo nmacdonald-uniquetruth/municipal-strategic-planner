@@ -1,0 +1,108 @@
+{
+  "name": "Service",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Service name"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "police_coverage",
+        "ambulance_ems",
+        "fire_mutual_aid",
+        "transfer_station",
+        "public_works_contract",
+        "financial_administration",
+        "assessing",
+        "code_enforcement",
+        "animal_control",
+        "dispatch",
+        "planning",
+        "recreation",
+        "other"
+      ],
+      "description": "Service category"
+    },
+    "provider_town": {
+      "type": "string",
+      "description": "Town providing the service"
+    },
+    "recipient_towns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Towns receiving this service"
+    },
+    "department_id": {
+      "type": "string",
+      "description": "Department delivering the service"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "proposed",
+        "under_negotiation",
+        "suspended",
+        "terminated"
+      ],
+      "default": "active"
+    },
+    "agreement_type": {
+      "type": "string",
+      "enum": [
+        "interlocal_agreement",
+        "mutual_aid",
+        "contract",
+        "informal",
+        "memorandum_of_understanding",
+        "none"
+      ],
+      "default": "interlocal_agreement"
+    },
+    "annual_value": {
+      "type": "number",
+      "description": "Annual contract / service value in dollars"
+    },
+    "annual_cost_to_machias": {
+      "type": "number",
+      "description": "Machias cost to deliver"
+    },
+    "net_annual_benefit": {
+      "type": "number",
+      "description": "Net financial benefit to Machias"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "renewal_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "coverage_area": {
+      "type": "string",
+      "description": "Geographic coverage description"
+    },
+    "response_time_minutes": {
+      "type": "number"
+    },
+    "call_volume_annual": {
+      "type": "number",
+      "description": "Annual call / transaction volume"
+    },
+    "description": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}

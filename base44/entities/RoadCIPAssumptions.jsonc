@@ -1,0 +1,99 @@
+{
+  "name": "RoadCIPAssumptions",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "description": "Scenario label, e.g. 'Option C Hybrid'"
+    },
+    "start_fiscal_year": {
+      "type": "number",
+      "default": 2027
+    },
+    "analysis_years": {
+      "type": "number",
+      "default": 15
+    },
+    "paved_centerline_miles": {
+      "type": "number",
+      "default": 12.089
+    },
+    "gravel_centerline_miles": {
+      "type": "number",
+      "default": 5.181
+    },
+    "total_centerline_miles": {
+      "type": "number",
+      "default": 17.27
+    },
+    "inflation_rate": {
+      "type": "number",
+      "default": 0.03,
+      "description": "Annual cost escalation (decimal)"
+    },
+    "crack_seal_cycle_yrs": {
+      "type": "number",
+      "default": 5
+    },
+    "crack_seal_cost_per_mile": {
+      "type": "number",
+      "default": 6000
+    },
+    "chip_seal_pct_of_paved": {
+      "type": "number",
+      "default": 0.35
+    },
+    "chip_seal_cost_per_mile": {
+      "type": "number",
+      "default": 20000
+    },
+    "overlay_cycle_yrs": {
+      "type": "number",
+      "default": 10
+    },
+    "overlay_cost_per_mile": {
+      "type": "number",
+      "default": 150000
+    },
+    "reclaim_cycle_yrs": {
+      "type": "number",
+      "default": 25
+    },
+    "reclaim_cost_per_mile": {
+      "type": "number",
+      "default": 400000
+    },
+    "gravel_grading_cycle_yrs": {
+      "type": "number",
+      "default": 2
+    },
+    "gravel_grading_cost_per_mile": {
+      "type": "number",
+      "default": 4000
+    },
+    "gf_annual_transfer": {
+      "type": "number",
+      "default": 100000
+    },
+    "excise_annual_allocation": {
+      "type": "number",
+      "default": 100000
+    },
+    "lrap_annual_estimate": {
+      "type": "number",
+      "default": 20724
+    },
+    "beginning_reserve": {
+      "type": "number",
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "label",
+    "start_fiscal_year"
+  ]
+}

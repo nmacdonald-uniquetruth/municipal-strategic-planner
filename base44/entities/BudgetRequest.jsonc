@@ -1,0 +1,218 @@
+{
+  "name": "BudgetRequest",
+  "type": "object",
+  "properties": {
+    "fiscal_year": {
+      "type": "string",
+      "description": "e.g. FY2027"
+    },
+    "department_code": {
+      "type": "string"
+    },
+    "department_name": {
+      "type": "string"
+    },
+    "account_code": {
+      "type": "string"
+    },
+    "account_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "WAGES/SALARY",
+        "BENEFITS",
+        "OFFICE SUPPLIES",
+        "UTILITIES",
+        "OPERATING EXPENSES",
+        "INSURANCES",
+        "EQUIP MAINT",
+        "BLDG MAINT",
+        "CLOTHING",
+        "CONTRACT SERVICES",
+        "CAPITAL PROJECTS",
+        "OTHER",
+        "GRANTS",
+        "FUND TRANSFER",
+        "LOANS/NOTES",
+        "THIRD PARTY",
+        "GOV'T AGENCY",
+        "GENERAL EDUCATION"
+      ]
+    },
+    "fy23_budget": {
+      "type": "number",
+      "description": "FY2023 Budget"
+    },
+    "fy23_actual": {
+      "type": "number",
+      "description": "FY2023 Actual"
+    },
+    "fy24_budget": {
+      "type": "number",
+      "description": "FY2024 Budget"
+    },
+    "fy24_actual": {
+      "type": "number",
+      "description": "FY2024 Actual"
+    },
+    "fy25_budget": {
+      "type": "number",
+      "description": "FY2025 Budget"
+    },
+    "fy25_actual": {
+      "type": "number",
+      "description": "FY2025 Actual"
+    },
+    "fy26_budget": {
+      "type": "number",
+      "description": "FY2026 Budget"
+    },
+    "fy26_ytd": {
+      "type": "number",
+      "description": "FY2026 YTD Actual"
+    },
+    "prior_year_actual": {
+      "type": "number",
+      "description": "FY2025 Actual (legacy)"
+    },
+    "prior_year_budget": {
+      "type": "number",
+      "description": "FY2025 Budget (legacy)"
+    },
+    "current_year_budget": {
+      "type": "number",
+      "description": "FY2026 Budget (legacy)"
+    },
+    "current_year_ytd": {
+      "type": "number",
+      "description": "FY2026 YTD (legacy)"
+    },
+    "initial_request": {
+      "type": "number",
+      "description": "Department Head initial request"
+    },
+    "initial_notes": {
+      "type": "string"
+    },
+    "initial_submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "manager_amount": {
+      "type": "number",
+      "description": "Town Manager recommended amount"
+    },
+    "manager_notes": {
+      "type": "string"
+    },
+    "manager_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "committee_amount": {
+      "type": "number",
+      "description": "Budget Committee amount"
+    },
+    "committee_notes": {
+      "type": "string"
+    },
+    "committee_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "board_amount": {
+      "type": "number",
+      "description": "Select Board final amount"
+    },
+    "board_notes": {
+      "type": "string"
+    },
+    "board_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "board_votes_yes": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of Select Board yes votes (need 3 of 5)"
+    },
+    "board_votes_no": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of Select Board no votes"
+    },
+    "final_approved_amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "initial",
+        "manager_review",
+        "committee_review",
+        "board_review",
+        "approved",
+        "printed"
+      ],
+      "default": "draft"
+    },
+    "workflow_stage": {
+      "type": "string",
+      "enum": [
+        "initial",
+        "manager",
+        "budget_committee",
+        "select_board",
+        "approved"
+      ],
+      "default": "initial"
+    },
+    "is_locked": {
+      "type": "boolean",
+      "default": false
+    },
+    "dept_head_request": {
+      "type": "number",
+      "description": "Legacy alias for initial_request"
+    },
+    "dept_head_notes": {
+      "type": "string"
+    },
+    "dept_head_submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fd_amount": {
+      "type": "number",
+      "description": "Legacy Finance Director amount"
+    },
+    "fd_notes": {
+      "type": "string"
+    },
+    "fd_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tm_amount": {
+      "type": "number",
+      "description": "Legacy Town Manager amount"
+    },
+    "tm_notes": {
+      "type": "string"
+    },
+    "tm_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "department_code",
+    "department_name",
+    "account_code",
+    "account_name"
+  ]
+}

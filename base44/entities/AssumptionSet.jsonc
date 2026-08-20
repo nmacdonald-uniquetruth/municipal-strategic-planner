@@ -1,0 +1,237 @@
+{
+  "name": "AssumptionSet",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of assumption set (e.g., 'Base Case 2026', 'Conservative')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description and rationale for this set of assumptions"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this the active assumption set used by default?"
+    },
+    "salary_assumptions": {
+      "type": "object",
+      "properties": {
+        "wage_growth_rate": {
+          "type": "number",
+          "description": "Annual wage growth percentage (e.g., 0.04 for 4%)"
+        },
+        "cola_adjustment": {
+          "type": "boolean",
+          "description": "Are COLAs included in growth rate?"
+        },
+        "benefit_cost_percentage": {
+          "type": "number",
+          "description": "Benefits as percentage of salary (e.g., 0.35 for 35%)"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "benefit_assumptions": {
+      "type": "object",
+      "properties": {
+        "health_insurance_tier": {
+          "type": "string",
+          "enum": [
+            "individual",
+            "employee_spouse",
+            "employee_children",
+            "family"
+          ],
+          "description": "Primary health insurance tier assumption"
+        },
+        "health_individual_annual": {
+          "type": "number",
+          "description": "Annual individual health insurance cost"
+        },
+        "health_family_annual": {
+          "type": "number",
+          "description": "Annual family health insurance cost"
+        },
+        "fica_rate": {
+          "type": "number",
+          "description": "FICA rate as decimal (e.g., 0.0765)"
+        },
+        "pers_rate": {
+          "type": "number",
+          "description": "Maine PERS rate as decimal"
+        },
+        "icma_match_rate": {
+          "type": "number",
+          "description": "ICMA 403(b) match as decimal (replaces PERS for some positions)"
+        },
+        "wc_rate": {
+          "type": "number",
+          "description": "Workers compensation rate"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "inflation_assumptions": {
+      "type": "object",
+      "properties": {
+        "general_inflation": {
+          "type": "number",
+          "description": "General inflation rate for goods/services"
+        },
+        "energy_inflation": {
+          "type": "number",
+          "description": "Energy/utilities inflation rate"
+        },
+        "healthcare_inflation": {
+          "type": "number",
+          "description": "Healthcare cost inflation"
+        },
+        "fuel_inflation": {
+          "type": "number",
+          "description": "Fuel/transportation inflation"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "service_demand_assumptions": {
+      "type": "object",
+      "properties": {
+        "ems_transport_growth": {
+          "type": "number",
+          "description": "Annual EMS transport volume growth rate"
+        },
+        "population_growth": {
+          "type": "number",
+          "description": "Population growth rate assumption"
+        },
+        "residential_development": {
+          "type": "string",
+          "description": "Expected residential development impact (e.g., 'modest', 'significant')"
+        },
+        "seasonal_variation": {
+          "type": "boolean",
+          "description": "Adjust for seasonal population variations"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "tax_base_assumptions": {
+      "type": "object",
+      "properties": {
+        "total_assessed_value": {
+          "type": "number",
+          "description": "Total municipal assessed property value"
+        },
+        "assessed_value_growth": {
+          "type": "number",
+          "description": "Annual growth in assessed value"
+        },
+        "current_mill_rate": {
+          "type": "number",
+          "description": "Current mill rate"
+        },
+        "annual_tax_levy": {
+          "type": "number",
+          "description": "Annual tax levy"
+        },
+        "undesignated_fund_balance": {
+          "type": "number",
+          "description": "General fund undesignated balance"
+        },
+        "fund_balance_policy": {
+          "type": "string",
+          "description": "Fund balance policy target (e.g., '16.7% of budget')"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "grant_assumptions": {
+      "type": "object",
+      "properties": {
+        "state_revenue_sharing": {
+          "type": "number",
+          "description": "Expected state revenue sharing annually"
+        },
+        "federal_grants_annual": {
+          "type": "number",
+          "description": "Expected federal grant funding"
+        },
+        "cdbg_availability": {
+          "type": "boolean",
+          "description": "Assume CDBG funding available"
+        },
+        "grant_collection_rate": {
+          "type": "number",
+          "description": "Percentage of grant funds collected vs. awarded"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "regional_revenue_assumptions": {
+      "type": "object",
+      "properties": {
+        "regional_adoption_rate_low": {
+          "type": "number",
+          "description": "Low scenario adoption percentage (0-1)"
+        },
+        "regional_adoption_rate_moderate": {
+          "type": "number",
+          "description": "Moderate scenario adoption percentage"
+        },
+        "regional_adoption_rate_high": {
+          "type": "number",
+          "description": "High scenario adoption percentage"
+        },
+        "regional_service_margin": {
+          "type": "number",
+          "description": "Profit margin on regional services (0-1)"
+        },
+        "partnership_ramp_up_years": {
+          "type": "number",
+          "description": "Years to reach full adoption"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string",
+      "description": "General notes about this assumption set"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,373 @@
+{
+  "name": "ServiceTerritory",
+  "type": "object",
+  "properties": {
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "ambulance_ems",
+        "police",
+        "transfer_station",
+        "public_works",
+        "administrative_support",
+        "code_enforcement",
+        "dispatch_communications",
+        "other"
+      ],
+      "description": "Type of service"
+    },
+    "proposal_id": {
+      "type": "string",
+      "description": "Link to proposal defining this territory"
+    },
+    "proposal_title": {
+      "type": "string",
+      "description": "Denormalized proposal title"
+    },
+    "territory_name": {
+      "type": "string",
+      "description": "Name of this service territory (e.g., 'Machias Bay EMS Region')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Territory description and scope"
+    },
+    "current_service_recipients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "municipality": {
+            "type": "string"
+          },
+          "population": {
+            "type": "number"
+          },
+          "service_start_year": {
+            "type": "number"
+          },
+          "contract_status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "expires_soon",
+              "pending_renewal"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Towns currently receiving this service"
+    },
+    "likely_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "municipality": {
+            "type": "string"
+          },
+          "population": {
+            "type": "number"
+          },
+          "adoption_probability": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "barriers_to_adoption": {
+            "type": "string",
+            "description": "Why they might not adopt"
+          },
+          "estimated_timeline": {
+            "type": "string",
+            "description": "When they might adopt"
+          },
+          "engagement_status": {
+            "type": "string",
+            "enum": [
+              "not_contacted",
+              "preliminary_interest",
+              "in_discussions",
+              "ready_to_contract"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Towns likely to adopt this service"
+    },
+    "prospective_long_term": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "municipality": {
+            "type": "string"
+          },
+          "population": {
+            "type": "number"
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Why they might be interested eventually"
+          },
+          "long_term_potential": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "prerequisites": {
+            "type": "string",
+            "description": "What needs to happen first"
+          },
+          "target_year": {
+            "type": "number",
+            "description": "Year we might pursue them"
+          }
+        }
+      },
+      "description": "Towns to consider for future years"
+    },
+    "geographic_service_area": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Geographic area description"
+        },
+        "response_time_standard": {
+          "type": "string",
+          "description": "e.g., 'First responder within 10 minutes'"
+        },
+        "service_boundaries": {
+          "type": "string",
+          "description": "How service area boundaries are defined"
+        }
+      }
+    },
+    "revenue_assumptions": {
+      "type": "object",
+      "properties": {
+        "revenue_model": {
+          "type": "string",
+          "enum": [
+            "fixed_fee_per_town",
+            "per_capita",
+            "call_volume_based",
+            "hybrid",
+            "annual_contract"
+          ]
+        },
+        "average_town_fee": {
+          "type": "number",
+          "description": "Average annual fee per town"
+        },
+        "total_projected_revenue": {
+          "type": "number",
+          "description": "Total annual revenue from all recipients"
+        },
+        "revenue_growth_assumption": {
+          "type": "number",
+          "description": "Annual growth percentage"
+        },
+        "assumption_id": {
+          "type": "string",
+          "description": "Link to AssumptionSet"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "cost_assumptions": {
+      "type": "object",
+      "properties": {
+        "cost_model": {
+          "type": "string",
+          "enum": [
+            "fixed_cost",
+            "variable_per_call",
+            "hybrid"
+          ]
+        },
+        "annual_delivery_cost": {
+          "type": "number",
+          "description": "Annual cost to deliver this service"
+        },
+        "cost_per_recipient": {
+          "type": "number",
+          "description": "Average cost per recipient town"
+        },
+        "cost_growth_assumption": {
+          "type": "number",
+          "description": "Annual cost inflation assumption"
+        },
+        "assumption_id": {
+          "type": "string",
+          "description": "Link to AssumptionSet"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "staffing_assumptions": {
+      "type": "object",
+      "properties": {
+        "dedicated_fte": {
+          "type": "number",
+          "description": "FTE dedicated to regional service"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "shared_staff_percentage": {
+          "type": "number",
+          "description": "Percentage of time from shared staff"
+        },
+        "assumption_id": {
+          "type": "string",
+          "description": "Link to AssumptionSet"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "governance_model": {
+      "type": "object",
+      "properties": {
+        "agreement_type": {
+          "type": "string",
+          "enum": [
+            "interlocal_agreement",
+            "mou",
+            "service_contract",
+            "joint_powers",
+            "regional_authority"
+          ]
+        },
+        "machias_control_level": {
+          "type": "string",
+          "enum": [
+            "full_control",
+            "majority_control",
+            "shared_control",
+            "advisory_only"
+          ]
+        },
+        "cost_sharing_method": {
+          "type": "string",
+          "description": "How costs are divided among participants"
+        },
+        "governance_framework_id": {
+          "type": "string",
+          "description": "Link to GovernanceFramework"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "total_potential_population": {
+      "type": "number",
+      "description": "Combined population of all candidate towns"
+    },
+    "total_current_population": {
+      "type": "number",
+      "description": "Combined population currently served"
+    },
+    "penetration_rate": {
+      "type": "number",
+      "description": "Percentage of potential territory currently served"
+    },
+    "growth_strategy": {
+      "type": "string",
+      "description": "Strategy for expanding service territory"
+    },
+    "marketing_outreach": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Marketing or outreach action"
+          },
+          "target_municipalities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timeline": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Planned outreach activities"
+    },
+    "competitive_threats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "threat": {
+            "type": "string"
+          },
+          "affected_towns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Competitive or operational threats to territory"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "active",
+        "mature",
+        "declining"
+      ],
+      "default": "concept"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "service_type"
+  ]
+}

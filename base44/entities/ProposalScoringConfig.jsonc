@@ -1,0 +1,110 @@
+{
+  "name": "ProposalScoringConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Configuration name (e.g., 'Default', 'Capital Projects', 'Regional Services')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of when to use this configuration"
+    },
+    "proposal_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Which proposal types this applies to"
+    },
+    "scale_min": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum score value"
+    },
+    "scale_max": {
+      "type": "number",
+      "default": 10,
+      "description": "Maximum score value"
+    },
+    "weights": {
+      "type": "object",
+      "description": "Default weights for all criteria",
+      "properties": {
+        "financial_impact": {
+          "type": "number",
+          "default": 12
+        },
+        "tax_impact": {
+          "type": "number",
+          "default": 10
+        },
+        "service_impact": {
+          "type": "number",
+          "default": 12
+        },
+        "operational_feasibility": {
+          "type": "number",
+          "default": 10
+        },
+        "staffing_impact": {
+          "type": "number",
+          "default": 10
+        },
+        "implementation_complexity": {
+          "type": "number",
+          "default": 8
+        },
+        "political_community_feasibility": {
+          "type": "number",
+          "default": 12
+        },
+        "regional_collaboration_potential": {
+          "type": "number",
+          "default": 8
+        },
+        "long_term_sustainability": {
+          "type": "number",
+          "default": 12
+        },
+        "risk_level": {
+          "type": "number",
+          "default": 6
+        }
+      }
+    },
+    "rating_scale": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "min_score": {
+            "type": "number"
+          },
+          "max_score": {
+            "type": "number"
+          },
+          "rating": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Score ranges and corresponding ratings"
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this the default configuration?"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about this configuration"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

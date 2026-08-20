@@ -1,0 +1,125 @@
+{
+  "name": "RoadSegment",
+  "type": "object",
+  "properties": {
+    "road_name": {
+      "type": "string",
+      "description": "Road name (e.g. Allen Av)"
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": [
+        "Townway",
+        "State-aid",
+        "State Highway",
+        "Private"
+      ],
+      "default": "Townway"
+    },
+    "surface": {
+      "type": "string",
+      "enum": [
+        "paved",
+        "gravel",
+        "unknown"
+      ],
+      "default": "paved"
+    },
+    "centerline_miles": {
+      "type": "number"
+    },
+    "avg_width_ft": {
+      "type": "number",
+      "default": 20
+    },
+    "lanes": {
+      "type": "number",
+      "default": 2
+    },
+    "functional_class": {
+      "type": "string",
+      "enum": [
+        "Town local",
+        "Collector",
+        "Arterial",
+        "State-aid"
+      ],
+      "default": "Town local"
+    },
+    "condition": {
+      "type": "number",
+      "description": "1 (poor) to 5 (excellent)"
+    },
+    "drainage_concern": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_major_work_year": {
+      "type": "number"
+    },
+    "last_work_type": {
+      "type": "string"
+    },
+    "last_capitalized_cost": {
+      "type": "number"
+    },
+    "planning_work_type": {
+      "type": "string",
+      "enum": [
+        "Overlay / shim",
+        "Reclaim & pave",
+        "Crack seal",
+        "Chip seal",
+        "Gravel grading",
+        "Drainage / culvert",
+        "Reconstruction",
+        "Sidewalk",
+        "None scheduled"
+      ],
+      "default": "Crack seal"
+    },
+    "planning_useful_life_yrs": {
+      "type": "number",
+      "default": 10
+    },
+    "next_treatment_year": {
+      "type": "number"
+    },
+    "estimated_project_cost": {
+      "type": "number"
+    },
+    "status_bucket": {
+      "type": "string",
+      "enum": [
+        "Critical",
+        "Aging",
+        "Mid-life",
+        "Good",
+        "Unknown"
+      ],
+      "default": "Unknown"
+    },
+    "accepted": {
+      "type": "boolean",
+      "default": true
+    },
+    "sidewalk": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    },
+    "priority_score": {
+      "type": "number",
+      "description": "Computed 0-100 priority"
+    },
+    "gis_route_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "road_name",
+    "jurisdiction"
+  ]
+}

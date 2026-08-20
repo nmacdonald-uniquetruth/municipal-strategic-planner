@@ -1,0 +1,118 @@
+{
+  "name": "FinancialRecord",
+  "type": "object",
+  "properties": {
+    "fiscal_year": {
+      "type": "string",
+      "description": "e.g. FY2027"
+    },
+    "town_id": {
+      "type": "string",
+      "description": "Town this record belongs to"
+    },
+    "department_id": {
+      "type": "string",
+      "description": "Department (if applicable)"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "revenue",
+        "expense",
+        "capital_investment",
+        "debt_obligation",
+        "fund_balance",
+        "transfer"
+      ],
+      "description": "Record classification"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "property_tax",
+        "excise_tax",
+        "state_revenue_sharing",
+        "grants",
+        "fees_charges",
+        "regional_service_contracts",
+        "ems_billing",
+        "transfer_station_fees",
+        "enterprise_transfers",
+        "other_revenue",
+        "salaries_wages",
+        "benefits",
+        "supplies",
+        "contracted_services",
+        "equipment",
+        "debt_service",
+        "capital_outlay",
+        "erp_implementation",
+        "other_expense",
+        "bond_issuance",
+        "loan",
+        "capital_reserve",
+        "principal_payment",
+        "interest_payment"
+      ]
+    },
+    "sub_category": {
+      "type": "string",
+      "description": "More specific classification"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Dollar amount (positive = revenue/asset, negative = expense/liability)"
+    },
+    "budgeted_amount": {
+      "type": "number",
+      "description": "Budgeted amount for comparison"
+    },
+    "variance": {
+      "type": "number",
+      "description": "Actual vs budgeted (calculated)"
+    },
+    "fund": {
+      "type": "string",
+      "enum": [
+        "general_fund",
+        "ambulance_fund",
+        "sewer_fund",
+        "transfer_station_fund",
+        "airport_fund",
+        "capital_reserve",
+        "grant_fund",
+        "debt_service_fund"
+      ],
+      "default": "general_fund"
+    },
+    "account_code": {
+      "type": "string",
+      "description": "Chart of accounts code"
+    },
+    "description": {
+      "type": "string"
+    },
+    "source_document": {
+      "type": "string",
+      "description": "Source document or reference"
+    },
+    "is_projected": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if projected, false if actual"
+    },
+    "gasb_classification": {
+      "type": "string",
+      "description": "GASB 34 fund/government-wide classification"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "record_type",
+    "category",
+    "amount"
+  ]
+}

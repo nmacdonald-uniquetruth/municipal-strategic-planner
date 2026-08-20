@@ -1,0 +1,63 @@
+{
+  "name": "RegionalServicesRevenueForecast",
+  "type": "object",
+  "properties": {
+    "municipality": {
+      "type": "string",
+      "description": "Municipality name"
+    },
+    "service_category": {
+      "type": "string",
+      "description": "Type of service"
+    },
+    "scenario": {
+      "type": "string",
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ],
+      "description": "Pricing scenario"
+    },
+    "year_1_revenue": {
+      "type": "number",
+      "description": "Year 1 projected annual revenue"
+    },
+    "year_2_revenue": {
+      "type": "number"
+    },
+    "year_3_revenue": {
+      "type": "number"
+    },
+    "year_4_revenue": {
+      "type": "number"
+    },
+    "year_5_revenue": {
+      "type": "number"
+    },
+    "five_year_cumulative": {
+      "type": "number",
+      "description": "Total revenue over 5 years"
+    },
+    "estimated_marginal_cost_annual": {
+      "type": "number",
+      "description": "Estimated annual marginal cost to deliver service"
+    },
+    "net_fiscal_impact_five_year": {
+      "type": "number",
+      "description": "Net fiscal impact (revenue minus costs) over 5 years"
+    },
+    "assumptions": {
+      "type": "string",
+      "description": "Pricing and cost assumptions"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "municipality",
+    "service_category",
+    "scenario"
+  ]
+}

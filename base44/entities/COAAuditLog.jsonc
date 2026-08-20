@@ -1,0 +1,73 @@
+{
+  "name": "COAAuditLog",
+  "type": "object",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "account_created",
+        "account_updated",
+        "account_deleted",
+        "account_approved",
+        "mapping_changed",
+        "status_changed",
+        "version_created",
+        "version_approved",
+        "version_superseded",
+        "import_completed",
+        "exception_resolved",
+        "exception_flagged",
+        "deletion_blocked"
+      ],
+      "description": "Type of audit event"
+    },
+    "account_id": {
+      "type": "string",
+      "description": "ChartOfAccounts record ID (if applicable)"
+    },
+    "version_id": {
+      "type": "string",
+      "description": "COACrosswalkVersion ID (if applicable)"
+    },
+    "account_number": {
+      "type": "string",
+      "description": "New account number for display"
+    },
+    "trio_account": {
+      "type": "string",
+      "description": "TRIO account number for display"
+    },
+    "field_changed": {
+      "type": "string",
+      "description": "Which field was modified"
+    },
+    "value_before": {
+      "type": "string",
+      "description": "Previous value (serialized)"
+    },
+    "value_after": {
+      "type": "string",
+      "description": "New value (serialized)"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "User who made the change"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the event"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "string",
+      "description": "JSON-serialized additional context"
+    }
+  },
+  "required": [
+    "event_type",
+    "timestamp"
+  ]
+}

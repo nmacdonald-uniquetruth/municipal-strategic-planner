@@ -1,0 +1,76 @@
+{
+  "name": "MunicipalityProfile",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "county": {
+      "type": "string"
+    },
+    "population": {
+      "type": "number"
+    },
+    "governance_type": {
+      "type": "string",
+      "enum": [
+        "town_meeting",
+        "council_manager",
+        "mayor_council",
+        "select_board",
+        "commission",
+        "other"
+      ]
+    },
+    "fiscal_year": {
+      "type": "string"
+    },
+    "annual_budget": {
+      "type": "number"
+    },
+    "departments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "enterprise_funds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategic_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "policy_focus_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "custom_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "state"
+  ]
+}

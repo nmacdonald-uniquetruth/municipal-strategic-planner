@@ -1,0 +1,227 @@
+{
+  "name": "RiskProfile",
+  "type": "object",
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "description": "Link to Proposal this risk profile belongs to"
+    },
+    "proposal_title": {
+      "type": "string",
+      "description": "Denormalized proposal title for reference"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Risk title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed risk description"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "financial",
+              "operational",
+              "staffing",
+              "governance",
+              "legal",
+              "public_acceptance",
+              "partner_participation"
+            ],
+            "description": "Risk category"
+          },
+          "likelihood": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "description": "Probability of occurrence"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ],
+            "description": "Impact if it occurs"
+          },
+          "risk_score": {
+            "type": "number",
+            "description": "Calculated risk score (0-100)"
+          },
+          "mitigation_actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "description": "Mitigation action"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "Person responsible"
+                },
+                "timeline": {
+                  "type": "string",
+                  "description": "When to implement"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "planned",
+                    "in_progress",
+                    "completed"
+                  ],
+                  "default": "planned"
+                }
+              }
+            },
+            "description": "Actions to reduce risk"
+          },
+          "fallback_options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "option": {
+                  "type": "string",
+                  "description": "Alternative approach if risk occurs"
+                },
+                "impact_on_proposal": {
+                  "type": "string",
+                  "description": "How fallback affects original proposal"
+                },
+                "additional_cost": {
+                  "type": "number",
+                  "description": "Extra cost of fallback option"
+                }
+              }
+            },
+            "description": "Contingency plans if risk materializes"
+          },
+          "monitoring_indicator": {
+            "type": "string",
+            "description": "What to monitor to detect this risk early"
+          }
+        },
+        "required": [
+          "title",
+          "category",
+          "likelihood",
+          "severity"
+        ]
+      },
+      "description": "Array of identified risks"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dependency_on": {
+            "type": "string",
+            "description": "What this proposal depends on"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "proposal",
+              "other_initiative",
+              "external_factor",
+              "policy_decision",
+              "infrastructure"
+            ],
+            "description": "Type of dependency"
+          },
+          "criticality": {
+            "type": "string",
+            "enum": [
+              "must_have",
+              "preferred",
+              "nice_to_have"
+            ],
+            "description": "How critical this dependency is"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "When this dependency must be met"
+          },
+          "contingency": {
+            "type": "string",
+            "description": "What if this dependency cannot be met"
+          }
+        }
+      },
+      "description": "Dependencies for successful implementation"
+    },
+    "overall_risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "critical"
+      ],
+      "description": "Overall risk assessment"
+    },
+    "risk_tolerance": {
+      "type": "string",
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ],
+      "default": "moderate",
+      "description": "Organization's tolerance for risk on this proposal"
+    },
+    "risk_owner": {
+      "type": "string",
+      "description": "Person accountable for risk management"
+    },
+    "review_frequency": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "quarterly",
+        "annually"
+      ],
+      "default": "quarterly",
+      "description": "How often risks should be reviewed"
+    },
+    "last_risk_review": {
+      "type": "string",
+      "format": "date"
+    },
+    "risk_register_notes": {
+      "type": "string",
+      "description": "General notes and observations"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "archived"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "proposal_id",
+    "risks"
+  ]
+}

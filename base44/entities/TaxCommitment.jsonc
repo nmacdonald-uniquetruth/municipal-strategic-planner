@@ -1,0 +1,107 @@
+{
+  "name": "TaxCommitment",
+  "type": "object",
+  "properties": {
+    "fiscal_year": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string",
+      "description": "e.g. 'FY2027 Adopted'"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "proposed",
+        "select_board_approved",
+        "town_meeting_adopted",
+        "committed"
+      ],
+      "default": "draft"
+    },
+    "total_assessed_value": {
+      "type": "number"
+    },
+    "homestead_exemption_value": {
+      "type": "number",
+      "default": 0
+    },
+    "bete_reimbursement": {
+      "type": "number",
+      "default": 0
+    },
+    "total_appropriations": {
+      "type": "number"
+    },
+    "municipal_appropriations": {
+      "type": "number"
+    },
+    "school_appropriations": {
+      "type": "number"
+    },
+    "county_assessment": {
+      "type": "number"
+    },
+    "tif_financing_plan": {
+      "type": "number",
+      "default": 0
+    },
+    "enterprise_offsets": {
+      "type": "number",
+      "default": 0
+    },
+    "total_deductions": {
+      "type": "number"
+    },
+    "state_revenue_sharing": {
+      "type": "number",
+      "default": 0
+    },
+    "local_revenues": {
+      "type": "number",
+      "default": 0
+    },
+    "fund_balance_use": {
+      "type": "number",
+      "default": 0
+    },
+    "grants_and_reimbursements": {
+      "type": "number",
+      "default": 0
+    },
+    "net_to_be_raised": {
+      "type": "number"
+    },
+    "selected_mill_rate": {
+      "type": "number"
+    },
+    "calculated_mill_rate": {
+      "type": "number"
+    },
+    "overlay_dollars": {
+      "type": "number",
+      "default": 0
+    },
+    "overlay_percent": {
+      "type": "number",
+      "default": 0
+    },
+    "tax_for_commitment": {
+      "type": "number"
+    },
+    "prior_year_mill_rate": {
+      "type": "number"
+    },
+    "prior_year_levy": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "label"
+  ]
+}

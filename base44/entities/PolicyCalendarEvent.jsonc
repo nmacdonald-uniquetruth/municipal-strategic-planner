@@ -1,0 +1,64 @@
+{
+  "name": "PolicyCalendarEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "hearing",
+        "vote",
+        "work_session",
+        "effective_date",
+        "comment_deadline",
+        "rulemaking",
+        "grant_deadline",
+        "custom"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "legislation_id": {
+      "type": "string"
+    },
+    "official_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "watch"
+      ]
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "event_type",
+    "date"
+  ]
+}

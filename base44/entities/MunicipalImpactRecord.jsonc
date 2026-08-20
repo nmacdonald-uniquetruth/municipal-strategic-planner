@@ -1,0 +1,178 @@
+{
+  "name": "MunicipalImpactRecord",
+  "type": "object",
+  "properties": {
+    "policy_item_id": {
+      "type": "string",
+      "description": "LegislationItem ID"
+    },
+    "municipality_profile_id": {
+      "type": "string"
+    },
+    "municipality_name": {
+      "type": "string"
+    },
+    "overall_relevance_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "priority_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "watch",
+        "low"
+      ],
+      "default": "watch"
+    },
+    "urgency_score": {
+      "type": "number",
+      "description": "0-100, boosted by deadlines"
+    },
+    "confidence_score": {
+      "type": "number",
+      "description": "0-100 confidence in scoring"
+    },
+    "budget_impact_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "operations_impact_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "hr_impact_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "compliance_impact_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "capital_impact_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "funding_opportunity_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "geographic_applicability_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "department_matches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategic_goal_matches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "topic_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "impact_type_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "why_it_matters_summary": {
+      "type": "string"
+    },
+    "plain_language_summary": {
+      "type": "string"
+    },
+    "what_changed": {
+      "type": "string"
+    },
+    "who_it_affects": {
+      "type": "string"
+    },
+    "possible_budget_impact": {
+      "type": "string"
+    },
+    "possible_operational_impact": {
+      "type": "string"
+    },
+    "possible_hr_impact": {
+      "type": "string"
+    },
+    "possible_compliance_impact": {
+      "type": "string"
+    },
+    "possible_capital_impact": {
+      "type": "string"
+    },
+    "possible_funding_opportunity": {
+      "type": "string"
+    },
+    "risks_if_enacted": {
+      "type": "string"
+    },
+    "risks_if_not_addressed": {
+      "type": "string"
+    },
+    "recommended_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_owner_role": {
+      "type": "string"
+    },
+    "scoring_version": {
+      "type": "string",
+      "default": "1.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "generation_method": {
+      "type": "string",
+      "enum": [
+        "ai_generated",
+        "rule_based",
+        "manual_override"
+      ],
+      "default": "rule_based"
+    },
+    "manual_override": {
+      "type": "boolean",
+      "default": false
+    },
+    "admin_note": {
+      "type": "string"
+    },
+    "internal_note": {
+      "type": "string"
+    },
+    "is_board_ready": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_budget_relevant": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "policy_item_id"
+  ]
+}

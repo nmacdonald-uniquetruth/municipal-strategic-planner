@@ -1,0 +1,44 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "description": "Type of audit event (e.g. assumption_changed, scenario_revised)"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Entity type affected (ModelSettings, Scenario, RestructuringProposal, etc.)"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the affected entity record"
+    },
+    "entity_name": {
+      "type": "string",
+      "description": "Human-readable name of the affected entity"
+    },
+    "changes": {
+      "type": "string",
+      "description": "JSON-serialized before/after diff of changed fields"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User who made the change (email or ID)"
+    },
+    "metadata": {
+      "type": "string",
+      "description": "JSON-serialized additional context"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of the event"
+    }
+  },
+  "required": [
+    "event_type",
+    "entity_type",
+    "timestamp"
+  ]
+}

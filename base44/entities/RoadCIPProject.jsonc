@@ -1,0 +1,108 @@
+{
+  "name": "RoadCIPProject",
+  "type": "object",
+  "properties": {
+    "project_name": {
+      "type": "string"
+    },
+    "road_segment_id": {
+      "type": "string",
+      "description": "RoadSegment ID"
+    },
+    "linked_road": {
+      "type": "string",
+      "description": "Road name for display"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Road",
+        "Sidewalk",
+        "Drainage",
+        "Equipment",
+        "Facility",
+        "Bridge",
+        "Other"
+      ],
+      "default": "Road"
+    },
+    "work_type": {
+      "type": "string",
+      "enum": [
+        "Overlay / shim",
+        "Reclaim & pave",
+        "Crack seal",
+        "Chip seal",
+        "Gravel grading",
+        "Drainage / culvert",
+        "Reconstruction",
+        "Equipment purchase",
+        "Facility",
+        "Other"
+      ],
+      "default": "Overlay / shim"
+    },
+    "fy_start": {
+      "type": "number",
+      "description": "Fiscal year start (e.g. 2027)"
+    },
+    "fy_end": {
+      "type": "number",
+      "description": "Fiscal year end (single year = same as start)"
+    },
+    "total_cost": {
+      "type": "number"
+    },
+    "annual_allocation": {
+      "type": "number",
+      "description": "Cost per year (total / span)"
+    },
+    "funding_source": {
+      "type": "string",
+      "enum": [
+        "General Fund",
+        "Capital Reserve",
+        "LRAP",
+        "Excise Tax",
+        "Grant / MDOT",
+        "Bond",
+        "Mixed"
+      ],
+      "default": "Capital Reserve"
+    },
+    "include_in_cip": {
+      "type": "boolean",
+      "default": true
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Planned",
+        "Approved",
+        "In Progress",
+        "Complete",
+        "Deferred",
+        "Needs Scope"
+      ],
+      "default": "Planned"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low"
+      ],
+      "default": "Medium"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_name",
+    "fy_start",
+    "total_cost"
+  ]
+}

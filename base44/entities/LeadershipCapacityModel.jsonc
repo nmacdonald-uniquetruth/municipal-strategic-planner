@@ -1,0 +1,77 @@
+{
+  "name": "LeadershipCapacityModel",
+  "type": "object",
+  "properties": {
+    "department": {
+      "type": "string",
+      "description": "Department name (e.g., Police, Finance, Ambulance/Fire)"
+    },
+    "leadershipRole": {
+      "type": "string",
+      "description": "Title of the leadership position"
+    },
+    "totalWeeklyHours": {
+      "type": "number",
+      "description": "Total weekly hours available for the leader"
+    },
+    "currentAdminHours": {
+      "type": "number",
+      "description": "Current hours spent on administrative work per week"
+    },
+    "adminHoursBreakdown": {
+      "type": "object",
+      "description": "Breakdown of administrative duties",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "supportRoleAdded": {
+      "type": "string",
+      "description": "Type of support role being considered"
+    },
+    "hoursTransferredToSupport": {
+      "type": "number",
+      "description": "Hours that will be transferred to support staff"
+    },
+    "strategicCapacityGained": {
+      "type": "number",
+      "description": "Additional hours available for strategic work"
+    },
+    "serviceDevelopmentOpportunitiesCreated": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of service development opportunities enabled by capacity"
+    },
+    "regionalRevenueImplications": {
+      "type": "string",
+      "description": "Potential revenue implications from new regional services"
+    },
+    "estimatedAnnualSavingsOrRevenue": {
+      "type": "number",
+      "description": "Estimated annual financial impact"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or context"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "approved",
+        "implemented"
+      ],
+      "default": "draft",
+      "description": "Status of the capacity model"
+    }
+  },
+  "required": [
+    "department",
+    "leadershipRole",
+    "totalWeeklyHours",
+    "currentAdminHours"
+  ]
+}

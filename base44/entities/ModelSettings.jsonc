@@ -1,0 +1,234 @@
+{
+  "name": "ModelSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings key identifier"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "default": "2026-07-01"
+    },
+    "fd_base_salary": {
+      "type": "number",
+      "default": 68000,
+      "description": "Finance Director base salary"
+    },
+    "tm_base_salary": {
+      "type": "number",
+      "default": 75000,
+      "description": "Town Manager base salary"
+    },
+    "sa_base_salary": {
+      "type": "number",
+      "default": 65000
+    },
+    "bs_base_salary": {
+      "type": "number",
+      "default": 55000
+    },
+    "ga_stipend": {
+      "type": "number",
+      "default": 10000
+    },
+    "rc_base_salary": {
+      "type": "number",
+      "default": 39000
+    },
+    "controller_base_salary": {
+      "type": "number",
+      "default": 85000
+    },
+    "y5_senior_hire": {
+      "type": "string",
+      "enum": [
+        "staff_accountant",
+        "controller"
+      ],
+      "default": "staff_accountant",
+      "description": "Year 5 senior hire: second Staff Accountant or Controller (half-year)"
+    },
+    "y1_staffing_model": {
+      "type": "string",
+      "enum": [
+        "fulltime_sa",
+        "parttime_stipend"
+      ],
+      "default": "fulltime_sa",
+      "description": "Year 1 staffing: full-time SA hired Y1, or part-time person funded by GA stipend + clerk stipend reallocation with full SA in Y2"
+    },
+    "clerk_stipend_realloc": {
+      "type": "number",
+      "default": 26000,
+      "description": "Amount of current clerk stipends reallocated to part-time accounting support in Y1 (matches stipend_elimination)"
+    },
+    "wage_growth_rate": {
+      "type": "number",
+      "default": 0.04
+    },
+    "health_tier": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "employee_spouse",
+        "employee_children",
+        "family"
+      ],
+      "default": "family"
+    },
+    "fica_rate": {
+      "type": "number",
+      "default": 0.0765
+    },
+    "pers_rate": {
+      "type": "number",
+      "default": 0.085
+    },
+    "icma_403b_match_rate": {
+      "type": "number",
+      "default": 0.05,
+      "description": "ICMA 403(b) employer match rate for full-time admin positions (replaces Maine PERS)"
+    },
+    "wc_rate": {
+      "type": "number",
+      "default": 0.025
+    },
+    "health_individual_annual": {
+      "type": "number",
+      "default": 17721
+    },
+    "health_family_annual": {
+      "type": "number",
+      "default": 30938
+    },
+    "ems_transports": {
+      "type": "number",
+      "default": 1648
+    },
+    "avg_revenue_per_transport": {
+      "type": "number",
+      "default": 659
+    },
+    "comstar_fee_rate": {
+      "type": "number",
+      "default": 0.0522
+    },
+    "comstar_collection_rate": {
+      "type": "number",
+      "default": 0.874
+    },
+    "inhouse_y1_rate": {
+      "type": "number",
+      "default": 0.855
+    },
+    "inhouse_steady_rate": {
+      "type": "number",
+      "default": 0.9
+    },
+    "transport_growth_rate": {
+      "type": "number",
+      "default": 0.02
+    },
+    "ambulance_transfer": {
+      "type": "number",
+      "default": 45000
+    },
+    "sewer_transfer": {
+      "type": "number",
+      "default": 21110
+    },
+    "ts_transfer": {
+      "type": "number",
+      "default": 21000
+    },
+    "telebusiness_transfer": {
+      "type": "number",
+      "default": 18525
+    },
+    "court_st_transfer": {
+      "type": "number",
+      "default": 15600
+    },
+    "enterprise_growth_rate": {
+      "type": "number",
+      "default": 0.03
+    },
+    "stipend_elimination": {
+      "type": "number",
+      "default": 26000
+    },
+    "airport_savings": {
+      "type": "number",
+      "default": 2527
+    },
+    "control_risk_exposure": {
+      "type": "number",
+      "default": 56000
+    },
+    "rb_annual_contract": {
+      "type": "number",
+      "default": 19000
+    },
+    "machiasport_annual_contract": {
+      "type": "number",
+      "default": 20000
+    },
+    "marshfield_annual_contract": {
+      "type": "number",
+      "default": 15000
+    },
+    "whitneyville_annual_contract": {
+      "type": "number",
+      "default": 11000
+    },
+    "northfield_annual_contract": {
+      "type": "number",
+      "default": 12000
+    },
+    "erp_y1_cost": {
+      "type": "number",
+      "default": 47000
+    },
+    "erp_designated_fund_offset": {
+      "type": "number",
+      "default": 24000
+    },
+    "erp_ongoing_cost": {
+      "type": "number",
+      "default": 5000
+    },
+    "erp_annual_value": {
+      "type": "number",
+      "default": 21000
+    },
+    "gf_undesignated_balance": {
+      "type": "number",
+      "default": 2500000
+    },
+    "ambulance_fund_balance": {
+      "type": "number",
+      "default": 500000
+    },
+    "ambulance_loan_payoff": {
+      "type": "number",
+      "default": 130000
+    },
+    "total_assessed_value": {
+      "type": "number",
+      "default": 198000000
+    },
+    "current_mill_rate": {
+      "type": "number",
+      "default": 14.5
+    },
+    "annual_tax_levy": {
+      "type": "number",
+      "default": 2871000
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

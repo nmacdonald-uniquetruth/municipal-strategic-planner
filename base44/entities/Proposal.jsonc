@@ -1,0 +1,234 @@
+{
+  "name": "Proposal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Proposal title"
+    },
+    "proposal_type": {
+      "type": "string",
+      "enum": [
+        "scenario",
+        "staffing_change",
+        "service_restructuring",
+        "regional_service",
+        "initiative"
+      ],
+      "description": "Type of proposal"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of source object (scenario, staffing change, etc.)"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "Type of source (Scenario, PositionConfig, etc.)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "approved",
+        "rejected",
+        "published"
+      ],
+      "default": "draft",
+      "description": "Proposal status"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Version number"
+    },
+    "background": {
+      "type": "string",
+      "description": "Background and context"
+    },
+    "problem_statement": {
+      "type": "string",
+      "description": "Problem being addressed"
+    },
+    "proposed_solution": {
+      "type": "string",
+      "description": "Detailed description of proposed solution"
+    },
+    "departments_affected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of affected departments"
+    },
+    "service_implications": {
+      "type": "string",
+      "description": "How services will be affected"
+    },
+    "staffing_implications": {
+      "type": "object",
+      "properties": {
+        "fte_change": {
+          "type": "number"
+        },
+        "positions_added": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "positions_eliminated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "budget_impact": {
+      "type": "object",
+      "properties": {
+        "annual_cost": {
+          "type": "number"
+        },
+        "annual_benefit": {
+          "type": "number"
+        },
+        "net_annual_impact": {
+          "type": "number"
+        },
+        "payback_period_years": {
+          "type": "number"
+        },
+        "five_year_total": {
+          "type": "number"
+        },
+        "breakdown": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "tax_impact": {
+      "type": "object",
+      "properties": {
+        "mill_rate_change": {
+          "type": "number"
+        },
+        "tax_levy_change": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "implementation_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timeline": {
+            "type": "string"
+          },
+          "responsible_party": {
+            "type": "string"
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "risks_and_mitigation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "regional_opportunities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Regional collaboration and expansion opportunities"
+    },
+    "recommendation": {
+      "type": "string",
+      "description": "Final recommendation and rationale"
+    },
+    "board_summary": {
+      "type": "string",
+      "description": "Board-ready executive summary (short form)"
+    },
+    "internal_notes": {
+      "type": "string",
+      "description": "Internal working notes and assumptions"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "User who created the proposal"
+    }
+  },
+  "required": [
+    "title",
+    "proposal_type"
+  ]
+}

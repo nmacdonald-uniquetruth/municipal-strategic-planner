@@ -1,0 +1,314 @@
+{
+  "name": "CapitalProject",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Project name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Project description and purpose"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "infrastructure",
+        "facility",
+        "technology",
+        "equipment",
+        "vehicle",
+        "public_safety",
+        "utilities",
+        "other"
+      ],
+      "description": "Project category"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department responsible"
+    },
+    "project_cost": {
+      "type": "number",
+      "description": "Total project cost"
+    },
+    "cost_breakdown": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Itemized cost breakdown"
+    },
+    "useful_life_years": {
+      "type": "number",
+      "description": "Expected useful life in years"
+    },
+    "annual_operating_impact": {
+      "type": "number",
+      "description": "Annual operating cost or savings (positive = cost, negative = savings)"
+    },
+    "annual_maintenance_impact": {
+      "type": "number",
+      "description": "Annual maintenance and repair costs"
+    },
+    "operating_impact_description": {
+      "type": "string",
+      "description": "Description of ongoing operating and maintenance impacts"
+    },
+    "funding_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "general_fund",
+              "capital_reserve",
+              "bond",
+              "grant",
+              "loan",
+              "enterprise_fund",
+              "donation"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "percentage": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "identified",
+              "applied",
+              "awarded",
+              "uncertain"
+            ]
+          }
+        }
+      },
+      "description": "Planned funding sources"
+    },
+    "grant_information": {
+      "type": "object",
+      "properties": {
+        "grant_available": {
+          "type": "boolean"
+        },
+        "grant_amount": {
+          "type": "number"
+        },
+        "grant_match_required": {
+          "type": "number"
+        },
+        "match_percentage": {
+          "type": "number"
+        },
+        "grant_source": {
+          "type": "string"
+        },
+        "application_deadline": {
+          "type": "string",
+          "format": "date"
+        },
+        "probability_of_award": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        }
+      }
+    },
+    "tax_impact": {
+      "type": "object",
+      "properties": {
+        "debt_service_annual": {
+          "type": "number",
+          "description": "Annual debt service if bonded"
+        },
+        "mill_rate_impact": {
+          "type": "number",
+          "description": "Impact on mill rate"
+        },
+        "household_impact": {
+          "type": "number",
+          "description": "Annual impact on typical household tax"
+        },
+        "assumptions": {
+          "type": "string"
+        }
+      }
+    },
+    "roi_community_value": {
+      "type": "object",
+      "properties": {
+        "quantifiable_benefits": {
+          "type": "string",
+          "description": "Measurable benefits (e.g., reduced operating costs, increased revenue)"
+        },
+        "benefit_amount_annual": {
+          "type": "number"
+        },
+        "intangible_benefits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Non-financial benefits (e.g., safety improvement, asset preservation)"
+        },
+        "roi_percentage": {
+          "type": "number",
+          "description": "Return on investment percentage"
+        },
+        "payback_period_years": {
+          "type": "number",
+          "description": "Years to recover initial investment"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "description": "Project urgency"
+    },
+    "urgency_rationale": {
+      "type": "string",
+      "description": "Why this urgency level"
+    },
+    "regulatory_necessity": {
+      "type": "boolean",
+      "description": "Is this required by law or regulation?"
+    },
+    "regulatory_requirement": {
+      "type": "string",
+      "description": "Description of regulatory requirement"
+    },
+    "regulatory_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Date by which compliance is required"
+    },
+    "phased_delivery": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase": {
+            "type": "number",
+            "description": "Phase number (1, 2, 3, etc.)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "year": {
+            "type": "number",
+            "description": "Fiscal year (relative to project start)"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "dependencies": {
+            "type": "string",
+            "description": "Other phases this depends on"
+          },
+          "can_proceed_independently": {
+            "type": "boolean"
+          }
+        }
+      },
+      "description": "Phased project breakdown"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "cost_impact": {
+            "type": "number"
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Project risks and contingencies"
+    },
+    "implementation_timeline": {
+      "type": "string",
+      "description": "Expected timeline (e.g., '18-24 months')"
+    },
+    "start_year": {
+      "type": "number",
+      "description": "Expected fiscal year to start"
+    },
+    "completion_year": {
+      "type": "number",
+      "description": "Expected fiscal year to complete"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "planning",
+        "design",
+        "permitting",
+        "construction",
+        "completed",
+        "deferred"
+      ],
+      "default": "concept"
+    },
+    "priority_rank": {
+      "type": "number",
+      "description": "Ranking relative to other projects"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional planning notes"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "title",
+    "project_cost",
+    "category"
+  ]
+}

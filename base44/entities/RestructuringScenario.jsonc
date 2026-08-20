@@ -1,0 +1,90 @@
+{
+  "name": "RestructuringScenario",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Scenario name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Scenario description"
+    },
+    "sa_base_salary": {
+      "type": "number",
+      "default": 65000,
+      "description": "Staff Accountant base salary"
+    },
+    "bs_base_salary": {
+      "type": "number",
+      "default": 55000,
+      "description": "Billing Specialist base salary"
+    },
+    "ga_stipend": {
+      "type": "number",
+      "default": 10000,
+      "description": "GA Coordinator annual stipend"
+    },
+    "wage_growth_rate": {
+      "type": "number",
+      "default": 0.04,
+      "description": "Annual wage growth rate"
+    },
+    "health_insurance_tier": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "employee_spouse",
+        "employee_children",
+        "family"
+      ],
+      "default": "family"
+    },
+    "regional_services_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "transfer_station_expansion": {
+      "type": "boolean",
+      "default": true
+    },
+    "ems_external_billing": {
+      "type": "boolean",
+      "default": true
+    },
+    "erp_implementation": {
+      "type": "boolean",
+      "default": true
+    },
+    "erp_year1_cost": {
+      "type": "number",
+      "default": 47000
+    },
+    "erp_ongoing_cost": {
+      "type": "number",
+      "default": 5000
+    },
+    "erp_annual_value": {
+      "type": "number",
+      "default": 21000
+    },
+    "comstar_fee_rate": {
+      "type": "number",
+      "default": 0.0522
+    },
+    "transport_growth_rate": {
+      "type": "number",
+      "default": 0.02
+    },
+    "inhouse_collection_rate": {
+      "type": "number",
+      "default": 0.9
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

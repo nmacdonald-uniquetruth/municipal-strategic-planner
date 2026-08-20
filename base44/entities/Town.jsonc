@@ -1,0 +1,106 @@
+{
+  "name": "Town",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Town name"
+    },
+    "county": {
+      "type": "string",
+      "default": "Washington",
+      "description": "County name"
+    },
+    "population": {
+      "type": "number",
+      "description": "Current population estimate"
+    },
+    "area_sq_miles": {
+      "type": "number",
+      "description": "Land area in square miles"
+    },
+    "total_assessed_value": {
+      "type": "number",
+      "description": "Total assessed property value"
+    },
+    "current_mill_rate": {
+      "type": "number",
+      "description": "Current property tax mill rate"
+    },
+    "annual_tax_levy": {
+      "type": "number",
+      "description": "Annual property tax levy"
+    },
+    "annual_budget": {
+      "type": "number",
+      "description": "Total annual municipal budget"
+    },
+    "has_full_time_manager": {
+      "type": "boolean",
+      "default": false
+    },
+    "has_finance_director": {
+      "type": "boolean",
+      "default": false
+    },
+    "form_of_government": {
+      "type": "string",
+      "enum": [
+        "town_meeting",
+        "town_council",
+        "select_board",
+        "city_council"
+      ],
+      "default": "town_meeting"
+    },
+    "relationship_with_machias": {
+      "type": "string",
+      "enum": [
+        "host_town",
+        "active_partner",
+        "prospect",
+        "limited_relationship",
+        "no_relationship"
+      ],
+      "default": "prospect"
+    },
+    "services_received_from_machias": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of services currently received from Machias"
+    },
+    "services_provided_to_machias": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of services provided to Machias"
+    },
+    "potential_services": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Services that could be provided under regional arrangement"
+    },
+    "distance_from_machias_miles": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number",
+      "description": "Latitude for map display"
+    },
+    "lng": {
+      "type": "number",
+      "description": "Longitude for map display"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

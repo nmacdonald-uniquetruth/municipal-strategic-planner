@@ -1,0 +1,176 @@
+{
+  "name": "RegionalServiceContract",
+  "type": "object",
+  "properties": {
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "ambulance_ems",
+        "policing",
+        "administrative_support",
+        "public_works_support",
+        "code_enforcement",
+        "shared_staffing",
+        "transfer_station",
+        "dispatch_communications"
+      ],
+      "description": "Type of service being provided"
+    },
+    "service_name": {
+      "type": "string",
+      "description": "Custom name for this service contract"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what's included in this service"
+    },
+    "participating_towns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "town_name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "prospect",
+              "negotiating"
+            ]
+          },
+          "population": {
+            "type": "number"
+          },
+          "distance_miles": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Towns participating in this service"
+    },
+    "pricing_model": {
+      "type": "string",
+      "enum": [
+        "fixed_fee",
+        "per_capita",
+        "call_volume",
+        "hourly",
+        "hybrid"
+      ]
+    },
+    "fixed_fee": {
+      "type": "number",
+      "description": "Annual fixed fee per town (if applicable)"
+    },
+    "per_capita_fee": {
+      "type": "number",
+      "description": "Annual fee per capita (if applicable)"
+    },
+    "call_volume_rate": {
+      "type": "number",
+      "description": "Rate per call/incident/service request (if applicable)"
+    },
+    "estimated_annual_calls": {
+      "type": "number",
+      "description": "Estimated total annual calls/requests across all participating towns"
+    },
+    "hourly_rate": {
+      "type": "number",
+      "description": "Hourly rate for service delivery (if applicable)"
+    },
+    "estimated_annual_hours": {
+      "type": "number",
+      "description": "Estimated annual hours of service (if applicable)"
+    },
+    "hybrid_details": {
+      "type": "object",
+      "description": "Details for hybrid pricing model",
+      "properties": {
+        "base_fee": {
+          "type": "number"
+        },
+        "base_fee_description": {
+          "type": "string"
+        },
+        "variable_component": {
+          "type": "string"
+        },
+        "variable_rate": {
+          "type": "number"
+        }
+      }
+    },
+    "service_delivery_cost": {
+      "type": "number",
+      "description": "Estimated annual cost to deliver this service (salaries, equipment, overhead)"
+    },
+    "cost_assumptions": {
+      "type": "string",
+      "description": "Notes about cost assumptions (e.g., 1.5 FTE, vehicle depreciation)"
+    },
+    "startup_cost": {
+      "type": "number",
+      "description": "One-time startup cost (equipment, training, systems)"
+    },
+    "startup_year": {
+      "type": "number",
+      "description": "Year of implementation (1, 2, 3, etc.)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "active",
+        "suspended",
+        "discontinued"
+      ],
+      "default": "concept"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "target_towns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Priority towns for recruitment"
+    },
+    "adoption_probability": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium",
+      "description": "Likelihood of towns adopting this service"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes and considerations"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_modified": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "service_type",
+    "service_name",
+    "pricing_model"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "name": "RegionalParticipation",
+  "type": "object",
+  "properties": {
+    "department": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "finance",
+        "transfer_station",
+        "assessor",
+        "animal_control",
+        "ambulance",
+        "police",
+        "fire",
+        "inspection"
+      ],
+      "description": "Department service line"
+    },
+    "municipality": {
+      "type": "string",
+      "description": "Town name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_participating",
+        "prospect",
+        "active_partner",
+        "host",
+        "limited_shared",
+        "future_phase"
+      ],
+      "default": "prospect",
+      "description": "Participation status"
+    },
+    "host_town": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this town the service host/operator?"
+    },
+    "central_location": {
+      "type": "string",
+      "description": "Central staffing/service location if applicable"
+    },
+    "pricing_method": {
+      "type": "string",
+      "enum": [
+        "per_capita",
+        "weighted_per_capita",
+        "equal_share",
+        "workload_based",
+        "incident_based",
+        "call_volume_based",
+        "parcel_based",
+        "fee_offset",
+        "custom_hybrid",
+        "flat_rate"
+      ],
+      "description": "Pricing methodology"
+    },
+    "implementation_year": {
+      "type": "number",
+      "description": "Implementation year (e.g., 1, 2, 3)"
+    },
+    "annual_fee": {
+      "type": "number",
+      "description": "Annual participation fee or contract value"
+    },
+    "ramp_up_notes": {
+      "type": "string",
+      "description": "Ramp-up or phasing notes"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "department",
+    "municipality"
+  ]
+}

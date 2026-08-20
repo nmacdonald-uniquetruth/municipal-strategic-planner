@@ -1,0 +1,63 @@
+{
+  "name": "DecisionLog",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Decision title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "staffing",
+        "erp",
+        "regional_services",
+        "transfer_station",
+        "ems_billing",
+        "budget",
+        "policy"
+      ],
+      "description": "Decision category"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "tabled",
+        "needs_info"
+      ],
+      "default": "pending"
+    },
+    "decision_body": {
+      "type": "string",
+      "enum": [
+        "select_board",
+        "town_manager",
+        "finance_director",
+        "budget_committee",
+        "town_meeting"
+      ],
+      "description": "Who makes this decision"
+    },
+    "financial_impact": {
+      "type": "number",
+      "description": "Annual financial impact (positive = benefit)"
+    },
+    "description": {
+      "type": "string"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "decision_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

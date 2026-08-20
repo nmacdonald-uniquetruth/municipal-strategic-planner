@@ -1,0 +1,55 @@
+{
+  "name": "FinancialServicesStaffing",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "finance_director",
+        "staff_accountant",
+        "billing_specialist",
+        "revenue_coordinator",
+        "bookkeeper",
+        "admin_support"
+      ],
+      "description": "Position role"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "triggered",
+        "future"
+      ],
+      "description": "Staffing status"
+    },
+    "base_salary": {
+      "type": "number",
+      "description": "Annual base salary"
+    },
+    "fully_loaded_cost": {
+      "type": "number",
+      "description": "Salary + benefits + taxes + overhead"
+    },
+    "allocation_percent": {
+      "type": "number",
+      "description": "Percent time allocated to regional services (0-100)"
+    },
+    "regional_cost": {
+      "type": "number",
+      "description": "Calculated cost attributed to regional services"
+    },
+    "trigger_condition": {
+      "type": "string",
+      "description": "Condition that triggers this position (e.g., 'after 6 towns', 'after 50 accounts')"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "role",
+    "base_salary"
+  ]
+}

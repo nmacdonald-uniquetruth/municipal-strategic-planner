@@ -1,0 +1,216 @@
+{
+  "name": "RestructuringProposal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Proposal title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the proposal"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "staffing",
+        "shared_services",
+        "regional_revenue",
+        "capital",
+        "governance",
+        "administration"
+      ],
+      "description": "Main category of the proposal"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium",
+      "description": "Priority level"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "in_development",
+        "ready_for_review",
+        "approved",
+        "implemented",
+        "archived"
+      ],
+      "default": "concept",
+      "description": "Current status of the proposal"
+    },
+    "scenario_id": {
+      "type": "string",
+      "description": "ID of parent scenario (if part of scenario planning)"
+    },
+    "departments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Departments affected by this proposal"
+    },
+    "towns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Towns involved if regional proposal"
+    },
+    "serviceTypes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Service types affected (e.g., Police, Fire, Finance, Public Works)"
+    },
+    "fiscalYear": {
+      "type": "string",
+      "description": "Fiscal year(s) for implementation (e.g., FY2027, FY2027-2028)"
+    },
+    "estimatedAnnualSavings": {
+      "type": "number",
+      "description": "Estimated annual savings in dollars"
+    },
+    "estimatedAnnualRevenue": {
+      "type": "number",
+      "description": "Estimated annual revenue generation in dollars"
+    },
+    "implementationCost": {
+      "type": "number",
+      "description": "One-time implementation cost in dollars"
+    },
+    "implementationTimeline": {
+      "type": "string",
+      "description": "Timeline for implementation (e.g., Q1 2027 - Q3 2027)"
+    },
+    "keyBenefits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of key benefits"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Potential risks and mitigation strategies"
+    },
+    "successMetrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key performance indicators for success"
+    },
+    "stakeholders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key stakeholders affected or involved"
+    },
+    "staffingImpact": {
+      "type": "object",
+      "properties": {
+        "fteChange": {
+          "type": "number",
+          "description": "Change in full-time equivalents"
+        },
+        "positionsAdded": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "positionsEliminated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Staffing-related impacts"
+    },
+    "regionalServices": {
+      "type": "object",
+      "properties": {
+        "targetTowns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "adoptionRate": {
+          "type": "number",
+          "description": "Expected adoption rate (0-1)"
+        },
+        "projectedRevenue": {
+          "type": "number",
+          "description": "Projected annual revenue from regional services"
+        }
+      },
+      "description": "Regional services expansion details"
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key assumptions underlying the proposal"
+    },
+    "evaluation_id": {
+      "type": "string",
+      "description": "ID of linked ProposalEvaluation"
+    },
+    "relatedProposals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of related proposals"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or considerations"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "description"
+  ]
+}

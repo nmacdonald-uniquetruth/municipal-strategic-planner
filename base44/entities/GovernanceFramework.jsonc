@@ -1,0 +1,219 @@
+{
+  "name": "GovernanceFramework",
+  "type": "object",
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "description": "Link to related Proposal"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "ambulance_ems",
+        "police",
+        "fire",
+        "public_works",
+        "transfer_station",
+        "administrative_support",
+        "financial_services",
+        "code_enforcement",
+        "dispatch"
+      ],
+      "description": "Type of shared service"
+    },
+    "agreement_type": {
+      "type": "string",
+      "enum": [
+        "interlocal_agreement",
+        "mou",
+        "service_contract",
+        "joint_powers",
+        "regional_authority"
+      ],
+      "description": "Type of governance agreement"
+    },
+    "agreement_description": {
+      "type": "string",
+      "description": "Description of the agreement type and how it works"
+    },
+    "machias_control_level": {
+      "type": "string",
+      "enum": [
+        "full_control",
+        "majority_control",
+        "shared_control",
+        "advisory_only",
+        "subservient"
+      ],
+      "description": "Level of control retained by Machias"
+    },
+    "control_details": {
+      "type": "string",
+      "description": "Specific details about control and decision-making authority"
+    },
+    "cost_sharing_structure": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": [
+            "fixed_fee",
+            "per_capita",
+            "call_volume",
+            "hybrid",
+            "equal_share"
+          ],
+          "description": "Cost sharing methodology"
+        },
+        "machias_share_percent": {
+          "type": "number",
+          "description": "Percentage of costs borne by Machias (0-100)"
+        },
+        "revenue_sharing": {
+          "type": "boolean",
+          "description": "Whether Machias shares in surpluses/revenue"
+        },
+        "adjustment_mechanism": {
+          "type": "string",
+          "description": "How costs are adjusted (e.g., annual review, inflation-based)"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "staffing_oversight": {
+      "type": "object",
+      "properties": {
+        "hiring_authority": {
+          "type": "string",
+          "description": "Who has hiring/firing authority for shared staff"
+        },
+        "compensation_decisions": {
+          "type": "string",
+          "description": "Who determines salaries and benefits"
+        },
+        "performance_oversight": {
+          "type": "string",
+          "description": "Who evaluates staff performance"
+        },
+        "union_implications": {
+          "type": "string",
+          "description": "Any union contract complications"
+        }
+      }
+    },
+    "legal_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "string",
+            "description": "Legal requirement or policy dependency"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "required_before",
+              "can_proceed_with",
+              "contingent_on"
+            ],
+            "description": "How this affects implementation"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "When this needs to be resolved"
+          }
+        }
+      },
+      "description": "Legal and policy prerequisites"
+    },
+    "operational_rationale": {
+      "type": "string",
+      "description": "Why this governance structure makes operational sense"
+    },
+    "governance_rationale": {
+      "type": "string",
+      "description": "How governance structure serves Machias interests and regional fairness"
+    },
+    "financial_rationale": {
+      "type": "string",
+      "description": "Financial justification for cost sharing and revenue arrangements"
+    },
+    "partner_withdrawal_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string",
+            "description": "What happens if a partner town withdraws"
+          },
+          "impact_on_machias": {
+            "type": "string",
+            "enum": [
+              "minimal",
+              "moderate",
+              "severe"
+            ],
+            "description": "Impact severity on Machias"
+          },
+          "mitigation": {
+            "type": "string",
+            "description": "How to mitigate this risk"
+          }
+        }
+      },
+      "description": "Risks if partner towns withdraw from agreement"
+    },
+    "implementation_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Governance-related implementation risks"
+    },
+    "termination_provisions": {
+      "type": "string",
+      "description": "How and when the agreement can be terminated"
+    },
+    "amendment_process": {
+      "type": "string",
+      "description": "How the agreement can be modified"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "approved",
+        "implemented"
+      ],
+      "default": "draft"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "service_type",
+    "agreement_type"
+  ]
+}

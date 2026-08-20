@@ -1,0 +1,91 @@
+{
+  "name": "PolicySourceRecord",
+  "type": "object",
+  "properties": {
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "federal_legislation",
+        "state_legislation",
+        "county_agenda",
+        "municipal_policy",
+        "committee_calendar",
+        "agency_rulemaking",
+        "funding_announcement",
+        "official_activity",
+        "manual_entry",
+        "csv_import",
+        "api_connector"
+      ],
+      "description": "Origin source type"
+    },
+    "source_name": {
+      "type": "string",
+      "description": "e.g. Maine Legislature, Congress.gov, USDA.gov"
+    },
+    "external_id": {
+      "type": "string",
+      "description": "ID in source system, e.g. bill number"
+    },
+    "raw_title": {
+      "type": "string"
+    },
+    "raw_summary": {
+      "type": "string"
+    },
+    "raw_payload": {
+      "type": "string",
+      "description": "JSON-serialized raw source data"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_jurisdiction": {
+      "type": "string"
+    },
+    "source_state": {
+      "type": "string"
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ingested_by": {
+      "type": "string",
+      "description": "User email or system process"
+    },
+    "normalization_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "normalized",
+        "deduplicated",
+        "skipped",
+        "error"
+      ],
+      "default": "pending"
+    },
+    "normalized_item_id": {
+      "type": "string",
+      "description": "ID of resulting LegislationItem after normalization"
+    },
+    "dedup_group_key": {
+      "type": "string",
+      "description": "Key used for deduplication grouping"
+    },
+    "is_duplicate": {
+      "type": "boolean",
+      "default": false
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_type",
+    "source_name"
+  ]
+}

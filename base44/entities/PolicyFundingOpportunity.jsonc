@@ -1,0 +1,84 @@
+{
+  "name": "PolicyFundingOpportunity",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "program_name": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "federal",
+        "state",
+        "county",
+        "foundation",
+        "other"
+      ]
+    },
+    "legislation_id": {
+      "type": "string"
+    },
+    "amount_available": {
+      "type": "number"
+    },
+    "max_award": {
+      "type": "number"
+    },
+    "match_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "match_percent": {
+      "type": "number"
+    },
+    "application_deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "eligible_uses": {
+      "type": "string"
+    },
+    "departments_relevant": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategic_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "upcoming",
+        "closed",
+        "awarded",
+        "watch"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "is_flagged": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "source"
+  ]
+}

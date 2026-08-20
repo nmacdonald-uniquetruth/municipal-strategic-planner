@@ -1,0 +1,171 @@
+{
+  "name": "DepartmentRestructuring",
+  "type": "object",
+  "properties": {
+    "department_id": {
+      "type": "string",
+      "enum": [
+        "police",
+        "ambulance",
+        "fire",
+        "public_works",
+        "transfer_station",
+        "administration",
+        "finance",
+        "code_enforcement",
+        "recreation"
+      ],
+      "description": "Department identifier"
+    },
+    "department_name": {
+      "type": "string",
+      "description": "Human-readable department name"
+    },
+    "current_model": {
+      "type": "string",
+      "enum": [
+        "current_structure",
+        "expanded_staffing",
+        "reduced_staffing",
+        "shared_service",
+        "regional_delivery",
+        "outsourced"
+      ],
+      "default": "current_structure",
+      "description": "Current operational model"
+    },
+    "proposed_model": {
+      "type": "string",
+      "enum": [
+        "current_structure",
+        "expanded_staffing",
+        "reduced_staffing",
+        "shared_service",
+        "regional_delivery",
+        "outsourced"
+      ],
+      "description": "Proposed operational model"
+    },
+    "current_fte": {
+      "type": "number",
+      "description": "Current full-time equivalents"
+    },
+    "proposed_fte": {
+      "type": "number",
+      "description": "Proposed full-time equivalents"
+    },
+    "current_budget": {
+      "type": "number",
+      "description": "Current annual budget"
+    },
+    "proposed_budget": {
+      "type": "number",
+      "description": "Proposed annual budget"
+    },
+    "workload_metric": {
+      "type": "string",
+      "description": "Key workload metric (e.g., 'calls per year', 'population served', 'tonnage')"
+    },
+    "current_workload": {
+      "type": "number",
+      "description": "Current workload volume"
+    },
+    "projected_workload": {
+      "type": "number",
+      "description": "Projected workload volume"
+    },
+    "workload_growth_rate": {
+      "type": "number",
+      "description": "Annual workload growth rate (decimal, e.g., 0.02 for 2%)"
+    },
+    "staffing_rationale": {
+      "type": "string",
+      "description": "Rationale for staffing changes"
+    },
+    "service_impact_description": {
+      "type": "string",
+      "description": "How the change affects service delivery"
+    },
+    "service_impact_level": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "neutral",
+        "negative"
+      ],
+      "description": "Overall service impact"
+    },
+    "leadership_capacity_change": {
+      "type": "string",
+      "description": "How leadership capacity changes (e.g., '5 hours/week freed for strategic planning')"
+    },
+    "tax_impact_annual": {
+      "type": "number",
+      "description": "Annual tax impact in dollars"
+    },
+    "implementation_timeline": {
+      "type": "string",
+      "description": "When changes will be implemented"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of other departments this depends on"
+    },
+    "regional_partners": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Potential regional partner towns for shared/regional models"
+    },
+    "risks_and_mitigation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Key risks and mitigation strategies"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional planning notes"
+    },
+    "scenario_id": {
+      "type": "string",
+      "description": "Link to Scenario if applicable"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "proposed",
+        "approved",
+        "implemented"
+      ],
+      "default": "planning",
+      "description": "Current status of the restructuring plan"
+    }
+  },
+  "required": [
+    "department_id",
+    "department_name"
+  ]
+}

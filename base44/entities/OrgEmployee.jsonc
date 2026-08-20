@@ -1,0 +1,37 @@
+{
+  "name": "OrgEmployee",
+  "type": "object",
+  "properties": {
+    "position_id": {
+      "type": "string",
+      "description": "Links to OrgPosition.position_id"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "preferred_name": {
+      "type": "string"
+    },
+    "hire_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "on_leave",
+        "separated",
+        "incoming"
+      ],
+      "default": "active"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "position_id",
+    "full_name"
+  ]
+}

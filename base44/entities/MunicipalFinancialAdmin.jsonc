@@ -1,0 +1,98 @@
+{
+  "name": "MunicipalFinancialAdmin",
+  "type": "object",
+  "properties": {
+    "municipality": {
+      "type": "string",
+      "description": "Municipality name"
+    },
+    "county": {
+      "type": "string"
+    },
+    "financial_admin_structure": {
+      "type": "string",
+      "description": "Description of current structure (Treasurer, Finance Director, Bookkeeper, Contract accounting, etc.)"
+    },
+    "treasurer_annual_allocation": {
+      "type": "number",
+      "description": "Current annual salary/stipend for Treasurer"
+    },
+    "finance_director_allocation": {
+      "type": "number",
+      "description": "Current annual salary/stipend for Finance Director"
+    },
+    "bookkeeper_allocation": {
+      "type": "number",
+      "description": "Current annual salary/stipend for Bookkeeper"
+    },
+    "accounting_services_contract": {
+      "type": "number",
+      "description": "Annual cost for contracted accounting services"
+    },
+    "total_annual_cost": {
+      "type": "number",
+      "description": "Total annual cost for financial administration"
+    },
+    "source_document": {
+      "type": "string",
+      "enum": [
+        "town_meeting_warrant",
+        "town_meeting_minutes",
+        "municipal_budget",
+        "website_posting",
+        "other"
+      ],
+      "description": "Source of information"
+    },
+    "source_document_detail": {
+      "type": "string",
+      "description": "Specific details about the source (e.g., warrant article number, year, URL)"
+    },
+    "fiscal_feasibility": {
+      "type": "string",
+      "enum": [
+        "high",
+        "moderate",
+        "low"
+      ],
+      "description": "Feasibility of transitioning to Machias regional services"
+    },
+    "estimated_regional_service_price_low": {
+      "type": "number",
+      "description": "Low end of estimated annual price for Machias regional services"
+    },
+    "estimated_regional_service_price_high": {
+      "type": "number",
+      "description": "High end of estimated annual price for Machias regional services"
+    },
+    "potential_net_fiscal_impact": {
+      "type": "number",
+      "description": "Estimated annual fiscal impact for Machias (positive = revenue, negative = cost)"
+    },
+    "existing_relationships": {
+      "type": "string",
+      "description": "Current service relationships, shared programs, regional collaborations"
+    },
+    "assessment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this assessment was conducted"
+    },
+    "research_notes": {
+      "type": "string",
+      "description": "Additional research notes and observations"
+    },
+    "data_confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "moderate",
+        "low"
+      ],
+      "description": "Confidence level in the accuracy of the data"
+    }
+  },
+  "required": [
+    "municipality"
+  ]
+}

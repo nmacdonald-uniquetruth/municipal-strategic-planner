@@ -1,0 +1,125 @@
+{
+  "name": "BudgetControlRecord",
+  "type": "object",
+  "properties": {
+    "fiscal_year": {
+      "type": "string",
+      "description": "e.g. FY2027"
+    },
+    "department": {
+      "type": "string"
+    },
+    "fund": {
+      "type": "string",
+      "enum": [
+        "general_fund",
+        "school",
+        "county",
+        "enterprise",
+        "tif",
+        "debt_service",
+        "capital_reserve",
+        "special_revenue"
+      ],
+      "default": "general_fund"
+    },
+    "article_number": {
+      "type": "string"
+    },
+    "bete_mapping": {
+      "type": "string"
+    },
+    "account_code": {
+      "type": "string"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "appropriation",
+        "revenue",
+        "transfer",
+        "encumbrance"
+      ],
+      "default": "appropriation"
+    },
+    "adopted_budget": {
+      "type": "number",
+      "default": 0
+    },
+    "revised_budget": {
+      "type": "number",
+      "default": 0,
+      "description": "Post-adoption revisions/transfers"
+    },
+    "encumbrances": {
+      "type": "number",
+      "default": 0,
+      "description": "Outstanding purchase orders/commitments"
+    },
+    "ytd_actual": {
+      "type": "number",
+      "default": 0
+    },
+    "projected_year_end": {
+      "type": "number",
+      "default": 0
+    },
+    "seasonality_profile": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "front_loaded",
+        "back_loaded",
+        "q2_q3_heavy",
+        "seasonal_summer",
+        "seasonal_winter",
+        "custom"
+      ],
+      "default": "flat",
+      "description": "Seasonality pattern for projection engine"
+    },
+    "custom_monthly_weights": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "12 monthly weights summing to 1.0 (used when seasonality_profile=custom)"
+    },
+    "gaap_adjustment": {
+      "type": "number",
+      "default": 0,
+      "description": "GAAP basis adjustment (accruals, deferrals)"
+    },
+    "gaap_basis_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "GAAP basis actual (ytd_actual + gaap_adjustment)"
+    },
+    "variance_threshold_pct": {
+      "type": "number",
+      "default": 5.0,
+      "description": "% over-budget that triggers alert"
+    },
+    "low_execution_threshold_pct": {
+      "type": "number",
+      "default": 15.0,
+      "description": "% under-spent at mid-year that triggers watch"
+    },
+    "is_locked": {
+      "type": "boolean",
+      "default": false
+    },
+    "manager_notes": {
+      "type": "string"
+    },
+    "finance_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fiscal_year",
+    "department",
+    "fund",
+    "record_type"
+  ]
+}

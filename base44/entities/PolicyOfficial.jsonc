@@ -1,0 +1,80 @@
+{
+  "name": "PolicyOfficial",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "office": {
+      "type": "string"
+    },
+    "jurisdiction_level": {
+      "type": "string",
+      "enum": [
+        "federal",
+        "state",
+        "county",
+        "local",
+        "regional"
+      ]
+    },
+    "state": {
+      "type": "string"
+    },
+    "district": {
+      "type": "string"
+    },
+    "party": {
+      "type": "string"
+    },
+    "committees": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sponsored_bills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "key_positions": {
+      "type": "string",
+      "description": "Known positions on municipal topics"
+    },
+    "voting_notes": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "contact_website": {
+      "type": "string"
+    },
+    "relevance_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "relationship_notes": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "jurisdiction_level"
+  ]
+}

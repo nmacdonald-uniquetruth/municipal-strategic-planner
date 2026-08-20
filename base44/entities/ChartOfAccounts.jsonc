@@ -1,0 +1,199 @@
+{
+  "name": "ChartOfAccounts",
+  "type": "object",
+  "properties": {
+    "trio_account": {
+      "type": "string",
+      "description": "Current TRIO account number (legacy)"
+    },
+    "trio_department": {
+      "type": "string",
+      "description": "Current TRIO department name/code"
+    },
+    "trio_object_code": {
+      "type": "string",
+      "description": "Current TRIO object code"
+    },
+    "trio_description": {
+      "type": "string",
+      "description": "Current TRIO account description"
+    },
+    "trio_historical_budget": {
+      "type": "number",
+      "description": "Last known TRIO budget amount for comparability"
+    },
+    "trio_historical_actual": {
+      "type": "number",
+      "description": "Last known TRIO actual amount"
+    },
+    "new_account_number": {
+      "type": "string",
+      "description": "New chart of accounts number"
+    },
+    "new_account_title": {
+      "type": "string",
+      "description": "New account title"
+    },
+    "new_account_description": {
+      "type": "string",
+      "description": "Full description of new account"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "revenue",
+        "expenditure",
+        "asset",
+        "liability",
+        "equity",
+        "transfer",
+        "contra"
+      ],
+      "description": "Account classification"
+    },
+    "fund": {
+      "type": "string",
+      "enum": [
+        "general_fund",
+        "ambulance_fund",
+        "sewer_fund",
+        "transfer_station_fund",
+        "airport_fund",
+        "capital_reserve",
+        "grant_fund",
+        "debt_service_fund",
+        "special_revenue",
+        "tif_fund",
+        "other"
+      ],
+      "description": "Fund classification"
+    },
+    "fund_type": {
+      "type": "string",
+      "enum": [
+        "governmental",
+        "enterprise",
+        "internal_service",
+        "fiduciary",
+        "capital_projects"
+      ],
+      "default": "governmental"
+    },
+    "function_program": {
+      "type": "string",
+      "description": "Function or program (e.g. Public Safety, General Government)"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department under new structure"
+    },
+    "natural_account": {
+      "type": "string",
+      "description": "Natural account category (e.g. Salaries, Benefits, Supplies)"
+    },
+    "reporting_category": {
+      "type": "string",
+      "enum": [
+        "salaries_wages",
+        "benefits",
+        "supplies_materials",
+        "contracted_services",
+        "equipment",
+        "debt_service",
+        "capital_outlay",
+        "intergovernmental",
+        "tax_revenue",
+        "non_tax_revenue",
+        "enterprise_revenue",
+        "transfers",
+        "other"
+      ],
+      "description": "GASB/GFOA reporting category"
+    },
+    "budget_article_mapping": {
+      "type": "string",
+      "description": "Warrant article this account maps to (e.g. Article 4)"
+    },
+    "gasb_34_class": {
+      "type": "string",
+      "enum": [
+        "governmental_activities",
+        "business_type_activities",
+        "component_unit",
+        "fiduciary"
+      ],
+      "description": "GASB 34 government-wide classification"
+    },
+    "mapping_type": {
+      "type": "string",
+      "enum": [
+        "one_to_one",
+        "one_to_many",
+        "many_to_one",
+        "unmapped",
+        "split"
+      ],
+      "default": "one_to_one",
+      "description": "Crosswalk mapping relationship"
+    },
+    "mapping_split_percent": {
+      "type": "number",
+      "description": "For split/many-to-one: % of old account going to this new account (0-100)"
+    },
+    "mapping_group_key": {
+      "type": "string",
+      "description": "Groups accounts in a many-to-one or one-to-many cluster"
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "mapped",
+        "unmapped",
+        "duplicate",
+        "ambiguous",
+        "needs_review",
+        "approved"
+      ],
+      "default": "unmapped"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "deprecated",
+        "pending"
+      ],
+      "default": "active"
+    },
+    "fiscal_year_effective": {
+      "type": "string",
+      "description": "First fiscal year this mapping is effective (e.g. FY2027)"
+    },
+    "transition_notes": {
+      "type": "string",
+      "description": "Notes on transition logic, allocations, or exceptions"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Person who reviewed/approved mapping"
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "erp_target_module": {
+      "type": "string",
+      "description": "Target ERP module for this account (for future ERP migration)"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "new_account_number",
+    "new_account_title",
+    "account_type",
+    "fund"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "name": "FinanceServicesProspect",
+  "type": "object",
+  "properties": {
+    "municipality": {
+      "type": "string",
+      "description": "Municipality name"
+    },
+    "region": {
+      "type": "string",
+      "description": "Region (e.g., Machias Bay Region)"
+    },
+    "service_category": {
+      "type": "string",
+      "enum": [
+        "financial_administration",
+        "human_resources",
+        "assessing",
+        "planning",
+        "public_works",
+        "emergency_services",
+        "other"
+      ],
+      "description": "Type of service being offered"
+    },
+    "current_annual_allocation": {
+      "type": "number",
+      "description": "Current estimated annual budget for this service"
+    },
+    "potential_allocation_low": {
+      "type": "number",
+      "description": "Low end of potential allocation range"
+    },
+    "potential_allocation_high": {
+      "type": "number",
+      "description": "High end of potential allocation range"
+    },
+    "relationship_with_machias": {
+      "type": "string",
+      "description": "Description of existing relationship or regional proximity"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "prospect",
+        "engaged",
+        "contracted",
+        "inactive"
+      ],
+      "default": "prospect",
+      "description": "Engagement status"
+    },
+    "probability_of_engagement": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "description": "Likelihood of contract engagement"
+    },
+    "contact_person": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email"
+    },
+    "last_engagement_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "municipality",
+    "region",
+    "service_category"
+  ]
+}

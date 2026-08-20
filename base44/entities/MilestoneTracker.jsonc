@@ -1,0 +1,66 @@
+{
+  "name": "MilestoneTracker",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Milestone title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "restructuring",
+        "erp",
+        "regional_services",
+        "transfer_station",
+        "ems_billing",
+        "audit"
+      ],
+      "description": "Initiative category"
+    },
+    "target_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed",
+        "blocked",
+        "deferred"
+      ],
+      "default": "not_started"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Implementation phase (e.g., Q1, Q2, Year 2)"
+    },
+    "dependencies": {
+      "type": "string",
+      "description": "What this milestone depends on"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "responsible_party": {
+      "type": "string",
+      "description": "Who is responsible"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

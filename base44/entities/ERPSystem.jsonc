@@ -1,0 +1,123 @@
+{
+  "name": "ERPSystem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "erp_financial",
+        "payroll_hris",
+        "revenue_civic",
+        "integrated_suite",
+        "timekeeping",
+        "performance"
+      ],
+      "default": "erp_financial"
+    },
+    "deployment": {
+      "type": "string",
+      "enum": [
+        "cloud_saas",
+        "on_premise",
+        "hybrid"
+      ],
+      "default": "cloud_saas"
+    },
+    "maine_municipal_references": {
+      "type": "boolean",
+      "default": false
+    },
+    "trio_migration_path": {
+      "type": "boolean",
+      "default": false
+    },
+    "multi_entity_support": {
+      "type": "boolean",
+      "default": false
+    },
+    "gasb_compliant": {
+      "type": "boolean",
+      "default": true
+    },
+    "fund_accounting": {
+      "type": "boolean",
+      "default": true
+    },
+    "ems_billing_module": {
+      "type": "boolean",
+      "default": false
+    },
+    "utility_billing_module": {
+      "type": "boolean",
+      "default": false
+    },
+    "citizen_portal": {
+      "type": "boolean",
+      "default": false
+    },
+    "payroll_module": {
+      "type": "boolean",
+      "default": false
+    },
+    "hr_module": {
+      "type": "boolean",
+      "default": false
+    },
+    "est_implementation_cost_low": {
+      "type": "number"
+    },
+    "est_implementation_cost_high": {
+      "type": "number"
+    },
+    "est_annual_cost_low": {
+      "type": "number"
+    },
+    "est_annual_cost_high": {
+      "type": "number"
+    },
+    "small_muni_fit": {
+      "type": "string",
+      "enum": [
+        "excellent",
+        "good",
+        "fair",
+        "poor"
+      ],
+      "default": "good"
+    },
+    "pros": {
+      "type": "string"
+    },
+    "cons": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "evaluation_score": {
+      "type": "number",
+      "description": "1-10 internal evaluation score"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "under_review",
+        "shortlisted",
+        "eliminated",
+        "selected"
+      ],
+      "default": "under_review"
+    }
+  },
+  "required": [
+    "name",
+    "vendor",
+    "category"
+  ]
+}

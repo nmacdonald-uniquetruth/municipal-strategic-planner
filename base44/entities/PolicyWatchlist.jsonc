@@ -1,0 +1,61 @@
+{
+  "name": "PolicyWatchlist",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Watchlist name, e.g. 'Budget Season 2027'"
+    },
+    "watch_type": {
+      "type": "string",
+      "enum": [
+        "topic",
+        "bill",
+        "official",
+        "agency",
+        "committee",
+        "department",
+        "strategic_goal",
+        "capital_project",
+        "custom"
+      ],
+      "default": "topic"
+    },
+    "watch_value": {
+      "type": "string",
+      "description": "The topic name, bill ID, official name, etc."
+    },
+    "municipality_profile_id": {
+      "type": "string"
+    },
+    "alert_on_priority": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Priorities that trigger alert"
+    },
+    "alert_on_deadline_days": {
+      "type": "number",
+      "description": "Days-out threshold for deadline alert"
+    },
+    "alert_on_status_change": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "watch_type"
+  ]
+}
