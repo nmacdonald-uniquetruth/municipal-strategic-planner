@@ -1,0 +1,49 @@
+{
+  "name": "Policy Data Live Sync \u2014 Every 6 Hours",
+  "description": "Syncs federal bills (Congress.gov), Federal Register rulemaking, Grants.gov opportunities, and Maine Legislature bills every 6 hours. Upserts normalized records without overwriting staff edits.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "interval",
+      "cron_expression": null,
+      "one_time_date": null,
+      "timezone": "UTC",
+      "interval_value": 6,
+      "interval_unit": "hours",
+      "interval_anchor": "2026-03-22T13:53:31.542000",
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "policy_data_live_sync_every_6_hours",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "policyDataSync",
+            "args": {
+              "sources": [
+                "all"
+              ],
+              "force": false
+            }
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "policyDataSync"
+  }
+}
